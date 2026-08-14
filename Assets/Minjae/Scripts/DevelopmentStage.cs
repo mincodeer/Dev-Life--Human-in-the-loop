@@ -1,9 +1,7 @@
 using UnityEngine;
 
-public class DevelopmentStage : MonoBehaviour
-{
     // Tags indicating the player's development stage
-    public enum DevelopmentStage
+public enum DevelopmentStage
     {
         None,
         ProjectSetup,
@@ -14,4 +12,3 @@ public class DevelopmentStage : MonoBehaviour
         Build,
         Result
     }
-}
