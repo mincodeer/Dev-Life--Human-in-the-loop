@@ -8,7 +8,7 @@ public enum DevelopmentStage
         Coding,
         Design,
         Sound,
-        Debug,
+        Debugging,
         Build,
         Result
     }
