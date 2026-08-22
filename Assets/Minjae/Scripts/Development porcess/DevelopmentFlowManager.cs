@@ -121,6 +121,10 @@ public class DevelopmentFlowManager : MonoBehaviour
     // Project Setup Selection
     // ==============================
 
+    public void None()
+    {
+        return;
+    }
     public void SelectFantasy()
     {
         ProjectDataManager.Instance.SetTheme(
@@ -247,16 +251,20 @@ public class DevelopmentFlowManager : MonoBehaviour
         switch (index)
         {
             case 0:
-            SelectFantasy();
-                break;
-
+            None();
+            break;
+            
             case 1:
-                SelectSciFi();
-                break;
+            SelectFantasy();
+            break;
 
             case 2:
-                SelectHorror();
-                break;
+            SelectSciFi();
+            break;
+
+            case 3:
+            SelectHorror();
+            break;
         }
     }
 
@@ -265,14 +273,18 @@ public class DevelopmentFlowManager : MonoBehaviour
         switch (index)
         {
             case 0:
+            None();
+            break;
+
+            case 1:
             SelectRPG();
                 break;
 
-            case 1:
+            case 2:
                 SelectAction();
                 break;
 
-            case 2:
+            case 3:
                 SelectSimulation();
                 break;
         }
