@@ -337,7 +337,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 590995890}
         m_TargetAssemblyTypeName: DevelopmentFlowManager, Assembly-CSharp
-        m_MethodName: GotoSound
+        m_MethodName: ChooseAI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4048,7 +4048,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 590995890}
         m_TargetAssemblyTypeName: DevelopmentFlowManager, Assembly-CSharp
-        m_MethodName: GotoDebugging
+        m_MethodName: ChooseAI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5138,7 +5138,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 590995890}
         m_TargetAssemblyTypeName: DevelopmentFlowManager, Assembly-CSharp
-        m_MethodName: GotoBuild
+        m_MethodName: ChooseAI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5404,7 +5404,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 590995890}
         m_TargetAssemblyTypeName: DevelopmentFlowManager, Assembly-CSharp
-        m_MethodName: GotoDebugging
+        m_MethodName: ChooseManual
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6297,7 +6297,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 590995890}
         m_TargetAssemblyTypeName: DevelopmentFlowManager, Assembly-CSharp
-        m_MethodName: GotoBuild
+        m_MethodName: ChooseManual
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6683,7 +6683,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 590995890}
         m_TargetAssemblyTypeName: DevelopmentFlowManager, Assembly-CSharp
-        m_MethodName: GotoSound
+        m_MethodName: ChooseManual
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
