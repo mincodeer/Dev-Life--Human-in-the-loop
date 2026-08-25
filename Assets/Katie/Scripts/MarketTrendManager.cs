@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using TMPro;
 using UnityEngine;
 
 public class MarketTrendManager : MonoBehaviour
@@ -17,6 +18,12 @@ public class MarketTrendManager : MonoBehaviour
         "Adventure", "Simulation", "Strategy"
     };
 
+    [Header("Market Trend UI")]
+    [SerializeField] private TMP_Text[] themeDirectionTexts;
+    [SerializeField] private TMP_Text[] genreDemandTexts;
+    [SerializeField] private RectTransform[] genreDemandFills;
+    [SerializeField] private float maximumBarWidth = 220f;
+
     [Header("Trend Duration")]
     [SerializeField] private int minimumWeeks = 2;
     [SerializeField] private int maximumWeeks = 5;
@@ -32,6 +39,13 @@ public class MarketTrendManager : MonoBehaviour
 
     public event Action OnTrendChanged;
 
+    private int[] themeDirections;
+    private int[] genreDemands;
+
+    private readonly Color risingColor = new Color32(53, 245, 107, 255);
+    private readonly Color fallingColor = new Color32(255, 59, 69, 255);
+    private readonly Color stableColor = new Color32(244, 237, 106, 255);
+
     private void Start()
     {
         GenerateNewTrend();
@@ -39,11 +53,13 @@ public class MarketTrendManager : MonoBehaviour
 
     public void GenerateNewTrend()
     {
-        CurrentTheme = themes[UnityEngine.Random.Range(0, themes.Length)];
-        CurrentGenre = genres[UnityEngine.Random.Range(0, genres.Length)];
+        GenerateThemeDirections();
+        GenerateGenreDemand();
 
         WeeksRemaining =
             UnityEngine.Random.Range(minimumWeeks, maximumWeeks + 1);
+
+        UpdateMarketTrendUI();
 
         Debug.Log(
             $"New Market Trend: {CurrentGenre}, " +
@@ -51,6 +67,92 @@ public class MarketTrendManager : MonoBehaviour
         );
 
         OnTrendChanged?.Invoke();
+    }
+
+    private void GenerateThemeDirections()
+    {
+        themeDirections = new int[themes.Length];
+
+        int popularThemeIndex =
+            UnityEngine.Random.Range(0, themes.Length);
+
+        for (int i = 0; i < themeDirections.Length; i++)
+        {
+            // Creates -1, 0 or 1.
+            themeDirections[i] = UnityEngine.Random.Range(-1, 2);
+        }
+
+        // Ensure the selected current theme is rising.
+        themeDirections[popularThemeIndex] = 1;
+        CurrentTheme = themes[popularThemeIndex];
+    }
+
+    private void GenerateGenreDemand()
+    {
+        genreDemands = new int[genres.Length];
+
+        int highestDemand = -1;
+        int highestDemandIndex = 0;
+
+        for (int i = 0; i < genreDemands.Length; i++)
+        {
+            genreDemands[i] = UnityEngine.Random.Range(20, 91);
+
+            if (genreDemands[i] > highestDemand)
+            {
+                highestDemand = genreDemands[i];
+                highestDemandIndex = i;
+            }
+        }
+
+        CurrentGenre = genres[highestDemandIndex];
+    }
+
+    private void UpdateMarketTrendUI()
+    {
+        for (int i = 0;
+             i < themeDirectionTexts.Length &&
+             i < themeDirections.Length;
+             i++)
+        {
+            if (themeDirections[i] > 0)
+            {
+                themeDirectionTexts[i].text = "↑";
+                themeDirectionTexts[i].color = risingColor;
+            }
+            else if (themeDirections[i] < 0)
+            {
+                themeDirectionTexts[i].text = "↓";
+                themeDirectionTexts[i].color = fallingColor;
+            }
+            else
+            {
+                themeDirectionTexts[i].text = "-";
+                themeDirectionTexts[i].color = stableColor;
+            }
+        }
+
+        for (int i = 0;
+             i < genreDemandTexts.Length &&
+             i < genreDemands.Length;
+             i++)
+        {
+            genreDemandTexts[i].text = genreDemands[i] + "%";
+        }
+
+        for (int i = 0;
+             i < genreDemandFills.Length &&
+             i < genreDemands.Length;
+             i++)
+        {
+            float width =
+                maximumBarWidth * genreDemands[i] / 100f;
+
+            genreDemandFills[i].SetSizeWithCurrentAnchors(
+                RectTransform.Axis.Horizontal,
+                width
+            );
+        }
     }
 
     public void AdvanceWeek()
