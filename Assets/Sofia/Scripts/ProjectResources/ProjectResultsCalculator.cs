@@ -206,6 +206,22 @@ public class ProjectResultsCalculator : MonoBehaviour
             + " using "
             + method);
     }
+
+    [ContextMenu("Process AI Coding")]
+    private void ProcessAICoding()
+    {
+        ProcessStageDecision(
+            DevelopmentStage.Coding,
+            WorkMethod.AI);
+    }
+
+    [ContextMenu("Process Manual Coding")]
+    private void ProcessManualCoding()
+    {
+        ProcessStageDecision(
+            DevelopmentStage.Coding,
+            WorkMethod.Manual);
+    }
     [ContextMenu("Process AI Design")]
     private void ProcessAIDesign()
     {
