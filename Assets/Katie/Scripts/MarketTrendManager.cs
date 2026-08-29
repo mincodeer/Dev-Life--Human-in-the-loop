@@ -18,15 +18,27 @@ public class MarketTrendManager : MonoBehaviour
         "Adventure", "Simulation", "Strategy"
     };
 
-    [Header("Market Trend UI")]
+    [Header("Theme UI")]
+    [SerializeField] private TMP_Text[] themeNameTexts;
     [SerializeField] private TMP_Text[] themeDirectionTexts;
+    [SerializeField] private TMP_Text[] themeStatusTexts;
+    [SerializeField] private TMP_Text[] themeDurationTexts;
+
+    [Header("Genre UI")]
+    [SerializeField] private TMP_Text[] genreNameTexts;
     [SerializeField] private TMP_Text[] genreDemandTexts;
     [SerializeField] private RectTransform[] genreDemandFills;
+    [SerializeField] private TMP_Text[] genreDurationTexts;
     [SerializeField] private float maximumBarWidth = 220f;
 
+    [Header("Current Market Summary UI")]
+    [SerializeField] private TMP_Text currentThemeText;
+    [SerializeField] private TMP_Text currentGenreText;
+    [SerializeField] private TMP_Text marketTimeLeftText;
+
     [Header("Trend Duration")]
-    [SerializeField] private int minimumWeeks = 2;
-    [SerializeField] private int maximumWeeks = 5;
+    [SerializeField] private int minimumWeeks = 1;
+    [SerializeField] private int maximumWeeks = 4;
 
     [Header("Bonuses Per Match")]
     [SerializeField] private int qualityBonus = 5;
@@ -40,11 +52,32 @@ public class MarketTrendManager : MonoBehaviour
     public event Action OnTrendChanged;
 
     private int[] themeDirections;
+    private int[] themeDurations;
     private int[] genreDemands;
+    private int[] genreDurations;
 
-    private readonly Color risingColor = new Color32(53, 245, 107, 255);
-    private readonly Color fallingColor = new Color32(255, 59, 69, 255);
-    private readonly Color stableColor = new Color32(244, 237, 106, 255);
+    private int currentThemeIndex;
+    private int currentGenreIndex;
+
+    // Trend direction and status colours.
+    private readonly Color risingColor =
+        new Color32(35, 247, 55, 255);       // #23F737
+
+    private readonly Color fallingColor =
+        new Color32(254, 12, 0, 255);        // #FE0C00
+
+    private readonly Color stableColor =
+        new Color32(254, 242, 0, 255);       // #FEF200
+
+    // Duration colours.
+    private readonly Color urgentDurationColor =
+        new Color32(197, 80, 0, 255);        // #C55000
+
+    private readonly Color warningDurationColor =
+        new Color32(197, 154, 0, 255);       // #C59A00
+
+    private readonly Color safeDurationColor =
+        new Color32(0, 197, 21, 255);        // #00C515
 
     private void Start()
     {
@@ -53,91 +86,145 @@ public class MarketTrendManager : MonoBehaviour
 
     public void GenerateNewTrend()
     {
-        GenerateThemeDirections();
-        GenerateGenreDemand();
-
-        WeeksRemaining =
-            UnityEngine.Random.Range(minimumWeeks, maximumWeeks + 1);
-
+        GenerateThemeTrends();
+        GenerateGenreTrends();
         UpdateMarketTrendUI();
 
         Debug.Log(
-            $"New Market Trend: {CurrentGenre}, " +
-            $"{CurrentTheme}, {WeeksRemaining} weeks"
+            $"New Market Trend: {CurrentTheme} + {CurrentGenre}, " +
+            $"{WeeksRemaining} weeks remaining"
         );
 
         OnTrendChanged?.Invoke();
     }
 
-    private void GenerateThemeDirections()
+    private void GenerateThemeTrends()
     {
         themeDirections = new int[themes.Length];
+        themeDurations = new int[themes.Length];
 
-        int popularThemeIndex =
+        currentThemeIndex =
             UnityEngine.Random.Range(0, themes.Length);
 
-        for (int i = 0; i < themeDirections.Length; i++)
+        for (int i = 0; i < themes.Length; i++)
         {
-            // Creates -1, 0 or 1.
-            themeDirections[i] = UnityEngine.Random.Range(-1, 2);
+            themeDirections[i] =
+                UnityEngine.Random.Range(-1, 2);
+
+            themeDurations[i] = GenerateDuration();
         }
 
-        // Ensure the selected current theme is rising.
-        themeDirections[popularThemeIndex] = 1;
-        CurrentTheme = themes[popularThemeIndex];
+        themeDirections[currentThemeIndex] = 1;
+        CurrentTheme = themes[currentThemeIndex];
     }
 
-    private void GenerateGenreDemand()
+    private void GenerateGenreTrends()
     {
         genreDemands = new int[genres.Length];
+        genreDurations = new int[genres.Length];
 
         int highestDemand = -1;
-        int highestDemandIndex = 0;
+        currentGenreIndex = 0;
 
-        for (int i = 0; i < genreDemands.Length; i++)
+        for (int i = 0; i < genres.Length; i++)
         {
-            genreDemands[i] = UnityEngine.Random.Range(20, 91);
+            genreDemands[i] =
+                UnityEngine.Random.Range(20, 91);
+
+            genreDurations[i] = GenerateDuration();
 
             if (genreDemands[i] > highestDemand)
             {
                 highestDemand = genreDemands[i];
-                highestDemandIndex = i;
+                currentGenreIndex = i;
             }
         }
 
-        CurrentGenre = genres[highestDemandIndex];
+        CurrentGenre = genres[currentGenreIndex];
+    }
+
+    private int GenerateDuration()
+    {
+        return UnityEngine.Random.Range(
+            minimumWeeks,
+            maximumWeeks + 1
+        );
     }
 
     private void UpdateMarketTrendUI()
     {
-        for (int i = 0;
-             i < themeDirectionTexts.Length &&
-             i < themeDirections.Length;
-             i++)
+        UpdateThemeUI();
+        UpdateGenreUI();
+        UpdateCurrentMarketSummary();
+    }
+
+    private void UpdateThemeUI()
+    {
+        for (int i = 0; i < themeDirections.Length; i++)
         {
+            string arrow;
+            string status;
+            Color trendColor;
+
             if (themeDirections[i] > 0)
             {
-                themeDirectionTexts[i].text = "↑";
-                themeDirectionTexts[i].color = risingColor;
+                arrow = "↑";
+                status = "RISING";
+                trendColor = risingColor;
             }
             else if (themeDirections[i] < 0)
             {
-                themeDirectionTexts[i].text = "↓";
-                themeDirectionTexts[i].color = fallingColor;
+                arrow = "↓";
+                status = "DECLINING";
+                trendColor = fallingColor;
             }
             else
             {
-                themeDirectionTexts[i].text = "-";
-                themeDirectionTexts[i].color = stableColor;
+                arrow = "-";
+                status = "STEADY";
+                trendColor = stableColor;
+            }
+
+            if (i < themeDirectionTexts.Length &&
+                themeDirectionTexts[i] != null)
+            {
+                themeDirectionTexts[i].text = arrow;
+                themeDirectionTexts[i].color = trendColor;
+            }
+
+            if (i < themeStatusTexts.Length &&
+                themeStatusTexts[i] != null)
+            {
+                themeStatusTexts[i].text = status;
+                themeStatusTexts[i].color = trendColor;
+            }
+
+            if (i < themeDurationTexts.Length &&
+                themeDurationTexts[i] != null)
+            {
+                themeDurationTexts[i].text =
+                    FormatRowDuration(themeDurations[i]);
+
+                themeDurationTexts[i].color =
+                    GetDurationColor(themeDurations[i]);
             }
         }
+    }
 
+    private void UpdateGenreUI()
+    {
         for (int i = 0;
              i < genreDemandTexts.Length &&
              i < genreDemands.Length;
              i++)
         {
-            genreDemandTexts[i].text = genreDemands[i] + "%";
+            if (genreDemandTexts[i] == null)
+            {
+                continue;
+            }
+
+            genreDemandTexts[i].text =
+                genreDemands[i] + "%";
         }
 
         for (int i = 0;
@@ -145,6 +232,11 @@ public class MarketTrendManager : MonoBehaviour
              i < genreDemands.Length;
              i++)
         {
+            if (genreDemandFills[i] == null)
+            {
+                continue;
+            }
+
             float width =
                 maximumBarWidth * genreDemands[i] / 100f;
 
@@ -153,19 +245,170 @@ public class MarketTrendManager : MonoBehaviour
                 width
             );
         }
+
+        for (int i = 0;
+             i < genreDurationTexts.Length &&
+             i < genreDurations.Length;
+             i++)
+        {
+            if (genreDurationTexts[i] == null)
+            {
+                continue;
+            }
+
+            genreDurationTexts[i].text =
+                FormatRowDuration(genreDurations[i]);
+
+            genreDurationTexts[i].color =
+                GetDurationColor(genreDurations[i]);
+        }
+    }
+
+    private void UpdateCurrentMarketSummary()
+    {
+        CurrentTheme = themes[currentThemeIndex];
+        CurrentGenre = genres[currentGenreIndex];
+
+        WeeksRemaining = Mathf.Min(
+            themeDurations[currentThemeIndex],
+            genreDurations[currentGenreIndex]
+        );
+
+        if (currentThemeText != null)
+        {
+            currentThemeText.text =
+                CurrentTheme.ToUpper();
+
+            if (themeNameTexts != null &&
+                currentThemeIndex < themeNameTexts.Length &&
+                themeNameTexts[currentThemeIndex] != null)
+            {
+                currentThemeText.color =
+                    themeNameTexts[currentThemeIndex].color;
+            }
+        }
+
+        if (currentGenreText != null)
+        {
+            currentGenreText.text =
+                CurrentGenre.ToUpper();
+
+            if (genreNameTexts != null &&
+                currentGenreIndex < genreNameTexts.Length &&
+                genreNameTexts[currentGenreIndex] != null)
+            {
+                currentGenreText.color =
+                    genreNameTexts[currentGenreIndex].color;
+            }
+        }
+
+        if (marketTimeLeftText != null)
+        {
+            marketTimeLeftText.text =
+                FormatSummaryDuration(WeeksRemaining);
+
+            marketTimeLeftText.color =
+                GetDurationColor(WeeksRemaining);
+        }
     }
 
     public void AdvanceWeek()
     {
-        WeeksRemaining--;
+        bool currentThemeExpired = false;
 
-        if (WeeksRemaining <= 0)
+        for (int i = 0; i < themeDurations.Length; i++)
         {
-            GenerateNewTrend();
-            return;
+            themeDurations[i]--;
+
+            if (themeDurations[i] <= 0)
+            {
+                if (i == currentThemeIndex)
+                {
+                    currentThemeExpired = true;
+                }
+
+                themeDirections[i] =
+                    UnityEngine.Random.Range(-1, 2);
+
+                themeDurations[i] = GenerateDuration();
+            }
         }
 
+        for (int i = 0; i < genreDurations.Length; i++)
+        {
+            genreDurations[i]--;
+
+            if (genreDurations[i] <= 0)
+            {
+                genreDemands[i] =
+                    UnityEngine.Random.Range(20, 91);
+
+                genreDurations[i] = GenerateDuration();
+            }
+        }
+
+        if (currentThemeExpired)
+        {
+            currentThemeIndex =
+                UnityEngine.Random.Range(0, themes.Length);
+
+            themeDirections[currentThemeIndex] = 1;
+        }
+
+        FindHighestDemandGenre();
+        UpdateMarketTrendUI();
+
         OnTrendChanged?.Invoke();
+    }
+
+    private void FindHighestDemandGenre()
+    {
+        int highestDemand = -1;
+        currentGenreIndex = 0;
+
+        for (int i = 0; i < genreDemands.Length; i++)
+        {
+            if (genreDemands[i] > highestDemand)
+            {
+                highestDemand = genreDemands[i];
+                currentGenreIndex = i;
+            }
+        }
+    }
+
+    private string FormatRowDuration(int weeks)
+    {
+        if (weeks == 1)
+        {
+            return "1 WEEK LEFT";
+        }
+
+        return weeks + " WEEKS LEFT";
+    }
+
+    private string FormatSummaryDuration(int weeks)
+    {
+        if (weeks == 1)
+        {
+            return "1 WEEK";
+        }
+
+        return weeks + " WEEKS";
+    }
+
+    private Color GetDurationColor(int weeks)
+    {
+        if (weeks <= 1)
+        {
+            return urgentDurationColor;
+        }
+
+        if (weeks == 2)
+        {
+            return warningDurationColor;
+        }
+
+        return safeDurationColor;
     }
 
     public MarketTrendResult EvaluateProject(
@@ -187,18 +430,24 @@ public class MarketTrendManager : MonoBehaviour
         int matchCount = 0;
 
         if (genreMatches)
+        {
             matchCount++;
+        }
 
         if (themeMatches)
+        {
             matchCount++;
+        }
 
         return new MarketTrendResult
         {
             genreMatches = genreMatches,
             themeMatches = themeMatches,
             qualityBonus = qualityBonus * matchCount,
-            moneyMultiplier = 1f + moneyBonusPercent * matchCount,
-            fandomMultiplier = 1f + fandomBonusPercent * matchCount
+            moneyMultiplier =
+                1f + moneyBonusPercent * matchCount,
+            fandomMultiplier =
+                1f + fandomBonusPercent * matchCount
         };
     }
 }
