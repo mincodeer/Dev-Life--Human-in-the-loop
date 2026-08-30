@@ -20,6 +20,10 @@ public class ProjectConditionsUI : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI timeText;
 
+    [SerializeField]
+    private TMP_Text bugsText;
+
+
     [Header("Resource References")]
     [SerializeField]
     private ProjectResourceController projectResourceController;
@@ -54,6 +58,10 @@ public class ProjectConditionsUI : MonoBehaviour
             "Development Time: "
             + conditions.totalTime
             + " days";
+
+        bugsText.text =
+        "Bugs: "
+    +   conditions.bugs;
 
         if (ResourceManager.Instance != null)
         {
