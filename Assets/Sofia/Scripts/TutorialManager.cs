@@ -2,89 +2,22 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
-using System.Collections;
 
 public class TutorialManager : MonoBehaviour
 {
-    // ============================================================
-    // TUTORIAL PHASES
-    // ============================================================
-    // This enum lists every stage of the tutorial.
-    // Each phase can display dialogue or wait for a specific
-    // player action before moving to the next phase.
-    private enum TutorialPhase
-    {
-        Introduction,
-        EnterComputer,
-        ComputerDialogue,
-        ThemeAndGenre,
-        StartDevelopment,
-        Development,
-        Shop,
-        Complete
-    }
-
-
-    // ============================================================
-    // UI REFERENCES
-    // ============================================================
-
-    // Reference to the TextMeshPro object used to display
-    // tutorial dialogue on the screen.
+    // Reference to the TextMeshPro text object that displays
+    // the current tutorial dialogue on the screen.
     public TextMeshProUGUI dialogueText;
 
     // Reference to the Next button.
-    // The button can be hidden when the player must complete
-    // an action instead of clicking through dialogue.
+    // This allows the script to hide the button when the player
+    // needs to perform an action instead of clicking Next.
     public GameObject nextButton;
 
-    // Reference to the interaction prompt shown when the player
-    // needs to press E to interact with the computer.
-    public GameObject interactPrompt;
 
-
-
-    // ============================================================
-    // TYPING EFFECT SETTINGS
-    // ============================================================
-
-    // Controls how quickly each character appears.
-    // A smaller number means faster typing.
-    [SerializeField] private float typingSpeed = 0.03f;
-
-    // Stores whether the current dialogue is still typing.
-    private bool isTyping = false;
-
-    // Stores the full dialogue currently being displayed.
-    // This allows the player to instantly reveal the full text
-    // when clicking the Next button during the typing effect.
-    private string currentFullDialogue;
-
-    // Stores the currently running typing coroutine.
-    // This allows the coroutine to be stopped safely if needed.
-    private Coroutine typingCoroutine;
-
-
-    // ============================================================
-    // TUTORIAL STATE
-    // ============================================================
-
-    // Stores the tutorial phase that is currently active.
-    private TutorialPhase currentPhase = TutorialPhase.Introduction;
-
-    // Keeps track of which dialogue message is currently displayed.
-    private int currentDialogueIndex = 0;
-
-    // Checks whether the tutorial is waiting for the player
-    // to press E and interact with the computer.
-    private bool waitingForComputer = false;
-
-
-    // ============================================================
-    // INTRODUCTION DIALOGUE
-    // ============================================================
-
-    // Stores the dialogue shown when the tutorial first begins.
+    // Stores all of the introduction dialogue messages.
+    // Each message is displayed one at a time when the player
+    // clicks the Next button.
     private string[] introductionDialogues =
     {
         "Welcome to Dev Life: Human in the Loop!",
@@ -99,483 +32,136 @@ public class TutorialManager : MonoBehaviour
     };
 
 
-    // ============================================================
-    // COMPUTER DIALOGUE
-    // ============================================================
-
-    // Stores dialogue shown after the player enters the computer.
-    private string[] computerDialogues =
-    {
-        "Great! You are now ready to begin developing your first game.",
-
-        "Every game begins with an idea.",
-
-        "First, you will need to choose a theme and genre for your game."
-    };
+    // Keeps track of which dialogue message is currently being displayed.
+    // The first dialogue starts at position 0 in the array.
+    private int currentDialogueIndex = 0;
 
 
-    // ============================================================
-    // UNITY METHODS
-    // ============================================================
+    // Checks whether the tutorial is currently waiting for the player
+    // to press E and interact with the computer.
+    private bool waitingForComputer = false;
+
 
     // Start is called once when the Tutorial Scene begins.
     private void Start()
     {
-        // Begin the tutorial with the introduction.
-        StartPhase(TutorialPhase.Introduction);
+        // Display the first tutorial dialogue when the scene starts.
+        ShowCurrentDialogue();
     }
 
 
     // Update is called once every frame.
-    // It checks for player actions required by the tutorial.
+    // This checks whether the player presses E while the tutorial
+    // is waiting for the computer interaction.
     private void Update()
     {
-        // Only check for the E key while the tutorial is waiting
-        // for the player to interact with the computer.
+        // Only check for the E key if the tutorial is currently
+        // waiting for the player to interact with the computer.
         if (waitingForComputer)
         {
-            // Keyboard.current accesses the keyboard using Unity's
-            // new Input System.
+            // Keyboard.current accesses the keyboard using
+            // Unity's New Input System.
+            //
+            // The null check prevents errors if a keyboard
+            // is not detected by the game.
             if (Keyboard.current != null &&
                 Keyboard.current.eKey.wasPressedThisFrame)
             {
-                // The player pressed E, so enter the computer.
+                // The player pressed E, so continue to the
+                // computer interaction step.
                 EnterComputer();
             }
         }
     }
 
 
-    // ============================================================
-    // PHASE MANAGEMENT
-    // ============================================================
-
-    // Starts a new tutorial phase.
-    private void StartPhase(TutorialPhase newPhase)
-    {
-        // Store the new phase.
-        currentPhase = newPhase;
-
-        // Reset the dialogue index whenever a new dialogue
-        // section begins.
-        currentDialogueIndex = 0;
-
-        // Handle the behaviour for each tutorial phase.
-        switch (currentPhase)
-        {
-            case TutorialPhase.Introduction:
-
-                if (nextButton != null)
-                {
-                    nextButton.SetActive(true);
-                }
-
-                ShowCurrentDialogue();
-                break;
-
-
-            case TutorialPhase.EnterComputer:
-
-                WaitForComputer();
-                break;
-
-
-            case TutorialPhase.ComputerDialogue:
-
-                if (nextButton != null)
-                {
-                    nextButton.SetActive(true);
-                }
-
-                ShowCurrentDialogue();
-                break;
-
-
-            case TutorialPhase.ThemeAndGenre:
-
-                ShowThemeAndGenreInstruction();
-                break;
-
-
-            case TutorialPhase.StartDevelopment:
-
-                ShowStartDevelopmentInstruction();
-                break;
-
-
-            case TutorialPhase.Development:
-
-                ShowDevelopmentInstruction();
-                break;
-
-
-            case TutorialPhase.Shop:
-
-                ShowShopInstruction();
-                break;
-
-
-            case TutorialPhase.Complete:
-
-                CompleteTutorial();
-                break;
-        }
-    }
-
-
-    // ============================================================
-    // DIALOGUE DISPLAY
-    // ============================================================
-
-    // Displays dialogue based on the current tutorial phase.
+    // Displays the dialogue at the current position
+    // in the introductionDialogues array.
     private void ShowCurrentDialogue()
     {
-        // Stop if the dialogue text reference has not been assigned.
-        if (dialogueText == null)
-        {
-            return;
-        }
-
-        // Determine which dialogue should be displayed.
-        switch (currentPhase)
-        {
-            case TutorialPhase.Introduction:
-
-                StartTyping(
-                    introductionDialogues[currentDialogueIndex]
-                );
-                break;
-
-
-            case TutorialPhase.ComputerDialogue:
-
-                StartTyping(
-                    computerDialogues[currentDialogueIndex]
-                );
-                break;
-        }
-    }
-
-
-    // ============================================================
-    // TYPING EFFECT
-    // ============================================================
-
-    // Starts the typing effect for a new dialogue message.
-    private void StartTyping(string dialogue)
-    {
-        // Stop the previous typing coroutine if one is still running.
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-        }
-
-        // Store the complete dialogue so it can be revealed instantly.
-        currentFullDialogue = dialogue;
-
-        // Start the typing animation.
-        typingCoroutine = StartCoroutine(TypeDialogue(dialogue));
-    }
-
-
-    // Types the dialogue one character at a time.
-    private IEnumerator TypeDialogue(string dialogue)
-    {
-        // Tell the script that text is currently typing.
-        isTyping = true;
-
-        // Clear the dialogue box before typing begins.
-        dialogueText.text = "";
-
-        // Go through every character in the dialogue.
-        foreach (char character in dialogue)
-        {
-            // Add the next character to the dialogue box.
-            dialogueText.text += character;
-
-            // Wait before displaying the next character.
-            yield return new WaitForSeconds(typingSpeed);
-        }
-
-        // The full dialogue has finished typing.
-        isTyping = false;
-
-        // Clear the coroutine reference because typing is finished.
-        typingCoroutine = null;
-    }
-
-
-    // Instantly displays the complete current dialogue.
-    private void CompleteCurrentDialogue()
-    {
-        // Stop the typing coroutine if it is still running.
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-            typingCoroutine = null;
-        }
-
-        // Display the complete dialogue immediately.
+        // Check that the Dialogue Text object has been assigned
+        // in the Unity Inspector before changing its text.
         if (dialogueText != null)
         {
-            dialogueText.text = currentFullDialogue;
+            dialogueText.text =
+                introductionDialogues[currentDialogueIndex];
         }
-
-        // The dialogue is no longer typing.
-        isTyping = false;
     }
 
-
-    // ============================================================
-    // NEXT BUTTON
-    // ============================================================
 
     // This method is connected to the Next button.
-    // If dialogue is currently typing, the first click completes it.
-    // If dialogue has already finished, the next click progresses.
+    // Every time the player clicks Next, the tutorial
+    // moves to the next dialogue message.
     public void NextDialogue()
-    {
-        // If the current dialogue is still typing,
-        // instantly show the complete sentence instead of progressing.
-        if (isTyping)
-        {
-            CompleteCurrentDialogue();
-            return;
-        }
-
-        // Move through the tutorial depending on the current phase.
-        switch (currentPhase)
-        {
-            case TutorialPhase.Introduction:
-
-                NextIntroductionDialogue();
-                break;
-
-
-            case TutorialPhase.ComputerDialogue:
-
-                NextComputerDialogue();
-                break;
-
-
-            // These phases will eventually progress through
-            // real player actions instead of the Next button.
-            case TutorialPhase.ThemeAndGenre:
-            case TutorialPhase.StartDevelopment:
-            case TutorialPhase.Development:
-            case TutorialPhase.Shop:
-                break;
-        }
-    }
-
-
-    // ============================================================
-    // INTRODUCTION PROGRESSION
-    // ============================================================
-
-    // Moves to the next introduction dialogue.
-    private void NextIntroductionDialogue()
     {
         // Move to the next dialogue message.
         currentDialogueIndex++;
 
-        // Check whether more introduction dialogue remains.
+        // Check if there are still dialogue messages remaining.
         if (currentDialogueIndex < introductionDialogues.Length)
         {
+            // Display the next tutorial dialogue.
             ShowCurrentDialogue();
         }
         else
         {
-            // The introduction is complete.
-            // Move to the computer interaction phase.
-            StartPhase(TutorialPhase.EnterComputer);
+            // All introduction dialogues have been shown.
+            // The tutorial will now wait for the player
+            // to press E before entering the main game.
+            WaitForComputer();
         }
     }
 
 
-    // ============================================================
-    // COMPUTER DIALOGUE PROGRESSION
-    // ============================================================
-
-    // Moves through dialogue shown after entering the computer.
-    private void NextComputerDialogue()
-    {
-        // Move to the next computer dialogue.
-        currentDialogueIndex++;
-
-        // Check whether more computer dialogue remains.
-        if (currentDialogueIndex < computerDialogues.Length)
-        {
-            ShowCurrentDialogue();
-        }
-        else
-        {
-            // Computer dialogue is complete.
-            // Move to the Theme and Genre phase.
-            StartPhase(TutorialPhase.ThemeAndGenre);
-        }
-    }
-
-
-    // ============================================================
-    // COMPUTER INTERACTION
-    // ============================================================
-
-    // Sets up the tutorial to wait for the player to press E.
+    // Sets up the tutorial to wait for the player
+    // to press E before continuing.
     private void WaitForComputer()
     {
-        // Tell the tutorial that it is waiting for computer input.
+        // Tell the script that the tutorial is now waiting
+        // for the computer interaction.
         waitingForComputer = true;
 
-        // Hide the Next button because the player must now
-        // perform an action instead of clicking Next.
+        // Hide the Next button because the player now needs
+        // to press E instead of clicking Next.
         if (nextButton != null)
         {
             nextButton.SetActive(false);
         }
-        // Show the interaction prompt to tell the player
-        // that they need to press E to use the computer.
-        if (interactPrompt != null)
-        {
-            interactPrompt.SetActive(true);
-        }
     }
 
 
-    // Called when the player presses E during the computer step.
+    // This method is called when the player presses E
+    // during the computer interaction part of the tutorial.
     private void EnterComputer()
     {
-        // Stop waiting so the interaction cannot trigger repeatedly.
+        // Stop waiting for the E key.
+        // This prevents the interaction from being triggered
+        // repeatedly while the scene is changing.
         waitingForComputer = false;
 
-        // Hide the interaction prompt because the player
-        // has successfully entered the computer.
-        if (interactPrompt != null)
-        {
-            interactPrompt.SetActive(false);
-        }
-        // Temporary debug message used to confirm the interaction works.
-        Debug.Log("Player entered the computer!");
+        // Display a message in the Console so we can confirm
+        // that the tutorial was successfully completed.
+        Debug.Log("Tutorial complete. Entering the computer.");
 
-        // Future zoom-in animation can be triggered here.
+        // Load the main gameplay/development scene.
         //
-        // Example:
-        // StartComputerZoomAnimation();
-
-        // The development screen can also be opened here later.
-        //
-        // Example:
-        // developmentScreen.SetActive(true);
-
-        // Move to the dialogue shown after entering the computer.
-        StartPhase(TutorialPhase.ComputerDialogue);
+        // The current development scene is named "Minjae's Scene".
+        // This scene contains the player's room, computer and
+        // DevelopmentFlowManager.
+        SceneManager.LoadScene("Minjae's Scene");
     }
 
-
-    // ============================================================
-    // PLACEHOLDER PHASES
-    // ============================================================
-
-    // Displays instructions for choosing a Theme and Genre.
-    private void ShowThemeAndGenreInstruction()
-    {
-        if (dialogueText != null)
-        {
-            StartTyping(
-                "Choose a theme and genre for your game."
-            );
-        }
-
-        // Hide Next because this phase should eventually wait
-        // for the player to make their selections.
-        if (nextButton != null)
-        {
-            nextButton.SetActive(false);
-        }
-
-        Debug.Log("Waiting for Theme and Genre selection...");
-    }
-
-
-    // Displays instructions for starting development.
-    private void ShowStartDevelopmentInstruction()
-    {
-        if (dialogueText != null)
-        {
-            StartTyping(
-                "Great! Now click Start Development to begin creating your game."
-            );
-        }
-
-        Debug.Log("Waiting for Start Development...");
-    }
-
-
-    // Displays a placeholder for the development process.
-    private void ShowDevelopmentInstruction()
-    {
-        if (dialogueText != null)
-        {
-            StartTyping(
-                "Your game is now entering development."
-            );
-        }
-
-        // The future development animation can be connected here.
-        Debug.Log("Development phase started.");
-    }
-
-
-    // Displays instructions for the Shop and upgrades.
-    private void ShowShopInstruction()
-    {
-        if (dialogueText != null)
-        {
-            StartTyping(
-                "As you develop and release games, you can earn money."
-            );
-        }
-
-        Debug.Log("Shop tutorial phase started.");
-    }
-
-
-    // ============================================================
-    // TUTORIAL COMPLETION
-    // ============================================================
-
-    // Called when the tutorial has been completed.
-    private void CompleteTutorial()
-    {
-        if (dialogueText != null)
-        {
-            StartTyping(
-                "Tutorial complete! You are now ready to begin your journey as a game developer."
-            );
-        }
-
-        Debug.Log("Tutorial completed!");
-
-        // Once the final gameplay scene is available,
-        // this can load the normal gameplay scene.
-        //
-        // SceneManager.LoadScene("GameplayScene");
-    }
-
-
-    // ============================================================
-    // SKIP TUTORIAL
-    // ============================================================
 
     // This method is connected to the Skip Tutorial button.
+    // Skipping the tutorial takes the player directly to
+    // the main gameplay/development scene.
     public void SkipTutorial()
     {
-        // The final gameplay scene is not available yet.
-        // For now, this confirms that the Skip button works.
-        Debug.Log("Tutorial skipped!");
+        // Display a message in the Console so we can confirm
+        // that the tutorial was skipped successfully.
+        Debug.Log("Tutorial skipped. Loading the game scene.");
 
-        // Once the correct gameplay scene name is known:
-        //
-        // SceneManager.LoadScene("GameplayScene");
+        // Load the main gameplay/development scene.
+        SceneManager.LoadScene("Minjae's Scene");
     }
 }
