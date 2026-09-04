@@ -43,6 +43,7 @@ public class TutorialManager : MonoBehaviour
     public GameObject interactPrompt;
 
 
+
     // ============================================================
     // TYPING EFFECT SETTINGS
     // ============================================================
