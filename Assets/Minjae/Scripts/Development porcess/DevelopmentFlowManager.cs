@@ -1,3 +1,8 @@
+/// <summary>
+/// Controls the order of the development stages
+/// This saves the player's choices before moving to the next stage.
+/// </summary>
+
 using UnityEngine;
 
 public class DevelopmentFlowManager : MonoBehaviour
@@ -114,6 +119,185 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void GotoResult()
     {
+        // Result calculation integration point
+        // After the build stage, it will read ProjectDataManager.Instance.Current Project.
+        // Check the porject.HasAllWorkedMethods, and calculate Money, fandom, Tech Debt, Dev skill, Time, Quality, Cost and bugs (if too much remove some of them).
+        // Apply the claculated changes to ResourceManager(create one).
+        // Display the calculated outcome on the result panel.
         ChangeStage(DevelopmentStage.Result);
+    }
+
+        // ==============================
+    // Project Setup Selection
+    // ==============================
+
+    public void None()
+    {
+        return;
+    }
+    public void SelectFantasy()
+    {
+        ProjectDataManager.Instance.SetTheme(
+            GameTheme.Fantasy);
+    }
+
+    public void SelectSciFi()
+    {
+        ProjectDataManager.Instance.SetTheme(
+            GameTheme.SciFi);
+    }
+
+    public void SelectHorror()
+    {
+        ProjectDataManager.Instance.SetTheme(
+            GameTheme.Horror);
+    }
+
+    public void SelectRPG()
+    {
+        ProjectDataManager.Instance.SetGenre(
+            GameGenre.RPG);
+    }
+
+    public void SelectAction()
+    {
+        ProjectDataManager.Instance.SetGenre(
+            GameGenre.Action);
+    }
+
+    public void SelectSimulation()
+    {
+        ProjectDataManager.Instance.SetGenre(
+            GameGenre.Simulation);
+    }
+
+    public void StartDevelopment()
+    {
+        if (ProjectDataManager.Instance == null)
+        {
+            Debug.LogError(
+                "ProjectDataManager is missing.");
+
+            return;
+        }
+
+        ProjectData project =
+            ProjectDataManager.Instance.CurrentProject;
+
+        if (!project.HasProjectSetup)
+        {
+            Debug.LogWarning(
+                "Select both Theme and Genre.");
+
+            return;
+        }
+
+        GotoCoding();
+    }
+
+    // ==============================
+    // Manual / AI Selection
+    // ==============================
+
+    public void ChooseManual()
+    {
+        SaveMethodAndContinue(
+            WorkMethod.Manual);
+    }
+
+    public void ChooseAI()
+    {
+        SaveMethodAndContinue(
+            WorkMethod.AI);
+    }
+
+    // Saves the player's Manual/AI choies.
+    private void SaveMethodAndContinue(
+        WorkMethod method)
+    {
+        if (ProjectDataManager.Instance == null)
+        {
+            Debug.LogError(
+                "ProjectDataManager is missing.");
+
+            return;
+        }
+
+        bool wasSaved =
+            ProjectDataManager.Instance.SetWorkMethod(
+                currentStage,
+                method);
+
+        if (!wasSaved)
+        {
+            Debug.LogWarning(
+                "Cannot select a work method during: "
+                + currentStage);
+
+            return;
+        }
+
+        switch (currentStage)
+        {
+            case DevelopmentStage.Coding:
+                GotoDesign();
+                break;
+
+            case DevelopmentStage.Design:
+                GotoSound();
+                break;
+
+            case DevelopmentStage.Sound:
+                GotoDebugging();
+                break;
+
+            case DevelopmentStage.Debugging:
+                GotoBuild();
+                break;
+        }
+    }
+
+        public void OnThemeDropdownChanged(int index)
+    {
+        switch (index)
+        {
+            case 0:
+            None();
+            break;
+            
+            case 1:
+            SelectFantasy();
+            break;
+
+            case 2:
+            SelectSciFi();
+            break;
+
+            case 3:
+            SelectHorror();
+            break;
+        }
+    }
+
+    public void OnGenreDropdownChanged(int index)
+    {
+        switch (index)
+        {
+            case 0:
+            None();
+            break;
+
+            case 1:
+            SelectRPG();
+                break;
+
+            case 2:
+                SelectAction();
+                break;
+
+            case 3:
+                SelectSimulation();
+                break;
+        }
     }
 }

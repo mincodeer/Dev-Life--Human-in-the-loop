@@ -1,16 +1,113 @@
-using UnityEngine;
+using System;
+using System.Text;
 
-public class ProjectData : MonoBehaviour
+/// <summary>
+/// Stores the choices and calculated outcome of one game project.
+/// The development flow stores the choices of AI, Manual, Theme and Genre.
+/// </summary>
+[Serializable]
+public class ProjectData
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public string projectName = "Untitled Project";
+
+    // Input data for result calculation
+    public GameTheme selectedTheme = GameTheme.None;
+    public GameGenre selectedGenre = GameGenre.None;
+
+    public WorkMethod codingMethod = WorkMethod.None;
+    public WorkMethod designMethod = WorkMethod.None;
+    public WorkMethod soundMethod = WorkMethod.None;
+    public WorkMethod debuggingMethod = WorkMethod.None;
+
+    // per project output data
+    // The reult calculation system may update these values.
+    // These are the results of this project, not the player's permanent resources.
+    public float totalTime;
+    public int totalCost;
+    public float quality;
+    public int bugs;
+
+    public bool HasProjectSetup
     {
-        
+        get
+        {
+            return selectedTheme != GameTheme.None
+                && selectedGenre != GameGenre.None;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    // The result calculation system can use this to check.
+    public bool HasAllWorkMethods
     {
-        
+        get
+        {
+            return codingMethod != WorkMethod.None
+                && designMethod != WorkMethod.None
+                && soundMethod != WorkMethod.None
+                && debuggingMethod != WorkMethod.None;
+        }
+    }
+
+    public void SetWorkMethod(DevelopmentStage stage, WorkMethod method)
+    {
+        switch (stage)
+        {
+            case DevelopmentStage.Coding:
+                codingMethod = method;
+                break;
+
+            case DevelopmentStage.Design:
+                designMethod = method;
+                break;
+
+            case DevelopmentStage.Sound:
+                soundMethod = method;
+                break;
+
+            case DevelopmentStage.Debugging:
+                debuggingMethod = method;
+                break;
+
+            default:
+                throw new ArgumentException(
+                    "This stage does not have a Manual/AI choice: " + stage,
+                    "stage");
+        }
+    }
+
+    public WorkMethod GetWorkMethod(DevelopmentStage stage)
+    {
+        switch (stage)
+        {
+            case DevelopmentStage.Coding:
+                return codingMethod;
+
+            case DevelopmentStage.Design:
+                return designMethod;
+
+            case DevelopmentStage.Sound:
+                return soundMethod;
+
+            case DevelopmentStage.Debugging:
+                return debuggingMethod;
+
+            default:
+                throw new ArgumentException(
+                    "This stage does not have a Manual/AI choice: " + stage,
+                    "stage");
+        }
+    }
+
+    public string ToReadableSummary()
+    {
+        StringBuilder summary = new StringBuilder();
+        summary.AppendLine("Project: " + projectName);
+        summary.AppendLine("Theme: " + selectedTheme);
+        summary.AppendLine("Genre: " + selectedGenre);
+        summary.AppendLine("Coding: " + codingMethod);
+        summary.AppendLine("Design: " + designMethod);
+        summary.AppendLine("Sound: " + soundMethod);
+        summary.Append("Debugging: " + debuggingMethod);
+        return summary.ToString();
     }
 }
