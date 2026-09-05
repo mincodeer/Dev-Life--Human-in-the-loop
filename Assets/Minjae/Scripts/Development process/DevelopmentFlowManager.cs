@@ -185,9 +185,7 @@ public class DevelopmentFlowManager : MonoBehaviour
         GotoCoding();
     }
 
-    // ==============================
     // Manual / AI Selection
-    // ==============================
 
     public void ChooseManual()
     {
@@ -204,14 +202,6 @@ public class DevelopmentFlowManager : MonoBehaviour
     private void SaveMethodAndContinue(
         WorkMethod method)
     {
-        if (ProjectDataManager.Instance == null)
-        {
-            Debug.LogError(
-                "ProjectDataManager is missing.");
-
-            return;
-        }
-
         bool wasSaved =
             ProjectDataManager.Instance.SetWorkMethod(
                 currentStage,
