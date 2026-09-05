@@ -1,3 +1,8 @@
+/// <summary>
+/// Controls the order of the development stages
+/// This saves the player's choices before moving to the next stage.
+/// </summary>
+
 using UnityEngine;
 
 public class DevelopmentFlowManager : MonoBehaviour
@@ -114,6 +119,11 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void GotoResult()
     {
+        // Result calculation integration point
+        // After the build stage, it will read ProjectDataManager.Instance.Current Project.
+        // Check the porject.HasAllWorkedMethods, and calculate Money, fandom, Tech Debt, Dev skill, Time, Quality, Cost and bugs (if too much remove some of them).
+        // Apply the claculated changes to ResourceManager(create one).
+        // Display the calculated outcome on the result panel.
         ChangeStage(DevelopmentStage.Result);
     }
 
@@ -199,6 +209,7 @@ public class DevelopmentFlowManager : MonoBehaviour
             WorkMethod.AI);
     }
 
+    // Saves the player's Manual/AI choies.
     private void SaveMethodAndContinue(
         WorkMethod method)
     {
