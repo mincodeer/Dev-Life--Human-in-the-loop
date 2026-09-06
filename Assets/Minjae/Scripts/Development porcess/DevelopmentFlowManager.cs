@@ -10,7 +10,9 @@ public class DevelopmentFlowManager : MonoBehaviour
     [Header("Current Stage")]
     [SerializeField]
     private DevelopmentStage currentStage =
-        DevelopmentStage.None;
+    DevelopmentStage.None;
+
+    public DevelopmentStage CurrentStage => currentStage;
 
     [Header("Main UI")]
     [SerializeField]
