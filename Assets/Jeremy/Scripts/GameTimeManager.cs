@@ -5,12 +5,12 @@ public class GameTimeManager : MonoBehaviour
     // The current in-game day.
     public int currentDay = 1;
 
-    // The current hour and minute.
+    // The current in-game hour and minute.
     public int currentHour = 8;
     public int currentMinute = 0;
 
     // How many in-game minutes pass every real-world second.
-    // 1 = normal speed, 10 = much faster for testing.
+    // 10 makes the clock move quickly for testing.
     public float gameMinutesPerSecond = 10f;
 
     // Keeps track of real-world time.
@@ -21,8 +21,7 @@ public class GameTimeManager : MonoBehaviour
         // Add the time that has passed since the previous frame.
         timer += Time.deltaTime;
 
-        // Once one real-world second has passed,
-        // advance the in-game clock.
+        // Advance the game clock every real-world second.
         if (timer >= 1f)
         {
             timer -= 1f;
