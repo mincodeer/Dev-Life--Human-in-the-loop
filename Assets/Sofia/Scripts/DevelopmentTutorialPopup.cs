@@ -247,8 +247,6 @@ public class DevelopmentTutorialPopup : MonoBehaviour
         ShowPopup(
             "CONGRATULATIONS!\n\n" +
             "Your game is complete!\n\n" +
-            "You've made your development choices and managed " +
-            "your project resources.\n\n" +
             "You're ready to start your first game!"
         );
     }
