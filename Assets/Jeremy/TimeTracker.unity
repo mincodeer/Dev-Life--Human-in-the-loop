@@ -152,6 +152,10 @@ MonoBehaviour:
   currentHour: 8
   currentMinute: 0
   gameMinutesPerSecond: 10
+<<<<<<< Updated upstream
+=======
+  timer: 0
+>>>>>>> Stashed changes
 --- !u!4 &1093707104
 Transform:
   m_ObjectHideFlags: 0
