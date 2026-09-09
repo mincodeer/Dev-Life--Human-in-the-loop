@@ -14,6 +14,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Minjae/Minjae's Scene.unity
     guid: b68043d364758044bb2d09d492df7086
+    path: Assets/Katie/Dashboard.unity
+    guid: f2a92f4971e777f4ba081bca2f1c1f56
+  - enabled: 1
+    path: Assets/Katie/GameReviewsScene.unity
+    guid: 488c014d7d3c46b4982b0fb02a87be49
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
