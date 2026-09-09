@@ -1,5 +1,6 @@
-//Student ID:23208000
+// Student ID: 23208000
 
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -14,6 +15,9 @@ public class ResourceManager : MonoBehaviour
         get;
         private set;
     }
+
+    // Notifies the UI whenever Money or Fandom changes.
+    public Action OnResourcesChanged;
 
     [Header("Player Resources")]
 
@@ -95,6 +99,9 @@ public class ResourceManager : MonoBehaviour
             + amount
             + ". Current Money: "
             + money);
+
+        // Tell the Resource UI that Money has changed.
+        OnResourcesChanged?.Invoke();
     }
 
     public void ChangeFandom(int amount)
@@ -109,6 +116,9 @@ public class ResourceManager : MonoBehaviour
             + amount
             + ". Current Fandom: "
             + fandom);
+
+        // Tell the Resource UI that Fandom has changed.
+        OnResourcesChanged?.Invoke();
     }
 
     public void ChangeDevelopmentSkill(int amount)
@@ -158,6 +168,9 @@ public class ResourceManager : MonoBehaviour
         fandom = 0;
         developmentSkill = 10;
         technicalDebt = 0;
+
+        // Tell the UI to refresh after resetting resources.
+        OnResourcesChanged?.Invoke();
 
         Debug.Log("Player resources reset.");
     }
