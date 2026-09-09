@@ -99,6 +99,23 @@ public class FinalResultsCalculator : MonoBehaviour
         CalculateMoneyReward(score);
         CalculateFandomReward(score);
 
+        // Add the earned rewards to the player's
+        // permanent resources.
+        if (ResourceManager.Instance != null)
+        {
+            ResourceManager.Instance.ChangeMoney(
+                finalResult.moneyEarned);
+
+            ResourceManager.Instance.ChangeFandom(
+                finalResult.fandomGained);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "ResourceManager not found. "
+                + "Money and Fandom rewards were not added.");
+        }
+
         Debug.Log(
             "=== FINAL PROJECT RESULT ==="
             + "\nFinal Score: "
@@ -182,6 +199,7 @@ public class FinalResultsCalculator : MonoBehaviour
     {
         CalculateFinalResult();
     }
+
     /// <summary>
     /// Returns the most recently calculated final result.
     /// </summary>
