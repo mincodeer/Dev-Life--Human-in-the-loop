@@ -22,6 +22,10 @@ public class DevelopmentFlowManager : MonoBehaviour
     [SerializeField] private GameObject buildPanel;
     [SerializeField] private GameObject resultPanel;
 
+    [Header("Coding Activity")]
+    [SerializeField] private CodingStageController codingActivity;
+    [SerializeField] private DesignStageController designActivity;
+
     private void Start()
     {
         CloseComputer();
@@ -29,9 +33,18 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void OpenComputer()
     {
-        developmentUI.SetActive(true);
+        if (developmentUI.activeInHierarchy)
+            return;
 
-        ChangeStage(DevelopmentStage.ProjectSetup);
+        DevelopmentStage stageToOpen = currentStage;
+
+        if (stageToOpen == DevelopmentStage.None)
+        {
+            stageToOpen = DevelopmentStage.ProjectSetup;
+        }
+
+        ChangeStage(stageToOpen);
+        developmentUI.SetActive(true);
     }
 
     public void CloseComputer()
@@ -39,6 +52,25 @@ public class DevelopmentFlowManager : MonoBehaviour
         developmentUI.SetActive(false);
 
         currentStage = DevelopmentStage.None;
+    }
+
+    // Coding is done, but Design waits for the next computer click.
+    public void CompleteCoding()
+    {
+        if (currentStage != DevelopmentStage.Coding) return;
+        currentStage = DevelopmentStage.Design;
+        HideAllPanels();
+        developmentUI.SetActive(false);
+    }
+
+    public void CompleteDesign()
+    {
+        if (currentStage != DevelopmentStage.Design)
+            return;
+
+        currentStage = DevelopmentStage.Sound;
+        HideAllPanels();
+        developmentUI.SetActive(false);
     }
 
     public void ChangeStage(DevelopmentStage newStage)
@@ -209,10 +241,30 @@ public class DevelopmentFlowManager : MonoBehaviour
             WorkMethod.AI);
     }
 
-    // Saves the player's Manual/AI choies.
+    // Save first. Coding now runs an activity; other stages keep their old behavior for lesson 1.
     private void SaveMethodAndContinue(
         WorkMethod method)
     {
+        if (currentStage == DevelopmentStage.Coding &&
+            (codingActivity == null || !codingActivity.CanBegin()))
+        {
+            Debug.LogWarning("Coding activity is missing, not ready, or already running.");
+            return;
+        }
+
+        if (currentStage == DevelopmentStage.Design &&
+            (designActivity == null || !designActivity.CanBegin()))
+        {
+            Debug.LogWarning("Check Design Activity and Drawing Steps.");
+            return;
+        }
+
+        if (ProjectDataManager.Instance == null)
+        {
+            Debug.LogError("ProjectDataManager is missing.");
+            return;
+        }
+
         bool wasSaved =
             ProjectDataManager.Instance.SetWorkMethod(
                 currentStage,
@@ -230,11 +282,11 @@ public class DevelopmentFlowManager : MonoBehaviour
         switch (currentStage)
         {
             case DevelopmentStage.Coding:
-                GotoDesign();
+                codingActivity.Begin(method == WorkMethod.AI);
                 break;
 
             case DevelopmentStage.Design:
-                GotoSound();
+                designActivity.Begin(method == WorkMethod.AI);
                 break;
 
             case DevelopmentStage.Sound:

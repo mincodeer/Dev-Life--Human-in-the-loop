@@ -35,7 +35,7 @@ public class ProjectDataManager : MonoBehaviour
         }
 
         Instance = this;
-
+        transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
     }
 

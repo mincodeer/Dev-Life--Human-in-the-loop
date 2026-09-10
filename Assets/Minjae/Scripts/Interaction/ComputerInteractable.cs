@@ -2,13 +2,11 @@ using UnityEngine;
 
 public class ComputerInteractable : MonoBehaviour, IInteractable
 {
-    [SerializeField]
-    private DevelopmentFlowManager developmentFlowManager;
+    [SerializeField] private ComputerInteractionIn interactionIn;
 
     public void Interact()
     {
-        Debug.Log("Computer Clicked");
-
-        developmentFlowManager.OpenComputer();
+        if (interactionIn != null)
+            interactionIn.InteractIn();
     }
 }
