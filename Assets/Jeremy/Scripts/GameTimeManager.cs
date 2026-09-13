@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameTimeManager : MonoBehaviour
@@ -15,6 +16,10 @@ public class GameTimeManager : MonoBehaviour
 
     // Keeps track of real-world time.
     private float timer = 0f;
+
+    // This event tells other systems when one in-game day has passed.
+    // Market Trends can listen to this event and update its countdown.
+    public event Action OnDayPassed;
 
     void Update()
     {
@@ -40,6 +45,10 @@ public class GameTimeManager : MonoBehaviour
             {
                 currentHour = 0;
                 currentDay++;
+
+                // Notify Market Trends and other systems
+                // that one in-game day has passed.
+                OnDayPassed?.Invoke();
             }
         }
     }

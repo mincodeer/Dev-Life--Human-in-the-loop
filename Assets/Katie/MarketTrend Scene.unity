@@ -1436,8 +1436,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -70}
-  m_SizeDelta: {x: -60, y: 75}
+  m_AnchoredPosition: {x: 0, y: -95}
+  m_SizeDelta: {x: -60, y: 105}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &289243819
 MonoBehaviour:
@@ -1511,8 +1511,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 200, y: 10}
-  m_SizeDelta: {x: 380, y: 50}
+  m_AnchoredPosition: {x: 185, y: 10}
+  m_SizeDelta: {x: 390, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &314821076
 CanvasRenderer:
@@ -1542,7 +1542,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: STRATEGY
+  m_text: SIMULATION
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
   m_sharedMaterial: {fileID: 5323781249084338476, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
@@ -1551,8 +1551,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4292373500
-  m_fontColor: {r: 0.98823535, g: 0.41960788, b: 0.8470589, a: 1}
+    rgba: 4285255935
+  m_fontColor: {r: 1, g: 0.8156863, b: 0.41960785, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1632,7 +1632,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &442668661
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1852,77 +1852,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 522b34192ecb98d40bae58cf4fe4be2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MarketTrendManager
-  themes:
-  - Fantasy
-  - Sci-Fi
-  - Modern
-  - Dystopia
-  - Pixel
-  genres:
-  - RPG
-  - Action
-  - Horror
-  - Adventure
-  - Simulation
-  - Strategy
   themeNameTexts:
   - {fileID: 1168641529}
   - {fileID: 910651631}
   - {fileID: 1232730168}
-  - {fileID: 470278261}
-  - {fileID: 1093029499}
   themeDirectionTexts:
   - {fileID: 1800426761}
   - {fileID: 779239199}
   - {fileID: 208315503}
-  - {fileID: 1896628796}
-  - {fileID: 1718204068}
   themeStatusTexts:
   - {fileID: 1540592849}
   - {fileID: 287137480}
   - {fileID: 746532191}
-  - {fileID: 919276486}
-  - {fileID: 1580164340}
   themeDurationTexts:
   - {fileID: 236150176}
   - {fileID: 2145830892}
   - {fileID: 164812926}
-  - {fileID: 1638292898}
-  - {fileID: 1220469525}
   genreNameTexts:
   - {fileID: 1854717072}
   - {fileID: 1594735241}
-  - {fileID: 482116928}
-  - {fileID: 841816893}
   - {fileID: 1480699041}
-  - {fileID: 1368391405}
   genreDemandTexts:
   - {fileID: 465181575}
   - {fileID: 1038203052}
-  - {fileID: 906657362}
-  - {fileID: 1070501192}
   - {fileID: 1746658898}
-  - {fileID: 1381717993}
   genreDemandFills:
   - {fileID: 2025016496}
   - {fileID: 1387584639}
-  - {fileID: 790459195}
-  - {fileID: 2002197024}
   - {fileID: 885817766}
-  - {fileID: 651354998}
   genreDurationTexts:
   - {fileID: 641609883}
   - {fileID: 81226818}
-  - {fileID: 1963745664}
-  - {fileID: 1109760375}
   - {fileID: 888330045}
-  - {fileID: 1927309661}
   maximumBarWidth: 220
   currentThemeText: {fileID: 2109215038}
   currentGenreText: {fileID: 314821077}
   marketTimeLeftText: {fileID: 1278178852}
+  currentWeekText: {fileID: 0}
   minimumWeeks: 1
   maximumWeeks: 4
+  daysPerWeek: 7
   qualityBonus: 5
   moneyBonusPercent: 0.1
   fandomBonusPercent: 0.15
@@ -2506,7 +2475,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &526657578
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5671,7 +5640,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Modern
+  m_text: 'Horror
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
   m_sharedMaterial: {fileID: 5323781249084338476, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
@@ -5680,8 +5651,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4290445306
-  m_fontColor: {r: 0.9815522, g: 1, b: 0.7294118, a: 1}
+    rgba: 4294929343
+  m_fontColor: {r: 0.7490196, g: 0.41960785, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6706,8 +6677,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -142}
-  m_SizeDelta: {x: -60, y: 75}
+  m_AnchoredPosition: {x: 0, y: -200}
+  m_SizeDelta: {x: -60, y: 105}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1424294483
 MonoBehaviour:
@@ -6899,7 +6870,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1508081491
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6940,7 +6911,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1518019442
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7975,7 +7946,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -15, y: 10}
+  m_AnchoredPosition: {x: -45, y: 10}
   m_SizeDelta: {x: 40, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1767065147
@@ -8130,7 +8101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.092423536, g: 0.08494833, b: 0.15471691, a: 1}
+  m_Color: {r: 0.09803922, g: 0.105882354, b: 0.23921569, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8547,7 +8518,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -308}
+  m_AnchoredPosition: {x: 0, y: -194}
   m_SizeDelta: {x: -80, y: 55}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1872325924
@@ -9433,7 +9404,7 @@ GameObject:
   - component: {fileID: 2002953299}
   - component: {fileID: 2002953298}
   m_Layer: 5
-  m_Name: 'ModernRow '
+  m_Name: 'HorrorRow '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9459,8 +9430,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -214}
-  m_SizeDelta: {x: -60, y: 75}
+  m_AnchoredPosition: {x: 0, y: -305}
+  m_SizeDelta: {x: -60, y: 105}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2002953298
 MonoBehaviour:
@@ -9590,7 +9561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2034373766
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9629,7 +9600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2040631304
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9928,7 +9899,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -210, y: 10}
+  m_AnchoredPosition: {x: -235, y: 10}
   m_SizeDelta: {x: 310, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2109215037
@@ -9959,7 +9930,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PIXEL
+  m_text: HORROR
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
   m_sharedMaterial: {fileID: 5323781249084338476, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
@@ -9968,8 +9939,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4290510522
-  m_fontColor: {r: 0.7294118, g: 0.9960785, b: 0.73333335, a: 1}
+    rgba: 4294929343
+  m_fontColor: {r: 0.7490196, g: 0.41960785, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
