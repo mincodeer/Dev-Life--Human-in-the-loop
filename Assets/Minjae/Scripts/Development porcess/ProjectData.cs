@@ -2,14 +2,15 @@ using System;
 using System.Text;
 
 /// <summary>
-/// Stores all choices for the game project currently being developed.
-/// This is a serializable data model, not a component placed on a GameObject.
+/// Stores the choices and calculated outcome of one game project.
+/// The development flow stores the choices of AI, Manual, Theme and Genre.
 /// </summary>
 [Serializable]
 public class ProjectData
 {
     public string projectName = "Untitled Project";
 
+    // Input data for result calculation
     public GameTheme selectedTheme = GameTheme.None;
     public GameGenre selectedGenre = GameGenre.None;
 
@@ -18,7 +19,9 @@ public class ProjectData
     public WorkMethod soundMethod = WorkMethod.None;
     public WorkMethod debuggingMethod = WorkMethod.None;
 
-    // Ready for the Result system in a later sprint.
+    // per project output data
+    // The reult calculation system may update these values.
+    // These are the results of this project, not the player's permanent resources.
     public float totalTime;
     public int totalCost;
     public float quality;
@@ -33,6 +36,7 @@ public class ProjectData
         }
     }
 
+    // The result calculation system can use this to check.
     public bool HasAllWorkMethods
     {
         get

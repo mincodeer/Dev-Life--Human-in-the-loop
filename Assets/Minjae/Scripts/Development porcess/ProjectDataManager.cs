@@ -1,3 +1,7 @@
+/// <summary>
+/// Owns and manages the data for the project currently being developed.
+/// </summary>
+
 using UnityEngine;
 
 public class ProjectDataManager : MonoBehaviour
@@ -13,6 +17,7 @@ public class ProjectDataManager : MonoBehaviour
     private ProjectData currentProject =
         new ProjectData();
 
+    // Main access point for the result calculation system.
     public ProjectData CurrentProject
     {
         get
@@ -103,6 +108,8 @@ public class ProjectDataManager : MonoBehaviour
         return true;
     }
 
+    // Creates empty data for the next project.
+    // Call this after the result has been calculated
     public void StartNewProject()
     {
         currentProject = new ProjectData();
