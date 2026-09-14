@@ -390,8 +390,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 08:00 AM
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: da5a4727a0ac57043b4e748df29d7a9c, type: 2}
-  m_sharedMaterial: {fileID: 273565481000192307, guid: da5a4727a0ac57043b4e748df29d7a9c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
+  m_sharedMaterial: {fileID: 5323781249084338476, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -602,8 +602,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: MORNING
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: da5a4727a0ac57043b4e748df29d7a9c, type: 2}
-  m_sharedMaterial: {fileID: 273565481000192307, guid: da5a4727a0ac57043b4e748df29d7a9c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
+  m_sharedMaterial: {fileID: 5323781249084338476, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -818,8 +818,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: DAY 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: da5a4727a0ac57043b4e748df29d7a9c, type: 2}
-  m_sharedMaterial: {fileID: 273565481000192307, guid: da5a4727a0ac57043b4e748df29d7a9c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
+  m_sharedMaterial: {fileID: 5323781249084338476, guid: 368151140cb417a439c0f3c89e0bcb16, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
