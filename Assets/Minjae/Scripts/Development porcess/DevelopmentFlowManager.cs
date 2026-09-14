@@ -50,6 +50,10 @@ public class DevelopmentFlowManager : MonoBehaviour
     [SerializeField]
     private ResultsUI resultsUI;
 
+    // Prevents the same finished project from being
+    // added to the Dashboard more than once.
+    private bool completedProjectWasSaved;
+
     private void Start()
     {
         CloseComputer();
@@ -152,16 +156,29 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void GotoResult()
     {
+        // Keep the calculated result so it can be saved
+        // in the completed-project history.
+        FinalProjectResult calculatedResult = null;
+
         // Calculate the final result before opening
         // the Results panel.
         if (finalResultsCalculator != null)
         {
-            finalResultsCalculator.CalculateFinalResult();
+            calculatedResult =
+                 finalResultsCalculator.CalculateFinalResult();
         }
         else
         {
             Debug.LogWarning(
                 "FinalResultsCalculator is missing.");
+        }
+
+        // Send that same result to the Dashboard
+        // and Game Review system.
+        if (calculatedResult != null)
+        {
+            SaveCompletedProjectForReview(
+                calculatedResult);
         }
 
         // Display the calculated result.
@@ -177,11 +194,120 @@ public class DevelopmentFlowManager : MonoBehaviour
 
         // Hide the project conditions because
         // development has now finished.
-        projectConditionsPanel.SetActive(false);
+        if (projectConditionsPanel != null)
+        {
+            projectConditionsPanel.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "ProjectConditionsPanel is missing.");
+        }
 
         // Open the final Results panel.
         ChangeStage(DevelopmentStage.Result);
     }
+
+    // Converts the current ProjectData and FinalProjectResult
+    // into the record used by Dashboard and Game Reviews.
+    private void SaveCompletedProjectForReview(
+        FinalProjectResult calculatedResult)
+    {
+        // Do not save the same completed project twice.
+        if (completedProjectWasSaved)
+        {
+            return;
+        }
+
+        if (calculatedResult == null)
+        {
+            Debug.LogWarning(
+                "FinalProjectResult is missing. " +
+                "The completed project was not saved.");
+
+            return;
+        }
+
+        if (ProjectDataManager.Instance == null)
+        {
+            Debug.LogWarning(
+                "ProjectDataManager is missing. " +
+                "The completed project was not saved.");
+
+            return;
+        }
+
+        if (ProjectHistoryManager.Instance == null)
+        {
+            Debug.LogWarning(
+                "ProjectHistoryManager is missing. " +
+                "The completed project was not saved.");
+
+            return;
+        }
+
+
+        ProjectData project =
+            ProjectDataManager.Instance.CurrentProject;
+
+        if (project == null)
+        {
+            Debug.LogWarning(
+                "CurrentProject is missing. " +
+                "The completed project was not saved.");
+
+            return;
+        }
+
+        // The Review feature does not currently have access
+        // to GameTimeManager on this branch. Use Week 1 until
+        // the Time Tracker is connected during integration.
+        int completedWeek = 1;
+
+        CompletedProjectRecord completedRecord =
+            new CompletedProjectRecord(
+                project.projectName,
+                project.selectedTheme,
+                project.selectedGenre,
+                calculatedResult.finalScore,
+                calculatedResult.moneyEarned,
+                completedWeek);
+        completedRecord.quality =
+        calculatedResult.quality;
+
+        completedRecord.workload =
+            calculatedResult.workload;
+
+        completedRecord.technicalDebt =
+            calculatedResult.technicalDebt;
+
+        completedRecord.bugs =
+            calculatedResult.bugs;
+
+        completedRecord.developmentTime =
+            calculatedResult.developmentTime;
+
+        // Copy the reward calculated by your friend's script.
+        completedRecord.fandomGained =
+            calculatedResult.fandomGained;
+
+        // Copy the Market Trend values.
+        // These will remain empty/default until
+        // the Market Trend feature is integrated.
+        completedRecord.marketBonus =
+            calculatedResult.marketBonus;
+
+        // Save only after every value has been copied.
+        ProjectHistoryManager.Instance
+            .AddCompletedProject(completedRecord);
+
+        completedProjectWasSaved = true;
+
+        Debug.Log(
+            "Project Result connected to Game Review: " +
+            completedRecord.projectName);
+    }
+
 
     // ==============================
     // New Project
@@ -191,6 +317,9 @@ public class DevelopmentFlowManager : MonoBehaviour
     // project without resetting permanent resources.
     public void StartNewProject()
     {
+        // Allow the next completed project to be saved.
+        completedProjectWasSaved = false;
+
         // Reset the stored project choices.
         if (ProjectDataManager.Instance != null)
         {
