@@ -152,16 +152,37 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void GotoResult()
     {
+        FinalProjectResult calculatedResult = null;
+
         // Calculate the final result before opening
         // the Results panel.
         if (finalResultsCalculator != null)
         {
-            finalResultsCalculator.CalculateFinalResult();
+            calculatedResult =
+                finalResultsCalculator.CalculateFinalResult();
         }
         else
         {
             Debug.LogWarning(
                 "FinalResultsCalculator is missing.");
+        }
+
+        // Save a permanent copy for the Dashboard and Review screens.
+        // This must happen before StartNewProject resets ProjectData.
+        if (calculatedResult != null
+            && ProjectDataManager.Instance != null
+            && ProjectHistoryManager.Instance != null)
+        {
+            ProjectHistoryManager.Instance
+                .AddCompletedProjectFromResult(
+                    ProjectDataManager.Instance.CurrentProject,
+                    calculatedResult);
+        }
+        else if (ProjectHistoryManager.Instance == null)
+        {
+            Debug.LogWarning(
+                "ProjectHistoryManager is missing. "
+                + "The completed project was not saved.");
         }
 
         // Display the calculated result.
