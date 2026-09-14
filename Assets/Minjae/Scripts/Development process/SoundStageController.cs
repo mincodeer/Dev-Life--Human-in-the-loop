@@ -65,7 +65,7 @@ public class SoundStageController : MonoBehaviour
     {
         image.type = Image.Type.Filled;
         image.fillMethod = method;
-        image.fillOrigin = 0; 
+        image.fillOrigin = 0; // Horizontal: Left / Vertical: Bottom
         image.fillAmount = 0f;
         image.preserveAspect = false;
         image.raycastTarget = false;
@@ -135,6 +135,7 @@ public class SoundStageController : MonoBehaviour
                 track.progress,
                 fillSpeed * Time.deltaTime);
 
+            // 実音声ではなく、音量表示の演出。
             float pulse = 0.7f + 0.3f *
                 Mathf.PerlinNoise(elapsed * 4f, i * 3f);
 
@@ -145,6 +146,7 @@ public class SoundStageController : MonoBehaviour
                 completeCount++;
         }
 
+        // 현재 트랙의 블록 끝과 흰색 선을 같은 위치에 맞추기.
         SetPlayhead(tracks[activeTrack].blocks.fillAmount);
 
         string message = automatic
@@ -185,6 +187,7 @@ public class SoundStageController : MonoBehaviour
     {
         Track track = tracks[activeTrack];
 
+        // 완성된 트랙 다음으로 이동.
         if (track.blocks.fillAmount >= 1f &&
             activeTrack < tracks.Length - 1)
         {
