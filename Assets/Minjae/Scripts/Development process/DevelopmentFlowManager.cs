@@ -25,6 +25,7 @@ public class DevelopmentFlowManager : MonoBehaviour
     [Header("Coding Activity")]
     [SerializeField] private CodingStageController codingActivity;
     [SerializeField] private DesignStageController designActivity;
+    [SerializeField] private SoundStageController soundActivity;
 
     private void Start()
     {
@@ -69,6 +70,16 @@ public class DevelopmentFlowManager : MonoBehaviour
             return;
 
         currentStage = DevelopmentStage.Sound;
+        HideAllPanels();
+        developmentUI.SetActive(false);
+    }
+
+    public void CompleteSound()
+    {
+        if (currentStage != DevelopmentStage.Sound)
+        return;
+
+        currentStage = DevelopmentStage.Debugging;
         HideAllPanels();
         developmentUI.SetActive(false);
     }
@@ -259,6 +270,12 @@ public class DevelopmentFlowManager : MonoBehaviour
             return;
         }
 
+        if (currentStage == DevelopmentStage.Sound && (soundActivity == null || !soundActivity.CanBegin()))
+        {
+            Debug.LogWarning("Check Sound activity and Tracks");
+            return;
+        }
+
         if (ProjectDataManager.Instance == null)
         {
             Debug.LogError("ProjectDataManager is missing.");
@@ -290,7 +307,7 @@ public class DevelopmentFlowManager : MonoBehaviour
                 break;
 
             case DevelopmentStage.Sound:
-                GotoDebugging();
+                soundActivity.Begin(method == WorkMethod.AI);
                 break;
 
             case DevelopmentStage.Debugging:
