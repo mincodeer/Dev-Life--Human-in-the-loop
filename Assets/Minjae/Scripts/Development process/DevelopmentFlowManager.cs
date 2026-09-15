@@ -1,26 +1,59 @@
 /// <summary>
-/// Controls the order of the development stages
+/// Controls the order of the development stages.
 /// This saves the player's choices before moving to the next stage.
 /// </summary>
 
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DevelopmentFlowManager : MonoBehaviour
 {
+    [Header("Tutorial")]
+    [SerializeField] private UnityEvent onProjectSetupOpened = new UnityEvent();
+
     [Header("Current Stage")]
-    [SerializeField] private DevelopmentStage currentStage = DevelopmentStage.None;
+    [SerializeField]
+    private DevelopmentStage currentStage = DevelopmentStage.None;
+    public bool IsComputerUIOpen => developmentUI.activeInHierarchy;
+
+    public DevelopmentStage CurrentStage => currentStage;
 
     [Header("Main UI")]
-    [SerializeField] private GameObject developmentUI;
+    [SerializeField]
+    private GameObject developmentUI;
 
     [Header("Development Panels")]
-    [SerializeField] private GameObject projectSetupPanel;
-    [SerializeField] private GameObject codingPanel;
-    [SerializeField] private GameObject designPanel;
-    [SerializeField] private GameObject soundPanel;
-    [SerializeField] private GameObject debuggingPanel;
-    [SerializeField] private GameObject buildPanel;
-    [SerializeField] private GameObject resultPanel;
+    [SerializeField]
+    private GameObject projectSetupPanel;
+    [SerializeField]
+    private GameObject codingPanel;
+    [SerializeField]
+    private GameObject designPanel;
+    [SerializeField]
+    private GameObject soundPanel;
+    [SerializeField]
+    private GameObject debuggingPanel;
+    [SerializeField]
+    private GameObject buildPanel;
+    [SerializeField]
+    private GameObject resultPanel;
+
+    [Header("Project Resources")]
+    [SerializeField]
+    private ProjectResultsCalculator projectResultsCalculator;
+
+    [SerializeField]
+    private ProjectResourceController projectResourceController;
+
+    [SerializeField]
+    private GameObject projectConditionsPanel;
+
+    [SerializeField]
+    private FinalResultsCalculator finalResultsCalculator;
+
+    [SerializeField]
+    private ResultsUI resultsUI;
 
     [Header("Coding Activity")]
     [SerializeField] private CodingStageController codingActivity;
@@ -32,25 +65,42 @@ public class DevelopmentFlowManager : MonoBehaviour
         CloseComputer();
     }
 
+
+    // Changed due to conflict between the tutorial and interaction in code.
+    // This waits one frame after
     public void OpenComputer()
+{
+    if (developmentUI.activeInHierarchy)
+        return;
+
+    DevelopmentStage stageToOpen = currentStage;
+
+    if (stageToOpen == DevelopmentStage.None)
+        stageToOpen = DevelopmentStage.ProjectSetup;
+
+    ChangeStage(stageToOpen);
+    developmentUI.SetActive(true);
+
+    if (stageToOpen == DevelopmentStage.ProjectSetup)
+        StartCoroutine(NotifyProjectSetupOpened());
+}
+
+private IEnumerator NotifyProjectSetupOpened()
+{
+    yield return null;
+
+    if (currentStage == DevelopmentStage.ProjectSetup &&
+        developmentUI.activeInHierarchy &&
+        projectSetupPanel.activeInHierarchy)
     {
-        if (developmentUI.activeInHierarchy)
-            return;
-
-        DevelopmentStage stageToOpen = currentStage;
-
-        if (stageToOpen == DevelopmentStage.None)
-        {
-            stageToOpen = DevelopmentStage.ProjectSetup;
-        }
-
-        ChangeStage(stageToOpen);
-        developmentUI.SetActive(true);
+        onProjectSetupOpened.Invoke();
     }
+}
 
     public void CloseComputer()
     {
         developmentUI.SetActive(false);
+        projectConditionsPanel.SetActive(false);
 
         currentStage = DevelopmentStage.None;
     }
@@ -121,7 +171,9 @@ public class DevelopmentFlowManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log("Development Stage: " + currentStage);
+        Debug.Log(
+            "Development Stage: "
+            + currentStage);
     }
 
     private void HideAllPanels()
@@ -162,15 +214,76 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void GotoResult()
     {
-        // Result calculation integration point
-        // After the build stage, it will read ProjectDataManager.Instance.Current Project.
-        // Check the porject.HasAllWorkedMethods, and calculate Money, fandom, Tech Debt, Dev skill, Time, Quality, Cost and bugs (if too much remove some of them).
-        // Apply the claculated changes to ResourceManager(create one).
-        // Display the calculated outcome on the result panel.
+        // Calculate the final result before opening
+        // the Results panel.
+        if (finalResultsCalculator != null)
+        {
+            finalResultsCalculator.CalculateFinalResult();
+        }
+        else
+        {
+            Debug.LogWarning(
+                "FinalResultsCalculator is missing.");
+        }
+
+        // Display the calculated result.
+        if (resultsUI != null)
+        {
+            resultsUI.DisplayResults();
+        }
+        else
+        {
+            Debug.LogWarning(
+                "ResultsUI is missing.");
+        }
+
+        // Hide the project conditions because
+        // development has now finished.
+        projectConditionsPanel.SetActive(false);
+
+        // Open the final Results panel.
         ChangeStage(DevelopmentStage.Result);
     }
 
-        // ==============================
+    // ==============================
+    // New Project
+    // ==============================
+
+    // Resets the current project and starts a fresh
+    // project without resetting permanent resources.
+    public void StartNewProject()
+    {
+        // Reset the stored project choices.
+        if (ProjectDataManager.Instance != null)
+        {
+            ProjectDataManager.Instance.StartNewProject();
+        }
+        else
+        {
+            Debug.LogWarning(
+                "ProjectDataManager is missing.");
+        }
+
+        // Reset the conditions for the new project.
+        if (projectResourceController != null)
+        {
+            projectResourceController.StartNewProject();
+        }
+        else
+        {
+            Debug.LogWarning(
+                "ProjectResourceController is missing.");
+        }
+
+        // Return to the project setup screen.
+        ChangeStage(
+            DevelopmentStage.ProjectSetup);
+
+        Debug.Log(
+            "New project started.");
+    }
+
+    // ==============================
     // Project Setup Selection
     // ==============================
 
@@ -178,6 +291,7 @@ public class DevelopmentFlowManager : MonoBehaviour
     {
         return;
     }
+
     public void SelectFantasy()
     {
         ProjectDataManager.Instance.SetTheme(
@@ -235,6 +349,18 @@ public class DevelopmentFlowManager : MonoBehaviour
             return;
         }
 
+        // Reset the conditions for the new project.
+        // Permanent resources are kept.
+        if (projectResourceController != null)
+        {
+            projectResourceController.StartNewProject();
+        }
+        else
+        {
+            Debug.LogWarning(
+                "ProjectResourceController is missing.");
+        }
+
         GotoCoding();
     }
 
@@ -282,6 +408,7 @@ public class DevelopmentFlowManager : MonoBehaviour
             return;
         }
 
+        // Save the player's selected work method.
         bool wasSaved =
             ProjectDataManager.Instance.SetWorkMethod(
                 currentStage,
@@ -296,6 +423,21 @@ public class DevelopmentFlowManager : MonoBehaviour
             return;
         }
 
+        // Apply the consequences of the player's
+        // Manual or AI decision.
+        if (projectResultsCalculator != null)
+        {
+            projectResultsCalculator.ProcessStageDecision(
+                currentStage,
+                method);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "ProjectResultsCalculator is missing.");
+        }
+
+        // Move to the next development stage.
         switch (currentStage)
         {
             case DevelopmentStage.Coding:
@@ -316,38 +458,44 @@ public class DevelopmentFlowManager : MonoBehaviour
         }
     }
 
-        public void OnThemeDropdownChanged(int index)
+    // ==============================
+    // Dropdown Selection
+    // ==============================
+
+    public void OnThemeDropdownChanged(
+        int index)
     {
         switch (index)
         {
             case 0:
-            None();
-            break;
-            
+                None();
+                break;
+
             case 1:
-            SelectFantasy();
-            break;
+                SelectFantasy();
+                break;
 
             case 2:
-            SelectSciFi();
-            break;
+                SelectSciFi();
+                break;
 
             case 3:
-            SelectHorror();
-            break;
+                SelectHorror();
+                break;
         }
     }
 
-    public void OnGenreDropdownChanged(int index)
+    public void OnGenreDropdownChanged(
+        int index)
     {
         switch (index)
         {
             case 0:
-            None();
-            break;
+                None();
+                break;
 
             case 1:
-            SelectRPG();
+                SelectRPG();
                 break;
 
             case 2:
