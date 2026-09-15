@@ -156,8 +156,6 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void GotoResult()
     {
-        // Keep the calculated result so it can be saved
-        // in the completed-project history.
         FinalProjectResult calculatedResult = null;
 
         // Calculate the final result before opening
@@ -165,7 +163,7 @@ public class DevelopmentFlowManager : MonoBehaviour
         if (finalResultsCalculator != null)
         {
             calculatedResult =
-                 finalResultsCalculator.CalculateFinalResult();
+                finalResultsCalculator.CalculateFinalResult();
         }
         else
         {

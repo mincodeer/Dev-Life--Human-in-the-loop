@@ -2,6 +2,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Displays one completed project inside the dashboard list.
+///
+/// Each generated row receives one CompletedProjectRecord.
+/// Clicking the row selects that project.
+/// </summary>
 public class ProjectHistoryRowUI : MonoBehaviour
 {
     [Header("Row Button")]
@@ -31,16 +37,22 @@ public class ProjectHistoryRowUI : MonoBehaviour
     [SerializeField]
     private TMP_Text completedWeekText;
 
+    // The real data represented by this row.
     private CompletedProjectRecord projectData;
 
     private void Awake()
     {
+        // Automatically find the Button on this object
+        // if it was not assigned through the Inspector.
         if (rowButton == null)
         {
             rowButton = GetComponent<Button>();
         }
     }
 
+    /// <summary>
+    /// Gives this row its project and displays every value.
+    /// </summary>
     public void Setup(
         CompletedProjectRecord project,
         int projectNumber)
@@ -50,67 +62,68 @@ public class ProjectHistoryRowUI : MonoBehaviour
         if (projectData == null)
         {
             Debug.LogWarning(
-                "ProjectHistoryRowUI received null project data."
-            );
+                "ProjectHistoryRowUI received null project data.");
 
             return;
         }
 
         SetText(
             projectNumberText,
-            projectNumber.ToString()
-        );
+            projectNumber.ToString());
 
         SetText(
             projectNameText,
-            projectData.projectName
-        );
+            projectData.projectName);
 
         SetText(
             themeText,
-            projectData.theme.ToString().ToUpperInvariant()
-        );
+            projectData.theme.ToString().ToUpperInvariant());
 
         SetText(
             genreText,
-            projectData.genre.ToString().ToUpperInvariant()
-        );
+            projectData.genre.ToString().ToUpperInvariant());
 
-        int starRating = Mathf.Clamp(
-            Mathf.FloorToInt(
-                (projectData.finalScore / 20f) + 0.5f
-            ),
-            0,
-            5
-        );
+        // Convert the 0–100 final score into 0–5 stars.
+        int starRating =
+            ConvertScoreToStars(projectData.finalScore);
 
         SetText(
             reviewText,
-            starRating + " / 5"
-        );
+            starRating + " / 5");
 
         SetText(
             moneyEarnedText,
-            "$" + projectData.moneyEarned.ToString("N0")
-        );
+            "$" + projectData.moneyEarned.ToString("N0"));
 
         SetText(
             completedWeekText,
-            projectData.completedWeek.ToString()
-        );
+            projectData.completedWeek.ToString());
 
+        // Prevent the same listener from being added twice.
         if (rowButton != null)
         {
             rowButton.onClick.RemoveListener(
-                SelectThisProject
-            );
+                SelectThisProject);
 
             rowButton.onClick.AddListener(
-                SelectThisProject
-            );
+                SelectThisProject);
         }
     }
 
+    /// <summary>
+    /// Converts a percentage score into the five-star scale.
+    /// </summary>
+    private int ConvertScoreToStars(float score)
+    {
+        return Mathf.Clamp(
+            Mathf.RoundToInt(score / 20f),
+            0,
+            5);
+    }
+
+    /// <summary>
+    /// Runs when the player clicks this project row.
+    /// </summary>
     private void SelectThisProject()
     {
         if (projectData == null)
@@ -121,17 +134,18 @@ public class ProjectHistoryRowUI : MonoBehaviour
         if (ProjectHistoryManager.Instance == null)
         {
             Debug.LogError(
-                "ProjectHistoryManager could not be found."
-            );
+                "ProjectHistoryManager could not be found.");
 
             return;
         }
 
         ProjectHistoryManager.Instance.SelectProject(
-            projectData
-        );
+            projectData);
     }
 
+    /// <summary>
+    /// Safely changes a TMP text field.
+    /// </summary>
     private void SetText(
         TMP_Text textField,
         string value)
@@ -144,11 +158,11 @@ public class ProjectHistoryRowUI : MonoBehaviour
 
     private void OnDestroy()
     {
+        // Remove the listener when Unity destroys the row.
         if (rowButton != null)
         {
             rowButton.onClick.RemoveListener(
-                SelectThisProject
-            );
+                SelectThisProject);
         }
     }
 }

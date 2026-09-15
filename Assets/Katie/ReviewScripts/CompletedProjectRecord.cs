@@ -1,36 +1,52 @@
 using System;
 
+/// <summary>
+/// Stores a permanent snapshot of one completed project.
+///
+/// This is separate from ProjectData because ProjectData is reset
+/// whenever the player starts a new project.
+/// </summary>
 [Serializable]
 public class CompletedProjectRecord
 {
+    // ==============================
+    // Project Identity
+    // ==============================
+
     public string projectName;
 
     public GameTheme theme;
     public GameGenre genre;
 
-    // Stored as the original 0-100 result score.
+    // ==============================
+    // Main Result
+    // ==============================
+
+    // Final review score from 0 to 100.
     public float finalScore;
 
+    // Rewards earned by this project.
     public int moneyEarned;
+    public int fandomGained;
+
+    // Temporary week value.
+    // This can be connected to a real week system later.
     public int completedWeek;
 
-    // Stores the detailed result values so the
-    // Review Report can create relevant comments.
+    // ==============================
+    // Development Result Details
+    // ==============================
+
     public float quality;
     public float workload;
     public int technicalDebt;
     public int bugs;
     public float developmentTime;
-
-    // Stores the rewards from the completed project.
-    public int fandomGained;
-
-    // Stores the Market Trend result.
     public float marketBonus;
-    public string marketMatchType;
-    public string trendingTheme;
-    public string trendingGenre;
 
+    /// <summary>
+    /// Empty constructor required by Unity serialization.
+    /// </summary>
     public CompletedProjectRecord()
     {
     }
@@ -51,5 +67,9 @@ public class CompletedProjectRecord
         this.finalScore = finalScore;
         this.moneyEarned = moneyEarned;
         this.completedWeek = completedWeek;
+
+        // Older records did not store a separate quality value.
+        // Using finalScore prevents their quality from displaying as zero.
+        quality = finalScore;
     }
 }
