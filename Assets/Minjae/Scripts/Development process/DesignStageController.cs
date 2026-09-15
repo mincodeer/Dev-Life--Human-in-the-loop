@@ -39,17 +39,6 @@ public class DesignStageController : MonoBehaviour
         StopAllCoroutines();
     }
 
-    private void Update()
-    {
-        if (started || Keyboard.current == null)
-            return;
-
-        if (Keyboard.current.mKey.wasPressedThisFrame)
-            flowManager.ChooseManual();
-        else if (Keyboard.current.aKey.wasPressedThisFrame)
-            flowManager.ChooseAI();
-    }
-
     public bool CanBegin()
     {
         return isActiveAndEnabled && !started && frames.Length >= 2;

@@ -66,6 +66,14 @@ public class DevelopmentTutorialPopup : MonoBehaviour
             return;
         }
 
+        if (!developmentFlowManager.IsComputerUIOpen)
+        {
+            if (popupPanel != null && popupPanel.activeSelf)
+            ClosePopup();
+
+            return;
+        }
+
         // Get the current development stage.
         DevelopmentStage currentStage =
             developmentFlowManager.CurrentStage;
