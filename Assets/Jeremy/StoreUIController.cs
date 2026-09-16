@@ -14,16 +14,10 @@ public class StoreUIController : MonoBehaviour
     // Drag StoreItemBox1, StoreItemBox2, etc. into this list in Unity
     public GameObject[] productItems;
 
-    // Shopping cart
-    public TMP_Text cartCountText;
 
-    // Keeps track of how many items have been purchased
-    private int cartCount = 0;
-
-
-    // ---------------------------------------------------------
+    // ------------------------------------------------------------
     // STORE OPEN / CLOSE
-    // ---------------------------------------------------------
+    // ------------------------------------------------------------
 
     public void CloseStore()
     {
@@ -36,9 +30,9 @@ public class StoreUIController : MonoBehaviour
     }
 
 
-    // ---------------------------------------------------------
+    // ------------------------------------------------------------
     // PURCHASE ITEM
-    // ---------------------------------------------------------
+    // ------------------------------------------------------------
 
     public void PurchaseItem(Button purchaseButton)
     {
@@ -47,36 +41,19 @@ public class StoreUIController : MonoBehaviour
         purchaseButton.interactable = false;
 
         // Change the button text to show that it was purchased
-        TMP_Text buttonText = purchaseButton.GetComponentInChildren<TMP_Text>();
+        TMP_Text buttonText =
+            purchaseButton.GetComponentInChildren<TMP_Text>();
 
         if (buttonText != null)
         {
             buttonText.text = "PURCHASED";
         }
-
-        // Add one item to the shopping cart counter
-        cartCount++;
-
-        UpdateCartCount();
     }
 
 
-    // ---------------------------------------------------------
-    // SHOPPING CART
-    // ---------------------------------------------------------
-
-    private void UpdateCartCount()
-    {
-        if (cartCountText != null)
-        {
-            cartCountText.text = cartCount.ToString();
-        }
-    }
-
-
-    // ---------------------------------------------------------
+    // ------------------------------------------------------------
     // SEARCH
-    // ---------------------------------------------------------
+    // ------------------------------------------------------------
 
     public void SearchProducts()
     {
@@ -87,7 +64,8 @@ public class StoreUIController : MonoBehaviour
         foreach (GameObject product in productItems)
         {
             // Look for the product's name
-            TMP_Text[] textComponents = product.GetComponentsInChildren<TMP_Text>();
+            TMP_Text[] textComponents =
+                product.GetComponentsInChildren<TMP_Text>();
 
             bool productFound = false;
 
