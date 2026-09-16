@@ -3,6 +3,7 @@
 /// </summary>
 
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ProjectDataManager : MonoBehaviour
 {
@@ -24,6 +25,33 @@ public class ProjectDataManager : MonoBehaviour
         {
             return currentProject;
         }
+    }
+
+    [Header("Completed Projects")]
+    [SerializeField] private List<ProjectData> completedProjects = new List<ProjectData>();
+    [SerializeField] private bool currentProjectArchived;
+
+    public IReadOnlyList<ProjectData> CompletedProjects => completedProjects.AsReadOnly();
+
+    public void ArchiveCurrentProject(FinalProjectResult result)
+    {
+        if (currentProjectArchived || result == null) return;
+
+        currentProject.quality = result.quality;
+        currentProject.bugs = result.bugs;
+        currentProject.totalTime = result.developmentTime;
+        currentProject.finalResult = JsonUtility.FromJson<FinalProjectResult>(
+            JsonUtility.ToJson(result));
+
+        // Store a separate copy so later edits cannot change the old project.
+        completedProjects.Add(JsonUtility.FromJson<ProjectData>(
+            JsonUtility.ToJson(currentProject)));
+        currentProjectArchived = true;
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
     }
 
     private void Awake()
@@ -113,6 +141,7 @@ public class ProjectDataManager : MonoBehaviour
     public void StartNewProject()
     {
         currentProject = new ProjectData();
+        currentProjectArchived = false;
 
         Debug.Log("New project data created.");
     }
@@ -139,6 +168,7 @@ public class ProjectDataManager : MonoBehaviour
     public void ResetCurrentProject()
     {
         currentProject = new ProjectData();
+        currentProjectArchived = false;
 
         Debug.Log("Current project data reset.");
     }

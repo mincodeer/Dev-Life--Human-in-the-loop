@@ -8,6 +8,9 @@ using System.Text;
 [Serializable]
 public class ProjectData
 {
+    // Snapshot of the completed project, including workload and debt at completion.
+    public FinalProjectResult finalResult;
+
     public string projectName = "Untitled Project";
 
     // Input data for result calculation
