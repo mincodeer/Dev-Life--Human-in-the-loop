@@ -1,44 +1,45 @@
+// Student ID: 23208000
+
+using UnityEngine;
+
 /// <summary>
 /// Controls the order of the development stages.
 /// This saves the player's choices before moving to the next stage.
+/// It also triggers the appropriate tutorial explanation
+/// when each development stage begins.
 /// </summary>
-
-using System.Collections;
-using UnityEngine;
-using UnityEngine.Events;
-
 public class DevelopmentFlowManager : MonoBehaviour
 {
-    [Header("Tutorial")]
-    [SerializeField]
-    private UnityEvent onProjectSetupOpened =
-        new UnityEvent();
-
+    // =========================================================
+    // CURRENT STAGE
+    // =========================================================
 
     [Header("Current Stage")]
+
     [SerializeField]
     private DevelopmentStage currentStage =
         DevelopmentStage.None;
-
-    public bool IsComputerUIOpen =>
-        developmentUI != null &&
-        developmentUI.activeInHierarchy;
 
     public DevelopmentStage CurrentStage =>
         currentStage;
 
 
+    // =========================================================
+    // MAIN UI
+    // =========================================================
+
     [Header("Main UI")]
+
     [SerializeField]
     private GameObject developmentUI;
 
 
-    [Header("Computer Interaction")]
-    [SerializeField]
-    private ComputerInteractionIn computerInteraction;
-
+    // =========================================================
+    // DEVELOPMENT PANELS
+    // =========================================================
 
     [Header("Development Panels")]
+
     [SerializeField]
     private GameObject projectSetupPanel;
 
@@ -61,7 +62,12 @@ public class DevelopmentFlowManager : MonoBehaviour
     private GameObject resultPanel;
 
 
+    // =========================================================
+    // PROJECT RESOURCES
+    // =========================================================
+
     [Header("Project Resources")]
+
     [SerializeField]
     private ProjectResultsCalculator projectResultsCalculator;
 
@@ -78,28 +84,19 @@ public class DevelopmentFlowManager : MonoBehaviour
     private ResultsUI resultsUI;
 
 
-    [Header("Development Process")]
-    [SerializeField]
-    private CodingStageController codingActivity;
+    // =========================================================
+    // TUTORIAL
+    // =========================================================
+
+    [Header("Tutorial")]
 
     [SerializeField]
-    private DesignStageController designActivity;
+    private DevelopmentTutorialPopup developmentTutorialPopup;
 
-    [SerializeField]
-    private SoundStageController soundActivity;
 
-    [SerializeField]
-    private Animator buildAnimator;
-
-    [SerializeField]
-    private GameObject buildButtonObject;
-
-    [SerializeField]
-    private GameObject succeededObject;
-
-    [SerializeField]
-    private float buildAnimationTime = 3f;
-
+    // =========================================================
+    // START
+    // =========================================================
 
     private void Start()
     {
@@ -107,138 +104,39 @@ public class DevelopmentFlowManager : MonoBehaviour
     }
 
 
-    // ==============================
-    // Computer
-    // ==============================
+    // =========================================================
+    // OPEN COMPUTER
+    // =========================================================
 
     public void OpenComputer()
     {
-        if (developmentUI.activeInHierarchy)
-            return;
-
-        DevelopmentStage stageToOpen =
-            currentStage;
-
-        if (stageToOpen == DevelopmentStage.None)
-        {
-            stageToOpen =
-                DevelopmentStage.ProjectSetup;
-        }
-
-        ChangeStage(stageToOpen);
-
         developmentUI.SetActive(true);
 
-        if (stageToOpen ==
-            DevelopmentStage.ProjectSetup)
-        {
-            StartCoroutine(
-                NotifyProjectSetupOpened());
-        }
+        projectConditionsPanel.SetActive(true);
+
+        ChangeStage(
+            DevelopmentStage.ProjectSetup);
     }
 
 
-    private IEnumerator NotifyProjectSetupOpened()
-    {
-        yield return null;
+    // =========================================================
+    // CLOSE COMPUTER
+    // =========================================================
 
-        if (currentStage ==
-                DevelopmentStage.ProjectSetup &&
-            developmentUI.activeInHierarchy &&
-            projectSetupPanel.activeInHierarchy)
-        {
-            onProjectSetupOpened.Invoke();
-        }
-    }
-
-
-    // Important:
-    // Closing the computer UI does NOT reset
-    // the current development stage.
     public void CloseComputer()
     {
-        if (developmentUI != null)
-        {
-            developmentUI.SetActive(false);
-        }
+        developmentUI.SetActive(false);
 
-        if (projectConditionsPanel != null)
-        {
-            projectConditionsPanel.SetActive(false);
-        }
+        projectConditionsPanel.SetActive(false);
+
+        currentStage =
+            DevelopmentStage.None;
     }
 
 
-    // ==============================
-    // Stage Completion
-    // ==============================
-
-    public void CompleteCoding()
-    {
-        CompleteStageAndReturnToComputer(
-            DevelopmentStage.Coding,
-            DevelopmentStage.Design);
-    }
-
-
-    public void CompleteDesign()
-    {
-        CompleteStageAndReturnToComputer(
-            DevelopmentStage.Design,
-            DevelopmentStage.Sound);
-    }
-
-
-    public void CompleteSound()
-    {
-        CompleteStageAndReturnToComputer(
-            DevelopmentStage.Sound,
-            DevelopmentStage.Debugging);
-
-        // If you decide to skip Debugging,
-        // change DevelopmentStage.Debugging above
-        // to DevelopmentStage.Build.
-    }
-
-
-    private void CompleteStageAndReturnToComputer(
-        DevelopmentStage expectedStage,
-        DevelopmentStage nextStage)
-    {
-        if (currentStage != expectedStage)
-            return;
-
-        // Save the next stage.
-        currentStage = nextStage;
-
-        // Hide the stage panels.
-        HideAllPanels();
-
-        // Hide the computer UI.
-        CloseComputer();
-
-        // Camera stays zoomed in.
-        // Only the interaction state changes.
-        if (computerInteraction != null)
-        {
-            computerInteraction
-                .ReturnToZoomedInState();
-        }
-        else
-        {
-            Debug.LogWarning(
-                "ComputerInteractionIn is missing.");
-        }
-
-        Debug.Log(
-            "Stage Complete. Next Stage: "
-            + currentStage);
-    }
-
-
-    // ==============================
-    // Change Stage
-    // ==============================
+    // =========================================================
+    // CHANGE STAGE
+    // =========================================================
 
     public void ChangeStage(
         DevelopmentStage newStage)
@@ -298,27 +196,97 @@ public class DevelopmentFlowManager : MonoBehaviour
                 break;
         }
 
+        // Tell the tutorial that a new stage has started.
+        ShowStageTutorial();
+
         Debug.Log(
             "Development Stage: "
             + currentStage);
     }
 
 
+    // =========================================================
+    // SHOW STAGE TUTORIAL
+    // =========================================================
+
+    private void ShowStageTutorial()
+    {
+        if (developmentTutorialPopup == null)
+        {
+            return;
+        }
+
+        switch (currentStage)
+        {
+            case DevelopmentStage.Coding:
+
+                developmentTutorialPopup.ShowCoding();
+
+                break;
+
+
+            case DevelopmentStage.Design:
+
+                developmentTutorialPopup.ShowDesign();
+
+                break;
+
+
+            case DevelopmentStage.Sound:
+
+                developmentTutorialPopup.ShowSound();
+
+                break;
+
+
+            case DevelopmentStage.Debugging:
+
+                developmentTutorialPopup.ShowDebugging();
+
+                break;
+
+
+            case DevelopmentStage.Build:
+
+                developmentTutorialPopup.ShowBuild();
+
+                break;
+
+
+            case DevelopmentStage.Result:
+
+                developmentTutorialPopup.ShowFinalResult();
+
+                break;
+        }
+    }
+
+
+    // =========================================================
+    // HIDE ALL DEVELOPMENT PANELS
+    // =========================================================
+
     private void HideAllPanels()
     {
         projectSetupPanel.SetActive(false);
+
         codingPanel.SetActive(false);
+
         designPanel.SetActive(false);
+
         soundPanel.SetActive(false);
+
         debuggingPanel.SetActive(false);
+
         buildPanel.SetActive(false);
+
         resultPanel.SetActive(false);
     }
 
 
-    // ==============================
-    // Stage Navigation
-    // ==============================
+    // =========================================================
+    // GOTO CODING
+    // =========================================================
 
     public void GotoCoding()
     {
@@ -327,12 +295,20 @@ public class DevelopmentFlowManager : MonoBehaviour
     }
 
 
+    // =========================================================
+    // GOTO DESIGN
+    // =========================================================
+
     public void GotoDesign()
     {
         ChangeStage(
             DevelopmentStage.Design);
     }
 
+
+    // =========================================================
+    // GOTO SOUND
+    // =========================================================
 
     public void GotoSound()
     {
@@ -341,6 +317,10 @@ public class DevelopmentFlowManager : MonoBehaviour
     }
 
 
+    // =========================================================
+    // GOTO DEBUGGING
+    // =========================================================
+
     public void GotoDebugging()
     {
         ChangeStage(
@@ -348,79 +328,29 @@ public class DevelopmentFlowManager : MonoBehaviour
     }
 
 
+    // =========================================================
+    // GOTO BUILD
+    // =========================================================
+
     public void GotoBuild()
     {
         ChangeStage(
             DevelopmentStage.Build);
-
-        if (succeededObject != null)
-        {
-            succeededObject.SetActive(false);
-        }
-
-        if (buildButtonObject != null)
-        {
-            buildButtonObject.SetActive(true);
-        }
     }
 
 
-    // ==============================
-    // Build
-    // ==============================
-
-    public void StartBuild()
-    {
-        if (buildButtonObject != null)
-        {
-            buildButtonObject.SetActive(false);
-        }
-
-        StartCoroutine(
-            BuildRoutine());
-    }
-
-
-    private IEnumerator BuildRoutine()
-    {
-        if (succeededObject != null)
-        {
-            succeededObject.SetActive(false);
-        }
-
-        if (buildAnimator != null)
-        {
-            buildAnimator.SetTrigger("Build");
-        }
-        else
-        {
-            Debug.LogWarning(
-                "Build Animator is missing.");
-        }
-
-        yield return new WaitForSeconds(
-            buildAnimationTime);
-
-        if (succeededObject != null)
-        {
-            succeededObject.SetActive(true);
-        }
-
-        Debug.Log(
-            "Build Succeeded!");
-    }
-
-
-    // ==============================
-    // Result
-    // ==============================
+    // =========================================================
+    // GOTO RESULT
+    // =========================================================
 
     public void GotoResult()
     {
+        // Calculate the final result before opening
+        // the Results panel.
+
         if (finalResultsCalculator != null)
         {
-            finalResultsCalculator
-                .CalculateFinalResult();
+            finalResultsCalculator.CalculateFinalResult();
         }
         else
         {
@@ -428,6 +358,8 @@ public class DevelopmentFlowManager : MonoBehaviour
                 "FinalResultsCalculator is missing.");
         }
 
+
+        // Display the calculated result.
 
         if (resultsUI != null)
         {
@@ -440,27 +372,34 @@ public class DevelopmentFlowManager : MonoBehaviour
         }
 
 
+        // Hide the project conditions because
+        // development has now finished.
+
         if (projectConditionsPanel != null)
         {
             projectConditionsPanel.SetActive(false);
         }
 
 
+        // Open the final Results panel.
+        // This will also trigger the Final Result tutorial.
+
         ChangeStage(
             DevelopmentStage.Result);
     }
 
 
-    // ==============================
-    // New Project
-    // ==============================
+    // =========================================================
+    // NEW PROJECT
+    // =========================================================
 
     public void StartNewProject()
     {
+        // Reset the current project data.
+
         if (ProjectDataManager.Instance != null)
         {
-            ProjectDataManager.Instance
-                .StartNewProject();
+            ProjectDataManager.Instance.StartNewProject();
         }
         else
         {
@@ -469,10 +408,11 @@ public class DevelopmentFlowManager : MonoBehaviour
         }
 
 
+        // Reset project conditions.
+
         if (projectResourceController != null)
         {
-            projectResourceController
-                .StartNewProject();
+            projectResourceController.StartNewProject();
         }
         else
         {
@@ -481,17 +421,20 @@ public class DevelopmentFlowManager : MonoBehaviour
         }
 
 
+        // Return to project setup.
+
         ChangeStage(
             DevelopmentStage.ProjectSetup);
+
 
         Debug.Log(
             "New project started.");
     }
 
 
-    // ==============================
-    // Project Setup Selection
-    // ==============================
+    // =========================================================
+    // PROJECT SETUP SELECTION
+    // =========================================================
 
     public void None()
     {
@@ -541,6 +484,10 @@ public class DevelopmentFlowManager : MonoBehaviour
     }
 
 
+    // =========================================================
+    // START DEVELOPMENT
+    // =========================================================
+
     public void StartDevelopment()
     {
         if (ProjectDataManager.Instance == null)
@@ -551,9 +498,10 @@ public class DevelopmentFlowManager : MonoBehaviour
             return;
         }
 
+
         ProjectData project =
-            ProjectDataManager.Instance
-                .CurrentProject;
+            ProjectDataManager.Instance.CurrentProject;
+
 
         if (!project.HasProjectSetup)
         {
@@ -564,10 +512,12 @@ public class DevelopmentFlowManager : MonoBehaviour
         }
 
 
+        // Reset project conditions.
+        // Permanent resources are kept.
+
         if (projectResourceController != null)
         {
-            projectResourceController
-                .StartNewProject();
+            projectResourceController.StartNewProject();
         }
         else
         {
@@ -580,9 +530,9 @@ public class DevelopmentFlowManager : MonoBehaviour
     }
 
 
-    // ==============================
-    // Manual / AI
-    // ==============================
+    // =========================================================
+    // MANUAL / AI SELECTION
+    // =========================================================
 
     public void ChooseManual()
     {
@@ -598,45 +548,13 @@ public class DevelopmentFlowManager : MonoBehaviour
     }
 
 
+    // =========================================================
+    // SAVE METHOD AND CONTINUE
+    // =========================================================
+
     private void SaveMethodAndContinue(
         WorkMethod method)
     {
-        if (currentStage ==
-                DevelopmentStage.Coding &&
-            (codingActivity == null ||
-             !codingActivity.CanBegin()))
-        {
-            Debug.LogWarning(
-                "Coding activity is missing, not ready, or already running.");
-
-            return;
-        }
-
-
-        if (currentStage ==
-                DevelopmentStage.Design &&
-            (designActivity == null ||
-             !designActivity.CanBegin()))
-        {
-            Debug.LogWarning(
-                "Check Design Activity and Drawing Steps.");
-
-            return;
-        }
-
-
-        if (currentStage ==
-                DevelopmentStage.Sound &&
-            (soundActivity == null ||
-             !soundActivity.CanBegin()))
-        {
-            Debug.LogWarning(
-                "Check Sound activity and Tracks");
-
-            return;
-        }
-
-
         if (ProjectDataManager.Instance == null)
         {
             Debug.LogError(
@@ -646,11 +564,13 @@ public class DevelopmentFlowManager : MonoBehaviour
         }
 
 
+        // Save the player's selected work method.
+
         bool wasSaved =
-            ProjectDataManager.Instance
-                .SetWorkMethod(
-                    currentStage,
-                    method);
+            ProjectDataManager.Instance.SetWorkMethod(
+                currentStage,
+                method);
+
 
         if (!wasSaved)
         {
@@ -662,12 +582,13 @@ public class DevelopmentFlowManager : MonoBehaviour
         }
 
 
+        // Apply the consequences of the decision.
+
         if (projectResultsCalculator != null)
         {
-            projectResultsCalculator
-                .ProcessStageDecision(
-                    currentStage,
-                    method);
+            projectResultsCalculator.ProcessStageDecision(
+                currentStage,
+                method);
         }
         else
         {
@@ -676,28 +597,27 @@ public class DevelopmentFlowManager : MonoBehaviour
         }
 
 
+        // Move to the next development stage.
+
         switch (currentStage)
         {
             case DevelopmentStage.Coding:
 
-                codingActivity.Begin(
-                    method == WorkMethod.AI);
+                GotoDesign();
 
                 break;
 
 
             case DevelopmentStage.Design:
 
-                designActivity.Begin(
-                    method == WorkMethod.AI);
+                GotoSound();
 
                 break;
 
 
             case DevelopmentStage.Sound:
 
-                soundActivity.Begin(
-                    method == WorkMethod.AI);
+                GotoDebugging();
 
                 break;
 
@@ -711,9 +631,9 @@ public class DevelopmentFlowManager : MonoBehaviour
     }
 
 
-    // ==============================
-    // Dropdown Selection
-    // ==============================
+    // =========================================================
+    // THEME DROPDOWN
+    // =========================================================
 
     public void OnThemeDropdownChanged(
         int index)
@@ -750,6 +670,10 @@ public class DevelopmentFlowManager : MonoBehaviour
     }
 
 
+    // =========================================================
+    // GENRE DROPDOWN
+    // =========================================================
+
     public void OnGenreDropdownChanged(
         int index)
     {
@@ -782,5 +706,33 @@ public class DevelopmentFlowManager : MonoBehaviour
 
                 break;
         }
+    }
+    // =========================================================
+    // COMPLETE CODING
+    // =========================================================
+
+    public void CompleteCoding()
+    {
+        GotoDesign();
+    }
+
+
+    // =========================================================
+    // COMPLETE DESIGN
+    // =========================================================
+
+    public void CompleteDesign()
+    {
+        GotoSound();
+    }
+
+
+    // =========================================================
+    // COMPLETE SOUND
+    // =========================================================
+
+    public void CompleteSound()
+    {
+        GotoDebugging();
     }
 }

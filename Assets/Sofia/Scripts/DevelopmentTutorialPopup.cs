@@ -1,40 +1,60 @@
-// Student ID: 23208000
+﻿// Student ID: 23208000
 
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 
+/// <summary>
+/// Controls the development tutorial popup.
+/// Displays tutorial dialogue with a typing animation
+/// and follows the player's actual development progress.
+/// </summary>
 public class DevelopmentTutorialPopup : MonoBehaviour
 {
     // =========================================================
-    // UI REFERENCES
+    // POPUP REFERENCES
     // =========================================================
 
-    // The popup panel that contains the tutorial message.
+    [Header("Popup References")]
+
     [SerializeField]
     private GameObject popupPanel;
 
-    // The TextMeshPro text used to display the tutorial message.
     [SerializeField]
     private TextMeshProUGUI popupText;
 
-
-    // =========================================================
-    // DEVELOPMENT SYSTEM
-    // =========================================================
-
-    // Reference to Minjae's DevelopmentFlowManager.
     [SerializeField]
-    private DevelopmentFlowManager developmentFlowManager;
+    private Button nextButton;
+
+    [SerializeField]
+    private Button skipButton;
+
+
+    // =========================================================
+    // TYPING SETTINGS
+    // =========================================================
+
+    [Header("Typing Settings")]
+
+    [SerializeField]
+    private float typingSpeed = 0.03f;
 
 
     // =========================================================
     // TUTORIAL STATE
     // =========================================================
 
-    // Keeps track of the last development stage shown.
-    // This prevents the same popup from appearing repeatedly.
-    private DevelopmentStage lastStage =
-        DevelopmentStage.None;
+    // Intro tutorial:
+    // 0 = Welcome
+    // 1 = Computer instruction
+    private int currentTutorialStep = 0;
+
+    private Coroutine typingCoroutine;
+
+    private bool isTyping = false;
+
+    private bool tutorialSkipped = false;
 
 
     // =========================================================
@@ -43,103 +63,91 @@ public class DevelopmentTutorialPopup : MonoBehaviour
 
     private void Start()
     {
-        // Hide the popup when the development scene begins.
-        if (popupPanel != null)
+        if (nextButton != null)
         {
-            popupPanel.SetActive(false);
+            nextButton.onClick.AddListener(OnNextClicked);
         }
 
-        // Start with no stage recorded.
-        lastStage = DevelopmentStage.None;
+        if (skipButton != null)
+        {
+            skipButton.onClick.AddListener(OnSkipClicked);
+        }
+
+        ShowWelcome();
     }
 
 
     // =========================================================
-    // UPDATE
+    // WELCOME
     // =========================================================
 
-    private void Update()
+    public void ShowWelcome()
     {
-        // Make sure the DevelopmentFlowManager exists.
-        if (developmentFlowManager == null)
+        if (tutorialSkipped)
         {
             return;
         }
 
-        if (!developmentFlowManager.IsComputerUIOpen)
-        {
-            if (popupPanel != null && popupPanel.activeSelf)
-            ClosePopup();
+        currentTutorialStep = 0;
 
-            return;
-        }
-
-        // Get the current development stage.
-        DevelopmentStage currentStage =
-            developmentFlowManager.CurrentStage;
-
-        // Only show a new tutorial message when
-        // the development stage changes.
-        if (currentStage == lastStage)
-        {
-            return;
-        }
-
-        // Remember the new stage.
-        lastStage = currentStage;
-
-        // Show the appropriate tutorial message.
-        switch (currentStage)
-        {
-            case DevelopmentStage.Coding:
-                ShowCoding();
-                break;
-
-            case DevelopmentStage.Design:
-                ShowDesign();
-                break;
-
-            case DevelopmentStage.Sound:
-                ShowSound();
-                break;
-
-            case DevelopmentStage.Debugging:
-                ShowDebugging();
-                break;
-
-            case DevelopmentStage.Build:
-                ShowBuild();
-                break;
-
-            case DevelopmentStage.Result:
-                ShowFinalResult();
-                break;
-        }
+        ShowPopup(
+            "WELCOME TO DEV LIFE: HUMAN IN THE LOOP!\n" +
+            "You're about to start your journey as an indie game developer."
+        );
     }
+
+
+    // =========================================================
+    // COMPUTER INSTRUCTION
+    // =========================================================
+
+    public void ShowComputerInstruction()
+    {
+        if (tutorialSkipped)
+        {
+            return;
+        }
+
+        currentTutorialStep = 1;
+
+        ShowPopup(
+            "This is your development workspace.\n" +
+            "Click the computer to start creating your game."
+        );
+    }
+
 
     // =========================================================
     // THEME EXPLANATION
     // =========================================================
 
-    // Explains that the player should choose a theme
-    // for their new game.
     public void ShowThemeExplanation()
     {
+        if (tutorialSkipped)
+        {
+            return;
+        }
+
         ShowPopup(
-            "Every game starts with an idea!\n\n" +
-            "First, choose a theme for your game."
+            "Every game starts with an idea!\n" +
+            "Choose a theme for your game."
         );
     }
+
 
     // =========================================================
     // THEME SELECTED
     // =========================================================
 
-    // Called when the player successfully selects a theme.
     public void ThemeSelected()
     {
+        if (tutorialSkipped)
+        {
+            return;
+        }
+
         ShowPopup(
-            "Great choice!\n\n" +
+            "Great choice!\n" +
             "Now choose a genre for your game."
         );
     }
@@ -149,30 +157,36 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     // GENRE SELECTED
     // =========================================================
 
-    // Called when the player successfully selects a genre.
     public void GenreSelected()
     {
+        if (tutorialSkipped)
+        {
+            return;
+        }
+
         ShowPopup(
-            "Great choice!\n\n" +
-            "Your theme and genre are ready. " +
+            "Great choice!\n" +
+            "Your theme and genre are ready.\n" +
             "Select Start Development when you're ready to begin."
         );
     }
+
 
     // =========================================================
     // CODING
     // =========================================================
 
-    // Explains the Coding stage.
     public void ShowCoding()
     {
+        if (tutorialSkipped)
+        {
+            return;
+        }
+
         ShowPopup(
             "CODING\n\n" +
-            "This is where you create the systems and mechanics " +
-            "that make your game work.\n\n" +
-            "Choose AI or Manual development. " +
-            "Your choice will affect your project's " +
-            "Quality, Workload, and Technical Debt."
+            "Create the systems and mechanics that make your game work.\n" +
+            "Your AI or Manual choice affects Quality, Workload, and Technical Debt."
         );
     }
 
@@ -181,16 +195,17 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     // DESIGN
     // =========================================================
 
-    // Explains the Design stage.
     public void ShowDesign()
     {
+        if (tutorialSkipped)
+        {
+            return;
+        }
+
         ShowPopup(
             "DESIGN\n\n" +
-            "Here you shape how your game looks " +
-            "and how players experience it.\n\n" +
-            "Choose AI or Manual development. " +
-            "Your choice will affect your project's " +
-            "Quality, Workload, and Technical Debt."
+            "Shape how your game looks and feels.\n" +
+            "Your choices can affect the quality of your project."
         );
     }
 
@@ -199,15 +214,17 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     // SOUND
     // =========================================================
 
-    // Explains the Sound stage.
     public void ShowSound()
     {
+        if (tutorialSkipped)
+        {
+            return;
+        }
+
         ShowPopup(
             "SOUND\n\n" +
-            "This is where you create the audio for your game.\n\n" +
-            "Choose AI or Manual development. " +
-            "Your choice will affect your project's " +
-            "Quality, Workload, and Technical Debt."
+            "Give your game a voice through music and sound effects.\n" +
+            "Good audio can help bring your game to life."
         );
     }
 
@@ -216,15 +233,17 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     // DEBUGGING
     // =========================================================
 
-    // Explains the Debugging stage.
     public void ShowDebugging()
     {
+        if (tutorialSkipped)
+        {
+            return;
+        }
+
         ShowPopup(
             "DEBUGGING\n\n" +
-            "Find and fix bugs before your game is released.\n\n" +
-            "Choose AI or Manual development. " +
-            "Your choice will affect your project's " +
-            "Quality, Workload, Technical Debt, and Bugs."
+            "Find and fix problems before your game is released.\n" +
+            "Keep an eye on your bugs and project conditions."
         );
     }
 
@@ -233,14 +252,17 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     // BUILD
     // =========================================================
 
-    // Explains the Build stage.
     public void ShowBuild()
     {
+        if (tutorialSkipped)
+        {
+            return;
+        }
+
         ShowPopup(
             "BUILD\n\n" +
-            "Your game is ready to be built and prepared for release.\n\n" +
-            "Your choices throughout development have affected " +
-            "your project's final results."
+            "Your game is almost ready!\n" +
+            "Make sure you're happy with your project before building it."
         );
     }
 
@@ -249,14 +271,116 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     // FINAL RESULT
     // =========================================================
 
-    // Explains that the development process is complete.
     public void ShowFinalResult()
     {
+        if (tutorialSkipped)
+        {
+            return;
+        }
+
         ShowPopup(
             "CONGRATULATIONS!\n\n" +
             "Your game is complete!\n\n" +
-            "You're ready to start your first game!"
+            "Let's see how your development choices affected the final result."
         );
+    }
+
+
+    // =========================================================
+    // NEXT BUTTON
+    // =========================================================
+
+    private void OnNextClicked()
+    {
+        // If text is still typing,
+        // finish it first.
+        if (isTyping)
+        {
+            FinishTyping();
+            return;
+        }
+
+        // Welcome → Computer instruction
+        if (currentTutorialStep == 0)
+        {
+            currentTutorialStep = 1;
+
+            ShowComputerInstruction();
+
+            return;
+        }
+
+        // Once the computer instruction is displayed,
+        // Next cannot move the tutorial forward.
+        //
+        // The player must actually click the computer.
+    }
+
+
+    // =========================================================
+    // FINISH TYPING
+    // =========================================================
+
+    private void FinishTyping()
+    {
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+
+            typingCoroutine = null;
+        }
+
+        popupText.text = GetCurrentMessage();
+
+        isTyping = false;
+    }
+
+
+    // =========================================================
+    // GET CURRENT MESSAGE
+    // =========================================================
+
+    private string GetCurrentMessage()
+    {
+        switch (currentTutorialStep)
+        {
+            case 0:
+
+                return
+                    "WELCOME TO DEV LIFE: HUMAN IN THE LOOP!\n\n" +
+                    "You're about to start your journey as an indie game developer.";
+
+            case 1:
+
+                return
+                    "This is your development workspace.\n\n" +
+                    "Click the computer to start creating your game.";
+
+            default:
+
+                return popupText.text;
+        }
+    }
+
+
+    // =========================================================
+    // SKIP BUTTON
+    // =========================================================
+
+    private void OnSkipClicked()
+    {
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+
+            typingCoroutine = null;
+        }
+
+        isTyping = false;
+
+        tutorialSkipped = true;
+
+        CloseTutorial();
     }
 
 
@@ -264,31 +388,95 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     // SHOW POPUP
     // =========================================================
 
-    // Displays the tutorial popup with the supplied message.
     private void ShowPopup(string message)
     {
-        if (popupText != null)
+        if (tutorialSkipped)
         {
-            popupText.text = message;
+            return;
         }
 
         if (popupPanel != null)
         {
             popupPanel.SetActive(true);
         }
+
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+
+        typingCoroutine = StartCoroutine(
+            TypeMessage(message));
     }
 
 
     // =========================================================
-    // CLOSE POPUP
+    // TYPING ANIMATION
     // =========================================================
 
-    // Called by the popup's OK button.
-    public void ClosePopup()
+    private IEnumerator TypeMessage(string message)
+    {
+        isTyping = true;
+
+        popupText.text = "";
+
+        foreach (char letter in message)
+        {
+            popupText.text += letter;
+
+            yield return new WaitForSeconds(
+                typingSpeed);
+        }
+
+        isTyping = false;
+
+        typingCoroutine = null;
+    }
+
+
+    // =========================================================
+    // CLOSE TUTORIAL
+    // =========================================================
+
+    public void CloseTutorial()
     {
         if (popupPanel != null)
         {
             popupPanel.SetActive(false);
+        }
+    }
+
+
+    // =========================================================
+    // SHOW TUTORIAL
+    // =========================================================
+
+    public void ShowTutorial()
+    {
+        tutorialSkipped = false;
+
+        currentTutorialStep = 0;
+
+        ShowWelcome();
+    }
+
+
+    // =========================================================
+    // CLEAN UP
+    // =========================================================
+
+    private void OnDestroy()
+    {
+        if (nextButton != null)
+        {
+            nextButton.onClick.RemoveListener(
+                OnNextClicked);
+        }
+
+        if (skipButton != null)
+        {
+            skipButton.onClick.RemoveListener(
+                OnSkipClicked);
         }
     }
 }

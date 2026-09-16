@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: 015b1feaf092fd84e873e78c45b6d7a4
+guid: 0357c96867732ce4f8d6c52e94ac5fe9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3708611220742190463
-    second: panel 05_0
+      213: -7385085746842954004
+    second: Bugs_0
+  - first:
+      213: -6068800229937506907
+    second: Bugs_1
+  - first:
+      213: 6222437612026494144
+    second: Bugs_2
+  - first:
+      213: -3061388134898156023
+    second: Bugs_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,9 +55,9 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -75,7 +84,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,13 +109,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: panel 05_0
+      name: Bugs_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 108
-        height: 35
+        width: 1270
+        height: 1200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +124,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f75bd569142a77330800000000000000
-      internalID: 3708611220742190463
+      spriteID: ce610af14a7e28990800000000000000
+      internalID: -7385085746842954004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bugs_1
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 432
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a514c1485a47cba0800000000000000
+      internalID: -6068800229937506907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bugs_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 135
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cc7edd4a0a8a5650800000000000000
+      internalID: 6222437612026494144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bugs_3
+      rect:
+        serializedVersion: 2
+        x: 1033
+        y: 69
+        width: 19
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90ebcc316b3c385d0800000000000000
+      internalID: -3061388134898156023
       vertices: []
       indices: 
       edges: []
@@ -125,7 +200,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +210,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      panel 05_0: 3708611220742190463
+      Bugs_0: -7385085746842954004
+      Bugs_1: -6068800229937506907
+      Bugs_2: 6222437612026494144
+      Bugs_3: -3061388134898156023
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

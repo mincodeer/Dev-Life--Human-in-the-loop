@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 015b1feaf092fd84e873e78c45b6d7a4
+guid: e41636f452dd8fb489ec6cd6355cf885
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3708611220742190463
-    second: panel 05_0
+      213: -3092223754324887936
+    second: Time_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,9 +46,9 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: panel 05_0
+      name: Time_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 108
-        height: 35
+        y: 25
+        width: 1122
+        height: 1133
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f75bd569142a77330800000000000000
-      internalID: 3708611220742190463
+      spriteID: 086b075f0e63615d0800000000000000
+      internalID: -3092223754324887936
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      panel 05_0: 3708611220742190463
+      Time_0: -3092223754324887936
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
