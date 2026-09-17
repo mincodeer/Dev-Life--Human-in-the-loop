@@ -1516,8 +1516,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4293819849
-  m_fontColor: {r: 0.78924227, g: 0.49065858, b: 0.93207544, a: 1}
+    rgba: 4284920063
+  m_fontColor: {r: 1, g: 0.6903896, b: 0.39811313, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3354,6 +3354,7 @@ GameObject:
   - component: {fileID: 567996538}
   - component: {fileID: 567996537}
   - component: {fileID: 567996536}
+  - component: {fileID: 567996539}
   m_Layer: 5
   m_Name: BackToMenuButton
   m_TagString: Untagged
@@ -3424,7 +3425,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 567996537}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 567996539}
+        m_TargetAssemblyTypeName: ReturnToRoom, Assembly-CSharp
+        m_MethodName: ReturnToRoomScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &567996537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3463,6 +3476,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 567996534}
   m_CullTransparentMesh: 1
+--- !u!114 &567996539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567996534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f199d922770cf8f4ba5fb66b9a0f185a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReturnToRoom
+  roomSceneName: Minjae's Scene
 --- !u!1 &571186418
 GameObject:
   m_ObjectHideFlags: 0
@@ -6399,8 +6425,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 138523229}
   m_HandleRect: {fileID: 138523228}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.1730054
+  m_Value: 0.9999999
+  m_Size: 0.28840348
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9779,7 +9805,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 2000}
+  m_SizeDelta: {x: 0, y: 1200}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1837602315
 MonoBehaviour:
@@ -10688,6 +10714,74 @@ PrefabInstance:
       propertyPath: m_Name
       value: ProjectHistoryManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[0].genre
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[0].theme
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[1].genre
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[1].theme
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[0].quality
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[1].quality
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[0].finalScore
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[1].finalScore
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[0].moneyEarned
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[0].projectName
+      value: PROJECT 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[1].moneyEarned
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[1].projectName
+      value: PROJECT 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[0].fandomGained
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[1].fandomGained
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[0].completedWeek
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5516185267000757512, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      propertyPath: completedProjects.Array.data[1].completedWeek
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6016414118394331156, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 273.93173
@@ -10728,7 +10822,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2111609958913792780, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

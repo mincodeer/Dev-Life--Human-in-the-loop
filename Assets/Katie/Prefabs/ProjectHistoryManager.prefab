@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6016414118394331156}
   - component: {fileID: 5516185267000757512}
-  - component: {fileID: 2111609958913792780}
   m_Layer: 0
   m_Name: ProjectHistoryManager
   m_TagString: Untagged
@@ -46,16 +45,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectHistoryManager
   completedProjects: []
---- !u!114 &2111609958913792780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3430053913958508751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ce57e7fdddc44d4592201a81ffd3d83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectCompletionBridge
-  finalResultsCalculator: {fileID: 0}

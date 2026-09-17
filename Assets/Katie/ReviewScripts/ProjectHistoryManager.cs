@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 /// <summary>
-/// Stores every completed project while the game is running.
-///
-/// This object survives scene changes so the Development,
-/// Dashboard and Review scenes can share the same records.
+/// Provides completed-project records to the Dashboard and Review scenes.
+/// The original project data remains owned by ProjectDataManager.
 /// </summary>
 public class ProjectHistoryManager : MonoBehaviour
 {
@@ -62,6 +61,76 @@ public class ProjectHistoryManager : MonoBehaviour
 
         // Keep the history when another scene opens.
         DontDestroyOnLoad(gameObject);
+    }
+
+    /// <summary>
+    /// Copies archived projects from ProjectDataManager into the
+    /// Dashboard's display format. ProjectDataManager remains the source
+    /// of truth and is not modified by this method.
+    /// </summary>
+    public void RefreshFromProjectDataManager()
+    {
+        if (ProjectDataManager.Instance == null)
+        {
+            Debug.LogWarning(
+                "ProjectHistoryManager could not find ProjectDataManager.");
+
+            return;
+        }
+
+        IReadOnlyList<ProjectData> archivedProjects =
+            ProjectDataManager.Instance.CompletedProjects;
+
+        int selectedIndex =
+            SelectedProject == null
+            ? -1
+            : completedProjects.IndexOf(SelectedProject);
+
+        // Rebuild the display list so it always matches the archived source.
+        completedProjects.Clear();
+
+        for (int i = 0;
+             i < archivedProjects.Count;
+             i++)
+        {
+            ProjectData projectData = archivedProjects[i];
+
+            if (projectData == null || projectData.finalResult == null)
+            {
+                Debug.LogWarning(
+                    "Archived project " + (i + 1)
+                    + " does not contain a final result.");
+
+                continue;
+            }
+
+            CompletedProjectRecord completedProject =
+                new CompletedProjectRecord(
+                    projectData,
+                    projectData.finalResult,
+                    i + 1);
+
+            completedProjects.Add(completedProject);
+        }
+
+        if (completedProjects.Count == 0)
+        {
+            SelectedProject = null;
+        }
+        else if (selectedIndex >= 0
+                 && selectedIndex < completedProjects.Count)
+        {
+            SelectedProject = completedProjects[selectedIndex];
+        }
+        else
+        {
+            // Select the newest completed project by default.
+            SelectedProject =
+                completedProjects[completedProjects.Count - 1];
+        }
+
+        HistoryChanged?.Invoke();
+        SelectedProjectChanged?.Invoke();
     }
 
     /// <summary>
@@ -248,17 +317,63 @@ public class ProjectHistoryManager : MonoBehaviour
         int projectNumber =
             completedProjects.Count + 1;
 
+        GameTheme[] sampleThemes =
+        {
+            GameTheme.Fantasy,
+            GameTheme.SciFi,
+            GameTheme.Horror
+        };
+
+        GameGenre[] sampleGenres =
+        {
+            GameGenre.RPG,
+            GameGenre.Action,
+            GameGenre.Simulation
+        };
+
+        float randomFinalScore =
+            Random.Range(35f, 96f);
+
+        int randomMoneyEarned =
+            Random.Range(200, 2001);
+
         CompletedProjectRecord sampleProject =
             new CompletedProjectRecord(
                 "PROJECT " + projectNumber,
-                GameTheme.Fantasy,
-                GameGenre.RPG,
-                80f,
-                500,
+                sampleThemes[
+                    Random.Range(0, sampleThemes.Length)],
+                sampleGenres[
+                    Random.Range(0, sampleGenres.Length)],
+                randomFinalScore,
+                randomMoneyEarned,
                 projectNumber);
 
-        // Give the test record some fandom.
-        sampleProject.fandomGained = 20;
+        // Random details make the Dashboard and Review tests visibly different.
+        sampleProject.fandomGained =
+            Random.Range(5, 101);
+
+        sampleProject.quality =
+            Mathf.Clamp(
+                randomFinalScore + Random.Range(-15f, 16f),
+                0f,
+                100f);
+
+        sampleProject.workload =
+            Random.Range(20f, 101f);
+
+        sampleProject.technicalDebt =
+            Random.Range(0, 31);
+
+        sampleProject.bugs =
+            Random.Range(0, 11);
+
+        sampleProject.developmentTime =
+            Random.Range(5f, 31f);
+
+        sampleProject.marketBonus =
+            Random.value >= 0.5f
+            ? Random.Range(1f, 16f)
+            : 0f;
 
         AddCompletedProject(sampleProject);
     }
