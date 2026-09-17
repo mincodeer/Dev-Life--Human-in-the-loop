@@ -26,4 +26,13 @@ public class FinalProjectResult
 
     // Bonus received from matching the market trend.
     public float marketBonus;
+
+    // Describes whether the completed project received
+    // an Exact Match, Partial Match, or No Match.
+    public string marketMatchType;
+
+    // Stores the Theme and Genre that were trending
+    // when the project was completed.
+    public string trendingTheme;
+    public string trendingGenre;
 }
