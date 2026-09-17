@@ -5,11 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-/// <summary>
-/// Controls the development tutorial popup.
-/// Displays tutorial dialogue with a typing animation
-/// and follows the player's actual development progress.
-/// </summary>
 public class DevelopmentTutorialPopup : MonoBehaviour
 {
     // =========================================================
@@ -45,7 +40,6 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     // TUTORIAL STATE
     // =========================================================
 
-    // Intro tutorial:
     // 0 = Welcome
     // 1 = Computer instruction
     private int currentTutorialStep = 0;
@@ -58,6 +52,43 @@ public class DevelopmentTutorialPopup : MonoBehaviour
 
 
     // =========================================================
+    // ONE-TIME TUTORIAL FLAGS
+    // =========================================================
+
+    // Prevent the Lobby tutorial from starting twice.
+    private bool tutorialStarted = false;
+
+    // Prevent computer / Project Setup tutorial
+    // from appearing every time the computer is reopened.
+    private bool themeExplanationShown = false;
+
+    private bool themeSelectedShown = false;
+    private bool genreSelectedShown = false;
+
+    private bool codingShown = false;
+    private bool designShown = false;
+    private bool soundShown = false;
+    private bool debuggingShown = false;
+    private bool buildShown = false;
+    private bool finalResultShown = false;
+
+
+    // =========================================================
+    // AWAKE
+    // =========================================================
+
+    private void Awake()
+    {
+        // Tutorial must NOT appear automatically
+        // when the Scene starts.
+        if (popupPanel != null)
+        {
+            popupPanel.SetActive(false);
+        }
+    }
+
+
+    // =========================================================
     // START
     // =========================================================
 
@@ -65,13 +96,42 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     {
         if (nextButton != null)
         {
-            nextButton.onClick.AddListener(OnNextClicked);
+            nextButton.onClick.AddListener(
+                OnNextClicked);
         }
 
         if (skipButton != null)
         {
-            skipButton.onClick.AddListener(OnSkipClicked);
+            skipButton.onClick.AddListener(
+                OnSkipClicked);
         }
+
+        // IMPORTANT:
+        // No ShowWelcome() here.
+        //
+        // LobbyController starts the tutorial
+        // after the Lobby transition finishes.
+    }
+
+
+    // =========================================================
+    // START TUTORIAL
+    // =========================================================
+
+    public void ShowTutorial()
+    {
+        // Prevent Welcome from starting again
+        // if ShowTutorial is accidentally called twice.
+        if (tutorialStarted)
+        {
+            return;
+        }
+
+        tutorialStarted = true;
+
+        tutorialSkipped = false;
+
+        currentTutorialStep = 0;
 
         ShowWelcome();
     }
@@ -128,6 +188,16 @@ public class DevelopmentTutorialPopup : MonoBehaviour
             return;
         }
 
+        // IMPORTANT:
+        // Project Setup can open again later.
+        // Only show this tutorial the FIRST time.
+        if (themeExplanationShown)
+        {
+            return;
+        }
+
+        themeExplanationShown = true;
+
         ShowPopup(
             "Every game starts with an idea!\n" +
             "Choose a theme for your game."
@@ -146,6 +216,13 @@ public class DevelopmentTutorialPopup : MonoBehaviour
             return;
         }
 
+        if (themeSelectedShown)
+        {
+            return;
+        }
+
+        themeSelectedShown = true;
+
         ShowPopup(
             "Great choice!\n" +
             "Now choose a genre for your game."
@@ -163,6 +240,13 @@ public class DevelopmentTutorialPopup : MonoBehaviour
         {
             return;
         }
+
+        if (genreSelectedShown)
+        {
+            return;
+        }
+
+        genreSelectedShown = true;
 
         ShowPopup(
             "Great choice!\n" +
@@ -183,6 +267,13 @@ public class DevelopmentTutorialPopup : MonoBehaviour
             return;
         }
 
+        if (codingShown)
+        {
+            return;
+        }
+
+        codingShown = true;
+
         ShowPopup(
             "CODING\n\n" +
             "Create the systems and mechanics that make your game work.\n" +
@@ -201,6 +292,13 @@ public class DevelopmentTutorialPopup : MonoBehaviour
         {
             return;
         }
+
+        if (designShown)
+        {
+            return;
+        }
+
+        designShown = true;
 
         ShowPopup(
             "DESIGN\n\n" +
@@ -221,6 +319,13 @@ public class DevelopmentTutorialPopup : MonoBehaviour
             return;
         }
 
+        if (soundShown)
+        {
+            return;
+        }
+
+        soundShown = true;
+
         ShowPopup(
             "SOUND\n\n" +
             "Give your game a voice through music and sound effects.\n" +
@@ -239,6 +344,13 @@ public class DevelopmentTutorialPopup : MonoBehaviour
         {
             return;
         }
+
+        if (debuggingShown)
+        {
+            return;
+        }
+
+        debuggingShown = true;
 
         ShowPopup(
             "DEBUGGING\n\n" +
@@ -259,6 +371,13 @@ public class DevelopmentTutorialPopup : MonoBehaviour
             return;
         }
 
+        if (buildShown)
+        {
+            return;
+        }
+
+        buildShown = true;
+
         ShowPopup(
             "BUILD\n\n" +
             "Your game is almost ready!\n" +
@@ -278,6 +397,13 @@ public class DevelopmentTutorialPopup : MonoBehaviour
             return;
         }
 
+        if (finalResultShown)
+        {
+            return;
+        }
+
+        finalResultShown = true;
+
         ShowPopup(
             "CONGRATULATIONS!\n\n" +
             "Your game is complete!\n\n" +
@@ -293,14 +419,16 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     private void OnNextClicked()
     {
         // If text is still typing,
-        // finish it first.
+        // clicking Next completes the sentence first.
         if (isTyping)
         {
             FinishTyping();
+
             return;
         }
 
-        // Welcome → Computer instruction
+
+        // Welcome -> Computer instruction
         if (currentTutorialStep == 0)
         {
             currentTutorialStep = 1;
@@ -310,10 +438,11 @@ public class DevelopmentTutorialPopup : MonoBehaviour
             return;
         }
 
-        // Once the computer instruction is displayed,
-        // Next cannot move the tutorial forward.
+
+        // At Computer Instruction:
+        // Next does nothing.
         //
-        // The player must actually click the computer.
+        // Player must actually click the computer.
     }
 
 
@@ -325,12 +454,14 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     {
         if (typingCoroutine != null)
         {
-            StopCoroutine(typingCoroutine);
+            StopCoroutine(
+                typingCoroutine);
 
             typingCoroutine = null;
         }
 
-        popupText.text = GetCurrentMessage();
+        popupText.text =
+            GetCurrentMessage();
 
         isTyping = false;
     }
@@ -350,11 +481,13 @@ public class DevelopmentTutorialPopup : MonoBehaviour
                     "WELCOME TO DEV LIFE: HUMAN IN THE LOOP!\n\n" +
                     "You're about to start your journey as an indie game developer.";
 
+
             case 1:
 
                 return
                     "This is your development workspace.\n\n" +
                     "Click the computer to start creating your game.";
+
 
             default:
 
@@ -364,14 +497,15 @@ public class DevelopmentTutorialPopup : MonoBehaviour
 
 
     // =========================================================
-    // SKIP BUTTON
+    // SKIP
     // =========================================================
 
     private void OnSkipClicked()
     {
         if (typingCoroutine != null)
         {
-            StopCoroutine(typingCoroutine);
+            StopCoroutine(
+                typingCoroutine);
 
             typingCoroutine = null;
         }
@@ -388,7 +522,8 @@ public class DevelopmentTutorialPopup : MonoBehaviour
     // SHOW POPUP
     // =========================================================
 
-    private void ShowPopup(string message)
+    private void ShowPopup(
+        string message)
     {
         if (tutorialSkipped)
         {
@@ -402,19 +537,22 @@ public class DevelopmentTutorialPopup : MonoBehaviour
 
         if (typingCoroutine != null)
         {
-            StopCoroutine(typingCoroutine);
+            StopCoroutine(
+                typingCoroutine);
         }
 
-        typingCoroutine = StartCoroutine(
-            TypeMessage(message));
+        typingCoroutine =
+            StartCoroutine(
+                TypeMessage(message));
     }
 
 
     // =========================================================
-    // TYPING ANIMATION
+    // TYPING
     // =========================================================
 
-    private IEnumerator TypeMessage(string message)
+    private IEnumerator TypeMessage(
+        string message)
     {
         isTyping = true;
 
@@ -424,8 +562,9 @@ public class DevelopmentTutorialPopup : MonoBehaviour
         {
             popupText.text += letter;
 
-            yield return new WaitForSeconds(
-                typingSpeed);
+            yield return
+                new WaitForSeconds(
+                    typingSpeed);
         }
 
         isTyping = false;
@@ -435,7 +574,7 @@ public class DevelopmentTutorialPopup : MonoBehaviour
 
 
     // =========================================================
-    // CLOSE TUTORIAL
+    // CLOSE
     // =========================================================
 
     public void CloseTutorial()
@@ -444,20 +583,6 @@ public class DevelopmentTutorialPopup : MonoBehaviour
         {
             popupPanel.SetActive(false);
         }
-    }
-
-
-    // =========================================================
-    // SHOW TUTORIAL
-    // =========================================================
-
-    public void ShowTutorial()
-    {
-        tutorialSkipped = false;
-
-        currentTutorialStep = 0;
-
-        ShowWelcome();
     }
 
 

@@ -3,7 +3,7 @@
 using System;
 
 /// Stores the current conditions of the game project being developed.
-/// These values belong to one project and should reset when a new project begins.
+/// Quality, bugs and time reset each project; workload carries over.
 [Serializable]
 public class ProjectConditions
 {
@@ -59,7 +59,7 @@ public class ProjectConditions
     }
 
  
-    /// Resets all project conditions for a new project.
+    /// Resets per-project values while preserving workload.
     public void ResetConditions()
     {
         quality = 0f;

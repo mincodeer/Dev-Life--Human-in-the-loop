@@ -5,6 +5,12 @@ TextureImporter:
   - first:
       213: -1649160151395322428
     second: Debugging_0
+  - first:
+      213: 3676227856970845016
+    second: Debugging_1
+  - first:
+      213: 2801741434383228492
+    second: Debugging_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +43,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +57,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 27
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -121,6 +127,50 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Debugging_1
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 28
+        width: 320
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85b842822c5940330800000000000000
+      internalID: 3676227856970845016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Debugging_2
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 12
+        width: 224
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4ed7e48df8c1e620800000000000000
+      internalID: 2801741434383228492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -136,6 +186,8 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       Debugging_0: -1649160151395322428
+      Debugging_1: 3676227856970845016
+      Debugging_2: 2801741434383228492
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
