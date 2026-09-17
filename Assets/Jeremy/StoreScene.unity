@@ -566,6 +566,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 217687081}
   m_CullTransparentMesh: 1
+--- !u!1 &218235695
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 218235697}
+  - component: {fileID: 218235696}
+  m_Layer: 0
+  m_Name: ResourceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &218235696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218235695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78e894e5c20209f45a7f3a3f996b920b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+  money: 3000
+  fandom: 0
+  developmentSkill: 10
+  technicalDebt: 0
+--- !u!4 &218235697
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218235695}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 782.5642, y: 316.463, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &287370958
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,8 +988,6 @@ MonoBehaviour:
   - {fileID: 1622464151}
   - {fileID: 1125159348}
   - {fileID: 9518416}
-  money: 3000
-  moneyText: {fileID: 539321731}
 --- !u!4 &355747408
 Transform:
   m_ObjectHideFlags: 0
@@ -1919,6 +1965,7 @@ GameObject:
   - component: {fileID: 539321733}
   - component: {fileID: 539321732}
   - component: {fileID: 539321731}
+  - component: {fileID: 539321734}
   m_Layer: 0
   m_Name: MoneyText
   m_TagString: Untagged
@@ -2045,6 +2092,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 170}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &539321734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539321730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c59e6efe13fc50c4093cc91608ddd8ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceUI
+  moneyText: {fileID: 539321731}
+  fandomText: {fileID: 0}
 --- !u!1 &546548659
 GameObject:
   m_ObjectHideFlags: 0
@@ -5916,3 +5977,4 @@ SceneRoots:
   - {fileID: 546548663}
   - {fileID: 1455224591}
   - {fileID: 355747408}
+  - {fileID: 218235697}

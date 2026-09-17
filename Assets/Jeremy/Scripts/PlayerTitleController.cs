@@ -11,10 +11,17 @@ public class PlayerTitleController : MonoBehaviour
     public TMP_Text nextTitleText;
     public TMP_Text skillValueText;
     public Slider titleProgressBar;
-    public int developmentSkill = 0;
 
     void Update()
     {
+        if (ResourceManager.Instance == null)
+        {
+            return;
+        }
+
+        int developmentSkill =
+            ResourceManager.Instance.DevelopmentSkill;
+
         skillValueText.text = developmentSkill + " / 100";
 
         if (developmentSkill <= 20)
