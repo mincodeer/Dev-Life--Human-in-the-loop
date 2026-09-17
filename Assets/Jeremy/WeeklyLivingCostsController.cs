@@ -16,6 +16,9 @@ public class WeeklyLivingCostsController : MonoBehaviour
     // Popup shown when rent needs to be paid
     public GameObject rentPopup;
 
+    // Popup shown when the player goes bankrupt
+    public GameObject gameOverPopup;
+
     // UI text
     public TMP_Text moneyText;
     public TMP_Text weekText;
@@ -31,7 +34,16 @@ public class WeeklyLivingCostsController : MonoBehaviour
 
     private void Start()
     {
-        rentPopup.SetActive(false);
+        if (rentPopup != null)
+        {
+            rentPopup.SetActive(false);
+        }
+
+        if (gameOverPopup != null)
+        {
+            gameOverPopup.SetActive(false);
+        }
+
         UpdateUI();
     }
 
@@ -42,8 +54,14 @@ public class WeeklyLivingCostsController : MonoBehaviour
 
     public void AdvanceWeek()
     {
-        // Do not allow another week to pass while rent is unpaid
-        if (rentPopup.activeSelf)
+        // Do not allow time to continue while rent is unpaid
+        if (rentPopup != null && rentPopup.activeSelf)
+        {
+            return;
+        }
+
+        // Do not continue after Game Over
+        if (gameOverPopup != null && gameOverPopup.activeSelf)
         {
             return;
         }
@@ -55,8 +73,26 @@ public class WeeklyLivingCostsController : MonoBehaviour
         // Rent is due every second week
         if (currentWeek % 2 == 0)
         {
-            ShowRentPopup();
+            CheckRent();
         }
+    }
+
+
+    // ------------------------------------------------------------
+    // CHECK RENT
+    // ------------------------------------------------------------
+
+    private void CheckRent()
+    {
+        // Player cannot afford the rent
+        if (money < livingCost)
+        {
+            TriggerGameOver();
+            return;
+        }
+
+        // Player can afford the rent
+        ShowRentPopup();
     }
 
 
@@ -68,7 +104,7 @@ public class WeeklyLivingCostsController : MonoBehaviour
     {
         rentPopup.SetActive(true);
 
-        // Only display the amount because "Amount:" is on the PNG
+        // "Amount:" is already part of the popup PNG
         rentText.text = "$" + livingCost;
     }
 
@@ -79,13 +115,38 @@ public class WeeklyLivingCostsController : MonoBehaviour
 
     public void PayRent()
     {
-        // Rent is paid even if this makes the player's money negative
+        // Make sure the player can still afford the rent
+        if (money < livingCost)
+        {
+            TriggerGameOver();
+            return;
+        }
+
+        // Remove the rent cost from the player's money
         money -= livingCost;
 
-        // Close the popup after rent has been paid
+        // Close the popup after payment
         rentPopup.SetActive(false);
 
         UpdateUI();
+    }
+
+
+    // ------------------------------------------------------------
+    // GAME OVER
+    // ------------------------------------------------------------
+
+    private void TriggerGameOver()
+    {
+        if (rentPopup != null)
+        {
+            rentPopup.SetActive(false);
+        }
+
+        if (gameOverPopup != null)
+        {
+            gameOverPopup.SetActive(true);
+        }
     }
 
 
