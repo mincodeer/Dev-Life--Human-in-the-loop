@@ -406,7 +406,7 @@ public class DevelopmentTutorialPopup : MonoBehaviour
 
         ShowPopup(
             "CONGRATULATIONS!\n\n" +
-            "Your game is complete!\n\n" +
+            "Your game is complete!\n" +
             "Let's see how your development choices affected the final result."
         );
     }

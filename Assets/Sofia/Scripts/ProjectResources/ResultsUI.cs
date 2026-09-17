@@ -4,20 +4,36 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Displays the final results of a completed project
-/// on the Results panel.
+/// Displays the final project results on the Results panel.
 /// </summary>
 public class ResultsUI : MonoBehaviour
 {
+    // =========================================================
+    // RESULT CALCULATOR
+    // =========================================================
+
     [Header("Result Calculator")]
+
     [SerializeField]
     private FinalResultsCalculator finalResultsCalculator;
 
+
+    // =========================================================
+    // FINAL SCORE
+    // =========================================================
+
     [Header("Final Score")]
+
     [SerializeField]
     private TMP_Text finalScoreText;
 
+
+    // =========================================================
+    // PROJECT RESULTS
+    // =========================================================
+
     [Header("Project Results")]
+
     [SerializeField]
     private TMP_Text qualityValue;
 
@@ -30,10 +46,27 @@ public class ResultsUI : MonoBehaviour
     [SerializeField]
     private TMP_Text bugsValue;
 
-    /// <summary>
-    /// Gets the calculated final result and
-    /// displays the values on the Results panel.
-    /// </summary>
+    [SerializeField]
+    private TMP_Text developmentTimeValue;
+
+
+    // =========================================================
+    // REWARDS
+    // =========================================================
+
+    [Header("Rewards")]
+
+    [SerializeField]
+    private TMP_Text moneyEarnedValue;
+
+    [SerializeField]
+    private TMP_Text fandomGainedValue;
+
+
+    // =========================================================
+    // DISPLAY RESULTS
+    // =========================================================
+
     public void DisplayResults()
     {
         if (finalResultsCalculator == null)
@@ -55,56 +88,92 @@ public class ResultsUI : MonoBehaviour
             return;
         }
 
+
         // Final Score
         if (finalScoreText != null)
         {
             finalScoreText.text =
-                result.finalScore.ToString("0.0")
+                "Final Score: "
+                + result.finalScore.ToString("0.0")
                 + " / 100";
         }
+
 
         // Quality
         if (qualityValue != null)
         {
             qualityValue.text =
-                result.quality.ToString("0")
+                "Quality: "
+                + result.quality.ToString("0")
                 + " / 100";
         }
+
 
         // Workload
         if (workloadValue != null)
         {
             workloadValue.text =
-                result.workload.ToString("0")
+                "Workload: "
+                + result.workload.ToString("0")
                 + " / 100";
         }
+
 
         // Technical Debt
         if (technicalDebtValue != null)
         {
             technicalDebtValue.text =
-                result.technicalDebt
+                "Technical Debt: "
+                + result.technicalDebt
                 + " / 100";
         }
+
 
         // Bugs
         if (bugsValue != null)
         {
             bugsValue.text =
-                result.bugs.ToString();
+                "Bugs: "
+                + result.bugs;
         }
+
+
+        // Development Time
+        if (developmentTimeValue != null)
+        {
+            developmentTimeValue.text =
+                "Development Time: "
+                + result.developmentTime.ToString("0")
+                + " days";
+        }
+
+
+        // Money Earned
+        if (moneyEarnedValue != null)
+        {
+            moneyEarnedValue.text =
+                "$"
+                + result.moneyEarned;
+        }
+
+
+        // Fandom Gained
+        if (fandomGainedValue != null)
+        {
+            fandomGainedValue.text =
+                result.fandomGained.ToString();
+        }
+
 
         Debug.Log(
             "Results UI updated successfully."
-            + "\nFinal Score: "
-            + result.finalScore
-            + "\nQuality: "
-            + result.quality
-            + "\nWorkload: "
-            + result.workload
-            + "\nTechnical Debt: "
-            + result.technicalDebt
-            + "\nBugs: "
-            + result.bugs);
+            + "\nFinal Score: " + result.finalScore
+            + "\nQuality: " + result.quality
+            + "\nWorkload: " + result.workload
+            + "\nTechnical Debt: " + result.technicalDebt
+            + "\nBugs: " + result.bugs
+            + "\nDevelopment Time: " + result.developmentTime
+            + "\nMoney Earned: " + result.moneyEarned
+            + "\nFandom Gained: " + result.fandomGained);
     }
 }
