@@ -5,12 +5,14 @@ public class SaveLoadManager : MonoBehaviour
 {
     public Slider bgmSlider;
     public Slider sfxSlider;
+    public Slider KeyboardSlider;
     // Save the current volume settings
     public void SaveGame()
     {
         PlayerPrefs.SetFloat("BGMVolume", bgmSlider.value);
         PlayerPrefs.SetFloat("SFXVolume", sfxSlider.value);
-
+        PlayerPrefs.SetFloat("keyboardVolume", KeyboardSlider.value);
+        
         PlayerPrefs.Save();
 
         Debug.Log("Game Saved");
@@ -28,6 +30,10 @@ public class SaveLoadManager : MonoBehaviour
             sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume");
         }
 
+        if (PlayerPrefs.HasKey("keyboardVolume"))
+        {
+            KeyboardSlider.value = PlayerPrefs.GetFloat("keyboardVolume");
+        }
         Debug.Log("Game Loaded");
     }
 }
