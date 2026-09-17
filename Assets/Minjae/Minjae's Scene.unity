@@ -4070,6 +4070,9 @@ MonoBehaviour:
     moneyEarned: 0
     fandomGained: 0
     marketBonus: 0
+    marketMatchType: 
+    trendingTheme: 
+    trendingGenre: 
 --- !u!114 &387396543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10695,6 +10698,9 @@ MonoBehaviour:
       moneyEarned: 0
       fandomGained: 0
       marketBonus: 0
+      marketMatchType: 
+      trendingTheme: 
+      trendingGenre: 
     projectName: Untitled Project
     selectedTheme: 0
     selectedGenre: 0
@@ -15160,7 +15166,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1732759934}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -16676,7 +16682,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1800137253
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18111,9 +18117,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 233772266}
-  m_Father: {fileID: 1732759934}
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -19150,7 +19155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2069848826
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19541,3 +19546,5 @@ SceneRoots:
   - {fileID: 1539131864}
   - {fileID: 1940851023}
   - {fileID: 1958864931}
+  - {fileID: 1512726008}
+  - {fileID: 1921038819}
