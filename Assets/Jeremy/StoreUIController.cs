@@ -14,6 +14,22 @@ public class StoreUIController : MonoBehaviour
     // Drag StoreItemBox1, StoreItemBox2, etc. into this list in Unity
     public GameObject[] productItems;
 
+    // Temporary money system for testing
+    public int money = 3000;
+
+    // Displays the player's current money
+    public TMP_Text moneyText;
+
+
+    // ------------------------------------------------------------
+    // START
+    // ------------------------------------------------------------
+
+    private void Start()
+    {
+        UpdateMoneyText();
+    }
+
 
     // ------------------------------------------------------------
     // STORE OPEN / CLOSE
@@ -31,22 +47,77 @@ public class StoreUIController : MonoBehaviour
 
 
     // ------------------------------------------------------------
-    // PURCHASE ITEM
+    // PURCHASE ITEMS
     // ------------------------------------------------------------
 
-    public void PurchaseItem(Button purchaseButton)
+    public void PurchasePCUpgrade()
     {
-        // Disable the button so the player cannot purchase
-        // the same item multiple times
+        PurchaseItem(800);
+    }
+
+    public void PurchaseLightUpgrade()
+    {
+        PurchaseItem(800);
+    }
+
+    public void PurchaseCleanUp()
+    {
+        PurchaseItem(300);
+    }
+
+    public void PurchaseWindowUpgrade()
+    {
+        PurchaseItem(300);
+    }
+
+    public void PurchaseDecor()
+    {
+        PurchaseItem(300);
+    }
+
+    private void PurchaseItem(int price)
+    {
+        // Get the button that was clicked
+        Button purchaseButton =
+            UnityEngine.EventSystems.EventSystem.current
+            .currentSelectedGameObject
+            .GetComponent<Button>();
+
+        // Check if the player has enough money
+        if (money < price)
+        {
+            Debug.Log("Not enough money.");
+            return;
+        }
+
+        // Remove the item's price from the player's money
+        money -= price;
+
+        // Disable the button so the item cannot be purchased again
         purchaseButton.interactable = false;
 
-        // Change the button text to show that it was purchased
+        // Change the button text to PURCHASED
         TMP_Text buttonText =
             purchaseButton.GetComponentInChildren<TMP_Text>();
 
         if (buttonText != null)
         {
             buttonText.text = "PURCHASED";
+        }
+
+        UpdateMoneyText();
+    }
+
+
+    // ------------------------------------------------------------
+    // MONEY DISPLAY
+    // ------------------------------------------------------------
+
+    private void UpdateMoneyText()
+    {
+        if (moneyText != null)
+        {
+            moneyText.text = "$" + money;
         }
     }
 
