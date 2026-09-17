@@ -374,8 +374,8 @@ public class DashboardUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Calculates progress using projects, money,
-    /// average quality and fandom.
+    /// Calculates overall progress using only completed projects.
+    /// Money, quality and fandom are display-only statistics.
     /// </summary>
     private void UpdateOverallProgress()
     {
@@ -391,35 +391,11 @@ public class DashboardUI : MonoBehaviour
         float averageQuality =
             historyManager.GetAverageQuality();
 
-        // Calculate progress for each category.
-        float projectProgress =
+        // Ten projects (or the configured target) equals 100%.
+        float overallProgress =
             GetProgressRatio(
                 projectCount,
                 targetProjectCount);
-
-        float moneyProgress =
-            GetProgressRatio(
-                totalMoney,
-                targetMoney);
-
-        // Quality already uses a 0–100 scale.
-        float qualityProgress =
-            Mathf.Clamp01(
-                averageQuality / 100f);
-
-        float fandomProgress =
-            GetProgressRatio(
-                totalFandom,
-                targetFandom);
-
-        // Every category has equal importance.
-        float overallProgress =
-            (
-                projectProgress
-                + moneyProgress
-                + qualityProgress
-                + fandomProgress
-            ) / 4f;
 
         int overallPercent =
             Mathf.RoundToInt(
@@ -439,9 +415,7 @@ public class DashboardUI : MonoBehaviour
         SetText(
             moneyProgressText,
             "MONEY: $"
-            + totalMoney.ToString("N0")
-            + " / $"
-            + targetMoney.ToString("N0"));
+            + totalMoney.ToString("N0"));
 
         SetText(
             averageQualityText,
@@ -452,9 +426,7 @@ public class DashboardUI : MonoBehaviour
         SetText(
             fandomProgressText,
             "FANDOM: "
-            + totalFandom.ToString("N0")
-            + " / "
-            + targetFandom.ToString("N0"));
+            + totalFandom.ToString("N0"));
 
         // The Fill Image must use:
         // Image Type = Filled

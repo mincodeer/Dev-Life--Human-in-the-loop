@@ -52,39 +52,7 @@ public class CompletedProjectRecord
     }
 
     /// <summary>
-    /// Creates a permanent completed-project record using
-    /// the selected project data and calculated final result.
-    /// </summary>
-    public CompletedProjectRecord(
-        ProjectData projectData,
-        FinalProjectResult finalResult,
-        int completedWeek)
-    {
-        // Copy the identity of the project.
-        projectName = projectData.projectName;
-        theme = projectData.selectedTheme;
-        genre = projectData.selectedGenre;
-
-        // Copy the main calculated result.
-        finalScore = finalResult.finalScore;
-        moneyEarned = finalResult.moneyEarned;
-        fandomGained = finalResult.fandomGained;
-
-        // Store when the project was completed.
-        this.completedWeek = completedWeek;
-
-        // Copy the development conditions.
-        quality = finalResult.quality;
-        workload = finalResult.workload;
-        technicalDebt = finalResult.technicalDebt;
-        bugs = finalResult.bugs;
-        developmentTime = finalResult.developmentTime;
-        marketBonus = finalResult.marketBonus;
-    }
-
-    /// <summary>
-    /// Keeps compatibility with older test code that creates
-    /// a record using only the original six values.
+    /// Creates a completed-project record from individual values.
     /// </summary>
     public CompletedProjectRecord(
         string projectName,
@@ -101,8 +69,56 @@ public class CompletedProjectRecord
         this.moneyEarned = moneyEarned;
         this.completedWeek = completedWeek;
 
-        // Older records did not store a separate quality value.
-        // Using finalScore prevents their quality from displaying as zero.
+        // Older sample records do not provide these values.
+        fandomGained = 0;
         quality = finalScore;
+        workload = 0f;
+        technicalDebt = 0;
+        bugs = 0;
+        developmentTime = 0f;
+        marketBonus = 0f;
+    }
+
+    /// <summary>
+    /// Creates a completed-project record from project data
+    /// and its calculated final result.
+    /// </summary>
+    public CompletedProjectRecord(
+        ProjectData projectData,
+        FinalProjectResult finalResult,
+        int completedWeek)
+    {
+        if (projectData == null)
+        {
+            throw new ArgumentNullException(
+                nameof(projectData));
+        }
+
+        if (finalResult == null)
+        {
+            throw new ArgumentNullException(
+                nameof(finalResult));
+        }
+
+        // Copy the project's identity before ProjectData is reset.
+        projectName = projectData.projectName;
+        theme = projectData.selectedTheme;
+        genre = projectData.selectedGenre;
+
+        // Copy the calculated final result.
+        finalScore = finalResult.finalScore;
+        moneyEarned = finalResult.moneyEarned;
+        fandomGained = finalResult.fandomGained;
+
+        this.completedWeek = completedWeek;
+
+        // Use the final score as the default quality value.
+        // Detailed values can be added by another system later.
+        quality = finalScore;
+        workload = 0f;
+        technicalDebt = 0;
+        bugs = 0;
+        developmentTime = 0f;
+        marketBonus = 0f;
     }
 }
