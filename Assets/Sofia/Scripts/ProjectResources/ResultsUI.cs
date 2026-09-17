@@ -4,9 +4,8 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Displays the final results of a completed project.
-/// This takes the calculated result and shows it
-/// on the Results panel for the player.
+/// Displays the final results of a completed project
+/// on the Results panel.
 /// </summary>
 public class ResultsUI : MonoBehaviour
 {
@@ -14,12 +13,26 @@ public class ResultsUI : MonoBehaviour
     [SerializeField]
     private FinalResultsCalculator finalResultsCalculator;
 
-    [Header("Result Text")]
+    [Header("Final Score")]
     [SerializeField]
-    private TMP_Text resultText;
+    private TMP_Text finalScoreText;
+
+    [Header("Project Results")]
+    [SerializeField]
+    private TMP_Text qualityValue;
+
+    [SerializeField]
+    private TMP_Text workloadValue;
+
+    [SerializeField]
+    private TMP_Text technicalDebtValue;
+
+    [SerializeField]
+    private TMP_Text bugsValue;
 
     /// <summary>
-    /// Displays the final project result on the UI.
+    /// Gets the calculated final result and
+    /// displays the values on the Results panel.
     /// </summary>
     public void DisplayResults()
     {
@@ -42,37 +55,56 @@ public class ResultsUI : MonoBehaviour
             return;
         }
 
-        resultText.text =
-            "PROJECT COMPLETE!\n\n"
-            + "Final Score: "
-            + result.finalScore.ToString("0.0")
-            + " / 100\n\n"
+        // Final Score
+        if (finalScoreText != null)
+        {
+            finalScoreText.text =
+                result.finalScore.ToString("0.0")
+                + " / 100";
+        }
 
-            + "Quality: "
-            + result.quality.ToString("0")
-            + " / 100\n"
+        // Quality
+        if (qualityValue != null)
+        {
+            qualityValue.text =
+                result.quality.ToString("0")
+                + " / 100";
+        }
 
-            + "Workload: "
-            + result.workload.ToString("0")
-            + " / 100\n"
+        // Workload
+        if (workloadValue != null)
+        {
+            workloadValue.text =
+                result.workload.ToString("0")
+                + " / 100";
+        }
 
-            + "Technical Debt: "
+        // Technical Debt
+        if (technicalDebtValue != null)
+        {
+            technicalDebtValue.text =
+                result.technicalDebt
+                + " / 100";
+        }
+
+        // Bugs
+        if (bugsValue != null)
+        {
+            bugsValue.text =
+                result.bugs.ToString();
+        }
+
+        Debug.Log(
+            "Results UI updated successfully."
+            + "\nFinal Score: "
+            + result.finalScore
+            + "\nQuality: "
+            + result.quality
+            + "\nWorkload: "
+            + result.workload
+            + "\nTechnical Debt: "
             + result.technicalDebt
-            + " / 100\n"
-
-            + "Bugs: "
-            + result.bugs
-            + "\n"
-
-            + "Development Time: "
-            + result.developmentTime.ToString("0")
-            + " days\n\n"
-
-            + "Money Earned: +$"
-            + result.moneyEarned
-            + "\n"
-
-            + "Fandom Gained: +"
-            + result.fandomGained;
+            + "\nBugs: "
+            + result.bugs);
     }
 }
