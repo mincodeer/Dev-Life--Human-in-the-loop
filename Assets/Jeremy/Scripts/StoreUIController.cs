@@ -14,22 +14,6 @@ public class StoreUIController : MonoBehaviour
     // Drag StoreItemBox1, StoreItemBox2, etc. into this list in Unity
     public GameObject[] productItems;
 
-    // Temporary money system for testing
-    public int money = 3000;
-
-    // Displays the player's current money
-    public TMP_Text moneyText;
-
-
-    // ------------------------------------------------------------
-    // START
-    // ------------------------------------------------------------
-
-    private void Start()
-    {
-        UpdateMoneyText();
-    }
-
 
     // ------------------------------------------------------------
     // STORE OPEN / CLOSE
@@ -77,47 +61,33 @@ public class StoreUIController : MonoBehaviour
 
     private void PurchaseItem(int price)
     {
-        // Get the button that was clicked
-        Button purchaseButton =
-            UnityEngine.EventSystems.EventSystem.current
-            .currentSelectedGameObject
-            .GetComponent<Button>();
+        if (ResourceManager.Instance == null)
+        {
+            Debug.LogWarning("ResourceManager not found.");
+            return;
+        }
 
-        // Check if the player has enough money
-        if (money < price)
+        if (ResourceManager.Instance.Money < price)
         {
             Debug.Log("Not enough money.");
             return;
         }
 
-        // Remove the item's price from the player's money
-        money -= price;
+        Button purchaseButton =
+            UnityEngine.EventSystems.EventSystem.current
+            .currentSelectedGameObject
+            .GetComponent<Button>();
 
-        // Disable the button so the item cannot be purchased again
+        ResourceManager.Instance.ChangeMoney(-price);
+
         purchaseButton.interactable = false;
 
-        // Change the button text to PURCHASED
         TMP_Text buttonText =
             purchaseButton.GetComponentInChildren<TMP_Text>();
 
         if (buttonText != null)
         {
             buttonText.text = "PURCHASED";
-        }
-
-        UpdateMoneyText();
-    }
-
-
-    // ------------------------------------------------------------
-    // MONEY DISPLAY
-    // ------------------------------------------------------------
-
-    private void UpdateMoneyText()
-    {
-        if (moneyText != null)
-        {
-            moneyText.text = "$" + money;
         }
     }
 
@@ -128,13 +98,10 @@ public class StoreUIController : MonoBehaviour
 
     public void SearchProducts()
     {
-        // Get whatever the player typed into the search bar
         string searchText = searchInput.text.ToLower();
 
-        // Check every product card
         foreach (GameObject product in productItems)
         {
-            // Look for the product's name
             TMP_Text[] textComponents =
                 product.GetComponentsInChildren<TMP_Text>();
 
@@ -149,8 +116,6 @@ public class StoreUIController : MonoBehaviour
                 }
             }
 
-            // Show products that match the search
-            // Hide products that don't
             product.SetActive(productFound);
         }
     }
