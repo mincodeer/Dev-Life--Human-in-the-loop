@@ -156,27 +156,16 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void GotoResult()
     {
-        FinalProjectResult calculatedResult = null;
-
         // Calculate the final result before opening
         // the Results panel.
         if (finalResultsCalculator != null)
         {
-            calculatedResult =
-                finalResultsCalculator.CalculateFinalResult();
+            finalResultsCalculator.CalculateFinalResult();
         }
         else
         {
             Debug.LogWarning(
                 "FinalResultsCalculator is missing.");
-        }
-
-        // Send that same result to the Dashboard
-        // and Game Review system.
-        if (calculatedResult != null)
-        {
-            SaveCompletedProjectForReview(
-                calculatedResult);
         }
 
         // Display the calculated result.
@@ -192,15 +181,7 @@ public class DevelopmentFlowManager : MonoBehaviour
 
         // Hide the project conditions because
         // development has now finished.
-        if (projectConditionsPanel != null)
-        {
-            projectConditionsPanel.SetActive(false);
-        }
-        else
-        {
-            Debug.LogWarning(
-                "ProjectConditionsPanel is missing.");
-        }
+        projectConditionsPanel.SetActive(false);
 
         // Open the final Results panel.
         ChangeStage(DevelopmentStage.Result);
@@ -211,26 +192,16 @@ public class DevelopmentFlowManager : MonoBehaviour
     private void SaveCompletedProjectForReview(
         FinalProjectResult calculatedResult)
     {
-        // Do not save the same completed project twice.
         if (completedProjectWasSaved)
         {
-            return;
-        }
-
-        if (calculatedResult == null)
-        {
-            Debug.LogWarning(
-                "FinalProjectResult is missing. " +
-                "The completed project was not saved.");
-
             return;
         }
 
         if (ProjectDataManager.Instance == null)
         {
             Debug.LogWarning(
-                "ProjectDataManager is missing. " +
-                "The completed project was not saved.");
+                "ProjectDataManager is missing. "
+                + "The completed project was not saved.");
 
             return;
         }
@@ -238,24 +209,14 @@ public class DevelopmentFlowManager : MonoBehaviour
         if (ProjectHistoryManager.Instance == null)
         {
             Debug.LogWarning(
-                "ProjectHistoryManager is missing. " +
-                "The completed project was not saved.");
+                "ProjectHistoryManager is missing. "
+                + "The completed project was not saved.");
 
             return;
         }
-
 
         ProjectData project =
             ProjectDataManager.Instance.CurrentProject;
-
-        if (project == null)
-        {
-            Debug.LogWarning(
-                "CurrentProject is missing. " +
-                "The completed project was not saved.");
-
-            return;
-        }
 
         // The Review feature does not currently have access
         // to GameTimeManager on this branch. Use Week 1 until
@@ -270,42 +231,16 @@ public class DevelopmentFlowManager : MonoBehaviour
                 calculatedResult.finalScore,
                 calculatedResult.moneyEarned,
                 completedWeek);
-        completedRecord.quality =
-        calculatedResult.quality;
 
-        completedRecord.workload =
-            calculatedResult.workload;
-
-        completedRecord.technicalDebt =
-            calculatedResult.technicalDebt;
-
-        completedRecord.bugs =
-            calculatedResult.bugs;
-
-        completedRecord.developmentTime =
-            calculatedResult.developmentTime;
-
-        // Copy the reward calculated by your friend's script.
-        completedRecord.fandomGained =
-            calculatedResult.fandomGained;
-
-        // Copy the Market Trend values.
-        // These will remain empty/default until
-        // the Market Trend feature is integrated.
-        completedRecord.marketBonus =
-            calculatedResult.marketBonus;
-
-        // Save only after every value has been copied.
         ProjectHistoryManager.Instance
             .AddCompletedProject(completedRecord);
 
         completedProjectWasSaved = true;
 
         Debug.Log(
-            "Project Result connected to Game Review: " +
-            completedRecord.projectName);
+            "Project Result connected to Game Review: "
+            + completedRecord.projectName);
     }
-
 
     // ==============================
     // New Project

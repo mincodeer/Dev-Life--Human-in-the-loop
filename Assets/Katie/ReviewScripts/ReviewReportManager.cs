@@ -1,6 +1,8 @@
 using UnityEngine;
 
+/// <summary>
 /// Contains all information needed to display one review.
+/// </summary>
 public class ReviewReportData
 {
     public string theme;
@@ -16,8 +18,12 @@ public class ReviewReportData
     public string playerDisliked;
 }
 
-/// Creates the review data.
-/// This script does not directly control UI objects.
+/// <summary>
+/// Creates review data for ReviewReportUI.
+///
+/// This script only reads the selected CompletedProjectRecord.
+/// It does not change any development or result scripts.
+/// </summary>
 public class ReviewReportManager : MonoBehaviour
 {
     [Header("Review UI")]
@@ -36,14 +42,13 @@ public class ReviewReportManager : MonoBehaviour
         RefreshReview();
     }
 
-    /// Reads the currently selected project and creates a fresh review whenever the Review scene opens.
+    /// <summary>
+    /// Displays the project selected from the Dashboard.
+    /// </summary>
     [ContextMenu("Refresh Review")]
     public void RefreshReview()
     {
-        if (reviewUI == null)
-        {
-            reviewUI = GetComponent<ReviewReportUI>();
-        }
+        FindReviewUI();
 
         if (reviewUI == null)
         {
@@ -53,13 +58,8 @@ public class ReviewReportManager : MonoBehaviour
             return;
         }
 
-        CompletedProjectRecord selectedProject = null;
-
-        if (ProjectHistoryManager.Instance != null)
-        {
-            selectedProject =
-                ProjectHistoryManager.Instance.SelectedProject;
-        }
+        CompletedProjectRecord selectedProject =
+            GetSelectedProject();
 
         ReviewReportData report;
 
@@ -80,33 +80,74 @@ public class ReviewReportManager : MonoBehaviour
         reviewUI.DisplayReport(report);
     }
 
-    /// Creates a review using a real completed project.
+    /// <summary>
+    /// Finds the ReviewReportUI component if it was not
+    /// assigned through the Inspector.
+    /// </summary>
+    private void FindReviewUI()
+    {
+        if (reviewUI == null)
+        {
+            reviewUI =
+                GetComponent<ReviewReportUI>();
+        }
+
+        if (reviewUI == null)
+        {
+            reviewUI =
+                FindFirstObjectByType<ReviewReportUI>();
+        }
+    }
+
+    /// <summary>
+    /// Gets the project selected on the Dashboard.
+    /// </summary>
+    private CompletedProjectRecord GetSelectedProject()
+    {
+        if (ProjectHistoryManager.Instance == null)
+        {
+            Debug.LogWarning(
+                "ProjectHistoryManager was not found.");
+
+            return null;
+        }
+
+        return
+            ProjectHistoryManager.Instance.SelectedProject;
+    }
+
+    /// <summary>
+    /// Creates a review from a completed project.
+    ///
+    /// Only fields stored inside CompletedProjectRecord are read.
+    /// </summary>
     private ReviewReportData CreateProjectReview(
         CompletedProjectRecord project)
     {
         ReviewReportData report =
             new ReviewReportData();
 
-        // Always read Theme and Genre from the latest
-        // selected completed project.
         report.theme =
             project.theme.ToString();
 
         report.genre =
             project.genre.ToString();
 
-        // Scope is not stored yet.
+        // Scope is not included in the friend's original
+        // ProjectData, so display N/A.
         report.scope = "N/A";
 
         report.finalScore =
-            Mathf.Clamp(project.finalScore, 0f, 100f);
+            Mathf.Clamp(
+                project.finalScore,
+                0f,
+                100f);
 
         report.reviewScores =
-            CreateProjectReviewScores(project);
+            CreateReviewScores(report.finalScore);
 
         report.reviewComments =
-            CreateProjectComments(
-                project,
+            CreateReviewComments(
                 report.reviewScores);
 
         CreatePlayerFeedback(
@@ -116,151 +157,101 @@ public class ReviewReportManager : MonoBehaviour
         return report;
     }
 
-    /// Creates category scores using the detailed
-    /// values saved in CompletedProjectRecord.
-    private int[] CreateProjectReviewScores(
-        CompletedProjectRecord project)
+    /// <summary>
+    /// Creates three category scores using only the final score.
+    ///
+    /// This avoids requiring extra fields inside the friend's
+    /// FinalProjectResult class.
+    /// </summary>
+    private int[] CreateReviewScores(
+        float finalScore)
     {
         int baseScore =
             Mathf.Clamp(
-                Mathf.RoundToInt(project.finalScore),
+                Mathf.RoundToInt(finalScore),
                 0,
                 100);
 
-        int gameplayScore =
-            baseScore -
-            Mathf.RoundToInt(project.bugs * 2f);
-
-        int artScore =
-            Mathf.RoundToInt(
-                (baseScore + project.quality) / 2f);
-
-        int audioScore =
-            baseScore -
-            Mathf.RoundToInt(
-                project.technicalDebt * 0.25f);
-
         return new int[]
         {
-            Mathf.Clamp(gameplayScore, 0, 100),
-            Mathf.Clamp(artScore, 0, 100),
-            Mathf.Clamp(audioScore, 0, 100)
+            Mathf.Clamp(baseScore + 3, 0, 100),
+            Mathf.Clamp(baseScore, 0, 100),
+            Mathf.Clamp(baseScore - 3, 0, 100)
         };
     }
 
-    private string[] CreateProjectComments(
-        CompletedProjectRecord project,
+    private string[] CreateReviewComments(
         int[] scores)
     {
         return new string[]
         {
-            CreateGameplayComment(project, scores[0]),
-            CreateArtComment(project, scores[1]),
-            CreateAudioComment(project, scores[2])
+            GetGameplayComment(scores[0]),
+            GetArtComment(scores[1]),
+            GetAudioComment(scores[2])
         };
     }
 
-    private string CreateGameplayComment(
-        CompletedProjectRecord project,
+    private string GetGameplayComment(
         int score)
     {
-        if (project.bugs >= 5)
-        {
-            return
-                "Bugs frequently interrupted the gameplay.";
-        }
-
-        if (project.marketBonus > 0f &&
-            score >= 70)
-        {
-            return
-                "The gameplay matched current player interests.";
-        }
-
-        if (project.fandomGained >= 15 &&
-            score >= 70)
-        {
-            return
-                "The gameplay quickly built a loyal following.";
-        }
-
         if (score >= 70)
         {
             return
-                "The gameplay was engaging and enjoyable.";
+                "The gameplay was really fun!";
         }
 
         if (score >= 45)
         {
             return
-                "The gameplay had potential but felt uneven.";
+                "The gameplay was enjoyable.";
         }
 
         return
-            "The gameplay needed more testing and refinement.";
+            "The gameplay needs more variety.";
     }
 
-    private string CreateArtComment(
-        CompletedProjectRecord project,
+    private string GetArtComment(
         int score)
     {
-        if (project.quality >= 80f)
-        {
-            return
-                "The art felt polished and carefully produced.";
-        }
-
-        if (project.workload >= 75f &&
-            score < 70)
-        {
-            return
-                "The art direction felt rushed in several areas.";
-        }
-
         if (score >= 70)
         {
             return
-                "The visual style created a strong atmosphere.";
+                "Beautiful art and atmosphere.";
         }
 
         if (score >= 45)
         {
             return
-                "The art style was interesting but inconsistent.";
+                "The art style was interesting.";
         }
 
         return
-            "The visuals needed more time and improvement.";
+            "The art needs more improvement.";
     }
 
-    private string CreateAudioComment(
-        CompletedProjectRecord project,
+    private string GetAudioComment(
         int score)
     {
-        if (project.technicalDebt >= 20 &&
-            score < 70)
-        {
-            return
-                "Technical issues reduced the audio quality.";
-        }
-
         if (score >= 70)
         {
             return
-                "The audio supported the game very well.";
+                "The audio worked really well.";
         }
 
         if (score >= 45)
         {
             return
-                "The audio was acceptable but lacked variety.";
+                "The audio was acceptable.";
         }
 
         return
-            "The audio felt repetitive and unfinished.";
+            "The audio was repetitive.";
     }
 
-    /// Finds the two highest categories and lowest category for player feedback.
+    /// <summary>
+    /// Displays the two strongest categories as liked and
+    /// the weakest category as disliked.
+    /// </summary>
     private void CreatePlayerFeedback(
         ReviewReportData report,
         int[] scores)
@@ -308,8 +299,6 @@ public class ReviewReportManager : MonoBehaviour
                 categoryNames[secondHighestIndex];
         }
 
-        // Do not show a disliked category when
-        // every category received a positive score.
         if (scores[lowestIndex] >= 70)
         {
             report.playerDisliked = "NOTHING";
@@ -321,115 +310,31 @@ public class ReviewReportManager : MonoBehaviour
         }
     }
 
-    /// Creates a test review when the Review scene is opened without selecting a project.
-    public ReviewReportData CreateSampleReview()
+    /// <summary>
+    /// Creates sample data when the Review scene is opened
+    /// without selecting a Dashboard project.
+    /// </summary>
+    private ReviewReportData CreateSampleReview()
     {
-        // These lists now match the actual project
-        // Theme and Genre choices.
-        string[] themes =
-        {
-            "Fantasy",
-            "SciFi",
-            "Horror"
-        };
-
-        string[] genres =
-        {
-            "RPG",
-            "Action",
-            "Simulation"
-        };
-
         ReviewReportData report =
             new ReviewReportData();
 
-        report.theme =
-            themes[Random.Range(0, themes.Length)];
-
-        report.genre =
-            genres[Random.Range(0, genres.Length)];
-
-        string[] scopeSizes =
-        {
-            "Small",
-            "Medium",
-            "Large"
-        };
-
-        report.scope =
-            scopeSizes[
-                Random.Range(0, scopeSizes.Length)
-                ];
-
-        report.finalScore =
-            Random.Range(40f, 96f);
+        report.theme = "Fantasy";
+        report.genre = "RPG";
+        report.scope = "Large";
+        report.finalScore = 80f;
 
         report.reviewScores =
-            new int[3];
+            CreateReviewScores(report.finalScore);
 
         report.reviewComments =
-            new string[3];
-
-        for (int i = 0;
-             i < report.reviewScores.Length;
-             i++)
-        {
-            report.reviewScores[i] =
-                Mathf.Clamp(
-                    Mathf.RoundToInt(
-                        report.finalScore) +
-                    Random.Range(-15, 16),
-                    0,
-                    100);
-
-            report.reviewComments[i] =
-                GetSampleComment(
-                    i,
-                    report.reviewScores[i]);
-        }
+            CreateReviewComments(
+                report.reviewScores);
 
         CreatePlayerFeedback(
             report,
             report.reviewScores);
 
         return report;
-    }
-
-    private string GetSampleComment(
-        int reviewIndex,
-        int score)
-    {
-        string[] positiveComments =
-        {
-            "The gameplay was really fun!",
-            "Beautiful art and atmosphere.",
-            "The audio worked really well."
-        };
-
-        string[] mixedComments =
-        {
-            "The gameplay was enjoyable.",
-            "The art style was interesting.",
-            "The audio was acceptable."
-        };
-
-        string[] negativeComments =
-        {
-            "The gameplay needs more variety.",
-            "The art needs more improvement.",
-            "The audio was repetitive."
-        };
-
-        if (score >= 70)
-        {
-            return positiveComments[reviewIndex];
-        }
-
-        if (score >= 45)
-        {
-            return mixedComments[reviewIndex];
-        }
-
-        return negativeComments[reviewIndex];
     }
 }

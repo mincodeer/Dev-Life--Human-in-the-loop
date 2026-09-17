@@ -52,7 +52,7 @@ public class CompletedProjectRecord
     }
 
     /// <summary>
-    /// Original constructor used by Dashboard sample tests.
+    /// Creates a completed-project record from individual values.
     /// </summary>
     public CompletedProjectRecord(
         string projectName,
@@ -80,8 +80,8 @@ public class CompletedProjectRecord
     }
 
     /// <summary>
-    /// Creates a permanent completed-project record using the
-    /// friend's original ProjectData and FinalProjectResult classes.
+    /// Creates a completed-project record from project data
+    /// and its calculated final result.
     /// </summary>
     public CompletedProjectRecord(
         ProjectData projectData,
@@ -112,12 +112,13 @@ public class CompletedProjectRecord
 
         this.completedWeek = completedWeek;
 
-        // Copy the detailed development results.
-        quality = finalResult.quality;
-        workload = finalResult.workload;
-        technicalDebt = finalResult.technicalDebt;
-        bugs = finalResult.bugs;
-        developmentTime = finalResult.developmentTime;
-        marketBonus = finalResult.marketBonus;
+        // Use the final score as the default quality value.
+        // Detailed values can be added by another system later.
+        quality = finalScore;
+        workload = 0f;
+        technicalDebt = 0;
+        bugs = 0;
+        developmentTime = 0f;
+        marketBonus = 0f;
     }
 }
