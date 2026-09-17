@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using System.Collections;
 public class DevelopmentProgress : MonoBehaviour
 {
     public Slider progressBar;
@@ -23,8 +23,13 @@ public class DevelopmentProgress : MonoBehaviour
         {
             progress = 100f;
             progressBar.value = 100f;
-            completeText.SetActive(true);
+            StartCoroutine(ShowCompleteText());
             Debug.Log("Development Complete");
         }
+    }IEnumerator ShowCompleteText()
+    {
+        completeText.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        completeText.SetActive(false);
     }
 }
