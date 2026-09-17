@@ -397,12 +397,8 @@ public class DevelopmentTutorialPopup : MonoBehaviour
             return;
         }
 
-        if (finalResultShown)
-        {
-            return;
-        }
-
-        finalResultShown = true;
+        // Set the tutorial step to the final result.
+        currentTutorialStep = 2;
 
         ShowPopup(
             "CONGRATULATIONS!\n\n" +
@@ -438,6 +434,12 @@ public class DevelopmentTutorialPopup : MonoBehaviour
             return;
         }
 
+        // Final result → close tutorial
+        if (currentTutorialStep == 2)
+        {
+            CloseTutorial();
+            return;
+        }
 
         // At Computer Instruction:
         // Next does nothing.
