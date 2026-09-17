@@ -14893,7 +14893,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.59417725, y: 0}
+  m_AnchoredPosition: {x: 0.5942383, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1380851409
@@ -15218,6 +15218,18 @@ MonoBehaviour:
       - m_Target: {fileID: 590995890}
         m_TargetAssemblyTypeName: DevelopmentFlowManager, Assembly-CSharp
         m_MethodName: FinishProjectAndExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1787749467}
+        m_TargetAssemblyTypeName: ProjectCompletionBridge, Assembly-CSharp
+        m_MethodName: SaveCompletedProject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18133,8 +18145,29 @@ PrefabInstance:
     - {fileID: 2111609958913792780, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3430053913958508751, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1787749467}
   m_SourcePrefab: {fileID: 100100000, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+--- !u!1 &1787749466 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3430053913958508751, guid: 91efb751f2c609d49b2f915817e4b43a, type: 3}
+  m_PrefabInstance: {fileID: 1787749465}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1787749467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787749466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce57e7fdddc44d4592201a81ffd3d83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectCompletionBridge
+  finalResultsCalculator: {fileID: 387396542}
 --- !u!1 &1799235739
 GameObject:
   m_ObjectHideFlags: 0
