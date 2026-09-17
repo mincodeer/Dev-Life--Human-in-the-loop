@@ -4,14 +4,14 @@ using UnityEngine.UI;
 
 public class WeeklyLivingCostsController : MonoBehaviour
 {
-    // Temporary money value used for testing
-    public int money = 1000;
-
     // Amount the player must pay every second week
     public int livingCost = 300;
 
-    // Keeps track of the current week
-    public int currentWeek = 1;
+    // Reference to the game's time system
+    public GameTimeManager gameTime;
+
+    // The next day that rent is due
+    private int nextRentDay = 14;
 
     // Popup shown when rent needs to be paid
     public GameObject rentPopup;
@@ -20,8 +20,6 @@ public class WeeklyLivingCostsController : MonoBehaviour
     public GameObject gameOverPopup;
 
     // UI text
-    public TMP_Text moneyText;
-    public TMP_Text weekText;
     public TMP_Text rentText;
 
     // Pay button
@@ -44,34 +42,25 @@ public class WeeklyLivingCostsController : MonoBehaviour
             gameOverPopup.SetActive(false);
         }
 
-        UpdateUI();
+        if (gameTime != null)
+        {
+            gameTime.OnDayPassed += CheckForRentDay;
+        }
     }
 
 
     // ------------------------------------------------------------
-    // ADVANCE WEEK
+    // CHECK FOR RENT DAY
     // ------------------------------------------------------------
 
-    public void AdvanceWeek()
+    private void CheckForRentDay()
     {
-        // Do not allow time to continue while rent is unpaid
-        if (rentPopup != null && rentPopup.activeSelf)
+        if (gameTime == null)
         {
             return;
         }
 
-        // Do not continue after Game Over
-        if (gameOverPopup != null && gameOverPopup.activeSelf)
-        {
-            return;
-        }
-
-        currentWeek++;
-
-        UpdateUI();
-
-        // Rent is due every second week
-        if (currentWeek % 2 == 0)
+        if (gameTime.currentDay >= nextRentDay)
         {
             CheckRent();
         }
@@ -84,14 +73,18 @@ public class WeeklyLivingCostsController : MonoBehaviour
 
     private void CheckRent()
     {
-        // Player cannot afford the rent
-        if (money < livingCost)
+        if (ResourceManager.Instance == null)
+        {
+            Debug.LogWarning("ResourceManager not found.");
+            return;
+        }
+
+        if (ResourceManager.Instance.Money < livingCost)
         {
             TriggerGameOver();
             return;
         }
 
-        // Player can afford the rent
         ShowRentPopup();
     }
 
@@ -102,10 +95,15 @@ public class WeeklyLivingCostsController : MonoBehaviour
 
     private void ShowRentPopup()
     {
-        rentPopup.SetActive(true);
+        if (rentPopup != null)
+        {
+            rentPopup.SetActive(true);
+        }
 
-        // "Amount:" is already part of the popup PNG
-        rentText.text = "$" + livingCost;
+        if (rentText != null)
+        {
+            rentText.text = "$" + livingCost;
+        }
     }
 
 
@@ -115,20 +113,26 @@ public class WeeklyLivingCostsController : MonoBehaviour
 
     public void PayRent()
     {
-        // Make sure the player can still afford the rent
-        if (money < livingCost)
+        if (ResourceManager.Instance == null)
+        {
+            Debug.LogWarning("ResourceManager not found.");
+            return;
+        }
+
+        if (ResourceManager.Instance.Money < livingCost)
         {
             TriggerGameOver();
             return;
         }
 
-        // Remove the rent cost from the player's money
-        money -= livingCost;
+        ResourceManager.Instance.ChangeMoney(-livingCost);
 
-        // Close the popup after payment
-        rentPopup.SetActive(false);
+        nextRentDay += 14;
 
-        UpdateUI();
+        if (rentPopup != null)
+        {
+            rentPopup.SetActive(false);
+        }
     }
 
 
@@ -151,19 +155,14 @@ public class WeeklyLivingCostsController : MonoBehaviour
 
 
     // ------------------------------------------------------------
-    // UPDATE UI
+    // CLEAN UP
     // ------------------------------------------------------------
 
-    private void UpdateUI()
+    private void OnDestroy()
     {
-        if (moneyText != null)
+        if (gameTime != null)
         {
-            moneyText.text = "Money: $" + money;
-        }
-
-        if (weekText != null)
-        {
-            weekText.text = "Week: " + currentWeek;
+            gameTime.OnDayPassed -= CheckForRentDay;
         }
     }
 }
