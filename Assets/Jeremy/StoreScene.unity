@@ -5357,7 +5357,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 355747407}
         m_TargetAssemblyTypeName: StoreUIController, Assembly-CSharp
-        m_MethodName: CloseStore
+        m_MethodName: ExitStore
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

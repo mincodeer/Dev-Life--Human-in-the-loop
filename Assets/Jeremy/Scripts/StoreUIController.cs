@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class StoreUIController : MonoBehaviour
 {
@@ -91,6 +92,10 @@ public class StoreUIController : MonoBehaviour
         }
     }
 
+    public void ExitStore()
+    {
+        SceneManager.LoadScene("Minjae's Scene");
+    }
 
     // ------------------------------------------------------------
     // SEARCH
