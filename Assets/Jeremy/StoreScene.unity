@@ -5289,6 +5289,7 @@ GameObject:
   - component: {fileID: 1607744810}
   - component: {fileID: 1607744809}
   - component: {fileID: 1607744808}
+  - component: {fileID: 1607744811}
   m_Layer: 0
   m_Name: ExitButton
   m_TagString: Untagged
@@ -5360,9 +5361,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 355747407}
-        m_TargetAssemblyTypeName: StoreUIController, Assembly-CSharp
-        m_MethodName: ExitStore
+      - m_Target: {fileID: 1607744811}
+        m_TargetAssemblyTypeName: FeatureReturnButton, Assembly-CSharp
+        m_MethodName: BackToRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5410,6 +5411,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1607744806}
   m_CullTransparentMesh: 1
+--- !u!114 &1607744811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607744806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3f4bd1bab96cd04b8cc8d9277e7857e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FeatureReturnButton
 --- !u!1 &1622464151
 GameObject:
   m_ObjectHideFlags: 0

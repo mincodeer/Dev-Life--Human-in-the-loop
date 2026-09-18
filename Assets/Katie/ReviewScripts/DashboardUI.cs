@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -122,6 +121,10 @@ public class DashboardUI : MonoBehaviour
 
     private void Start()
     {
+        // Navigation must work even if the history manager is unavailable.
+        if (backToMenuButton != null)
+            backToMenuButton.onClick.AddListener(BackToMenu);
+
         // Find the persistent project-history system.
         historyManager =
             ProjectHistoryManager.Instance;
@@ -152,12 +155,6 @@ public class DashboardUI : MonoBehaviour
                 OpenSelectedProjectReview);
         }
 
-        // Connect the Back To Menu button.
-        if (backToMenuButton != null)
-        {
-            backToMenuButton.onClick.AddListener(
-                BackToMenu);
-        }
 
         // Draw the dashboard for the first time.
         RefreshDashboard();
@@ -337,7 +334,7 @@ public class DashboardUI : MonoBehaviour
         SetText(
             selectedThemeGenreText,
             project.theme.ToString().ToUpperInvariant()
-            + " • "
+            + " / "
             + project.genre.ToString().ToUpperInvariant());
 
         SetText(
@@ -456,7 +453,7 @@ public class DashboardUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Converts a 0–100 score into 0–5 stars.
+    /// Converts a 0-100 score into 0-5 stars.
     /// </summary>
     private int ConvertScoreToStars(
         float score)
@@ -519,17 +516,21 @@ public class DashboardUI : MonoBehaviour
             return;
         }
 
-        SceneManager.LoadScene(
-            gameReviewSceneName);
+        if (FeatureSceneNavigation.Instance != null)
+            FeatureSceneNavigation.Instance.OpenScene(gameReviewSceneName);
+        else
+            Debug.LogWarning("Open Dashboard from the main room scene first.");
     }
 
     /// <summary>
-    /// Returns the player to the Main Menu scene.
+    /// Returns to the already loaded gameplay room.
     /// </summary>
     private void BackToMenu()
     {
-        SceneManager.LoadScene(
-            mainMenuSceneName);
+        if (FeatureSceneNavigation.Instance != null)
+            FeatureSceneNavigation.Instance.BackToRoom();
+        else
+            Debug.LogWarning("Open Dashboard from the main room scene first.");
     }
 
     /// <summary>

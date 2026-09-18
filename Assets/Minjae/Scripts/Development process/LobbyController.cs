@@ -8,416 +8,120 @@ public class LobbyController : MonoBehaviour
     [SerializeField] private RectTransform lobbyButtons;
     [SerializeField] private CanvasGroup lobbyCanvasGroup;
 
-
     [Header("Camera")]
     [SerializeField] private Camera mainCamera;
-
-    [Tooltip("Lobby camera starts slightly to the right.")]
     [SerializeField] private float lobbyXOffset = 2f;
-
-    [Tooltip("1.2 = Lobby camera appears 1.2x closer.")]
-    [SerializeField] private float lobbyZoomMultiplier = 1.2f;
-
+    [SerializeField, Min(0.01f)] private float lobbyZoomMultiplier = 1.2f;
 
     [Header("Transition")]
-    [SerializeField] private float transitionDuration = 1.2f;
-
+    [SerializeField, Min(0f)] private float transitionDuration = 1.2f;
     [SerializeField] private float buttonSlideDistance = 300f;
-
 
     [Header("After Lobby")]
     [SerializeField] private ComputerInteractionIn computerInteraction;
-
-    // Script controller
     [SerializeField] private DevelopmentTutorialPopup tutorialPopup;
-
-    // Actual UI panel
     [SerializeField] private GameObject developmentTutorialPopupPanel;
 
+    [Header("Game UI and Settings")]
+    [SerializeField] private GameUIVisibility gameUI;
+    [SerializeField] private EscapeInputRouter escapeInput;
 
     private Vector3 roomCameraPosition;
     private float roomCameraSize;
-
-    private Vector3 lobbyCameraPosition;
-    private float lobbyCameraSize;
-
     private Vector2 buttonStartPosition;
-
     private bool isTransitioning;
-
-
-    // =========================================================
-    // AWAKE
-    // =========================================================
+    public bool IsTransitioning => isTransitioning;
+    public bool IsGameStarted { get; private set; }
 
     private void Awake()
     {
-        // -----------------------------------------------------
-        // TUTORIAL MUST BE HIDDEN AT GAME START
-        // -----------------------------------------------------
-
+        IsGameStarted = false;
+        if (gameUI != null) gameUI.Hide();
         if (developmentTutorialPopupPanel != null)
-        {
             developmentTutorialPopupPanel.SetActive(false);
-        }
-
-
-        // -----------------------------------------------------
-        // SAVE NORMAL GAMEPLAY CAMERA
-        // -----------------------------------------------------
 
         if (mainCamera != null)
         {
-            roomCameraPosition =
-                mainCamera.transform.position;
-
-            // Gameplay room camera always returns here.
-            roomCameraPosition.x = 0f;
-
-            roomCameraSize =
-                mainCamera.orthographicSize;
-
-
-            // -------------------------------------------------
-            // CREATE LOBBY CAMERA
-            // -------------------------------------------------
-
-            lobbyCameraPosition =
-                roomCameraPosition +
-                new Vector3(
-                    lobbyXOffset,
-                    0f,
-                    0f
-                );
-
-
-            // Smaller Orthographic Size
-            // means the camera is zoomed in.
-            lobbyCameraSize =
-                roomCameraSize /
-                lobbyZoomMultiplier;
-
-
-            // Start game in Lobby view.
-            mainCamera.transform.position =
-                lobbyCameraPosition;
-
-            mainCamera.orthographicSize =
-                lobbyCameraSize;
+            roomCameraPosition = mainCamera.transform.position;
+            roomCameraPosition.x = 0f; // Preserve your existing room camera convention.
+            roomCameraSize = mainCamera.orthographicSize;
+            mainCamera.transform.position = roomCameraPosition + Vector3.right * lobbyXOffset;
+            mainCamera.orthographicSize = roomCameraSize / Mathf.Max(0.01f, lobbyZoomMultiplier);
         }
-
-
-        // -----------------------------------------------------
-        // SAVE BUTTON START POSITION
-        // -----------------------------------------------------
-
-        if (lobbyButtons != null)
-        {
-            buttonStartPosition =
-                lobbyButtons.anchoredPosition;
-        }
-
-
-        // -----------------------------------------------------
-        // COMPUTER INTERACTION OFF DURING LOBBY
-        // -----------------------------------------------------
-
-        if (computerInteraction != null)
-        {
-            computerInteraction.enabled = false;
-        }
-
-
-        // -----------------------------------------------------
-        // SHOW LOBBY
-        // -----------------------------------------------------
-
-        if (lobbyPanel != null)
-        {
-            lobbyPanel.SetActive(true);
-        }
-
-
-        if (lobbyCanvasGroup != null)
-        {
-            lobbyCanvasGroup.alpha = 1f;
-
-            lobbyCanvasGroup.interactable = true;
-
-            lobbyCanvasGroup.blocksRaycasts = true;
-        }
+        if (lobbyButtons != null) buttonStartPosition = lobbyButtons.anchoredPosition;
+        if (computerInteraction != null) computerInteraction.enabled = false;
+        if (lobbyPanel != null) lobbyPanel.SetActive(true);
+        SetLobbyAlpha(1f, true);
     }
-
-
-    // =========================================================
-    // PLAY BUTTON
-    // =========================================================
 
     public void PlayGame()
     {
-        if (isTransitioning)
-            return;
-
-
-        StartCoroutine(
-            PlayTransition()
-        );
+        if (isTransitioning || IsGameStarted) return;
+        if (escapeInput != null && escapeInput.SettingsOpen) return;
+        StartCoroutine(PlayTransition());
     }
-
-
-    // =========================================================
-    // LOBBY TRANSITION
-    // =========================================================
 
     private IEnumerator PlayTransition()
     {
         isTransitioning = true;
+        SetLobbyAlpha(1f, false);
+        Vector3 startPosition = mainCamera != null ? mainCamera.transform.position : Vector3.zero;
+        float startSize = mainCamera != null ? mainCamera.orthographicSize : 1f;
+        Vector2 target = buttonStartPosition + Vector2.left * buttonSlideDistance;
+        float elapsed = 0f;
 
-
-        // -----------------------------------------------------
-        // DISABLE LOBBY BUTTON INPUT
-        // -----------------------------------------------------
-
-        if (lobbyCanvasGroup != null)
+        while (elapsed < transitionDuration)
         {
-            lobbyCanvasGroup.interactable = false;
-
-            lobbyCanvasGroup.blocksRaycasts = false;
-        }
-
-
-        float timer = 0f;
-
-
-        Vector3 cameraStartPosition =
-            mainCamera.transform.position;
-
-
-        float cameraStartSize =
-            mainCamera.orthographicSize;
-
-
-        Vector2 buttonTargetPosition =
-            buttonStartPosition +
-            Vector2.left *
-            buttonSlideDistance;
-
-
-        // -----------------------------------------------------
-        // TRANSITION LOOP
-        // -----------------------------------------------------
-
-        while (timer < transitionDuration)
-        {
-            timer +=
-                Time.unscaledDeltaTime;
-
-
-            float t =
-                Mathf.Clamp01(
-                    timer /
-                    transitionDuration
-                );
-
-
-            float smoothT =
-                Mathf.SmoothStep(
-                    0f,
-                    1f,
-                    t
-                );
-
-
-            // -------------------------------------------------
-            // CAMERA MOVE
-            // -------------------------------------------------
-
-            mainCamera.transform.position =
-                Vector3.Lerp(
-                    cameraStartPosition,
-                    roomCameraPosition,
-                    smoothT
-                );
-
-
-            // -------------------------------------------------
-            // CAMERA ZOOM OUT
-            // -------------------------------------------------
-
-            mainCamera.orthographicSize =
-                Mathf.Lerp(
-                    cameraStartSize,
-                    roomCameraSize,
-                    smoothT
-                );
-
-
-            // -------------------------------------------------
-            // BUTTONS MOVE LEFT
-            // -------------------------------------------------
-
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(elapsed / transitionDuration));
+            if (mainCamera != null)
+            {
+                mainCamera.transform.position = Vector3.Lerp(startPosition, roomCameraPosition, t);
+                mainCamera.orthographicSize = Mathf.Lerp(startSize, roomCameraSize, t);
+            }
             if (lobbyButtons != null)
-            {
-                lobbyButtons.anchoredPosition =
-                    Vector2.Lerp(
-                        buttonStartPosition,
-                        buttonTargetPosition,
-                        smoothT
-                    );
-            }
-
-
-            // -------------------------------------------------
-            // LOBBY FADE OUT
-            // -------------------------------------------------
-
-            if (lobbyCanvasGroup != null)
-            {
-                lobbyCanvasGroup.alpha =
-                    1f - smoothT;
-            }
-
-
+                lobbyButtons.anchoredPosition = Vector2.Lerp(buttonStartPosition, target, t);
+            SetLobbyAlpha(1f - t, false);
             yield return null;
         }
 
-
-        // =====================================================
-        // TRANSITION COMPLETELY FINISHED
-        // =====================================================
-
-
-        // -----------------------------------------------------
-        // FORCE EXACT GAMEPLAY CAMERA
-        // -----------------------------------------------------
-
-        mainCamera.transform.position =
-            roomCameraPosition;
-
-
-        mainCamera.orthographicSize =
-            roomCameraSize;
-
-
-        // -----------------------------------------------------
-        // LOBBY COMPLETELY INVISIBLE
-        // -----------------------------------------------------
-
-        if (lobbyCanvasGroup != null)
+        if (mainCamera != null)
         {
-            lobbyCanvasGroup.alpha = 0f;
-
-            lobbyCanvasGroup.interactable = false;
-
-            lobbyCanvasGroup.blocksRaycasts = false;
+            mainCamera.transform.position = roomCameraPosition;
+            mainCamera.orthographicSize = roomCameraSize;
         }
+        SetLobbyAlpha(0f, false);
+        if (lobbyPanel != null) lobbyPanel.SetActive(false);
+        if (computerInteraction != null) computerInteraction.enabled = true;
+        yield return null; // ComputerInteractionIn.Start records the gameplay camera here.
 
-
-        // -----------------------------------------------------
-        // ENABLE COMPUTER INTERACTION
-        // -----------------------------------------------------
-
-        if (computerInteraction != null)
-        {
-            computerInteraction.enabled = true;
-        }
-
-
-        // -----------------------------------------------------
-        // WAIT ONE FRAME
-        //
-        // This lets ComputerInteractionIn
-        // finish its OnEnable / Start work first.
-        // -----------------------------------------------------
-
-        yield return null;
-
-
-        // =====================================================
-        // FORCE TUTORIAL PANEL ON
-        // =====================================================
-
-        if (developmentTutorialPopupPanel != null)
-        {
-            developmentTutorialPopupPanel.SetActive(true);
-
-
-            Debug.Log(
-                "Tutorial Panel ActiveSelf: " +
-                developmentTutorialPopupPanel.activeSelf
-            );
-
-
-            Debug.Log(
-                "Tutorial Panel ActiveInHierarchy: " +
-                developmentTutorialPopupPanel.activeInHierarchy
-            );
-        }
-        else
-        {
-            Debug.LogError(
-                "Development Tutorial Popup Panel is NOT connected!"
-            );
-        }
-
-
-        // =====================================================
-        // START TUTORIAL
-        // =====================================================
-
-        if (tutorialPopup != null)
-        {
-            tutorialPopup.ShowTutorial();
-
-
-            Debug.Log(
-                "ShowTutorial called successfully."
-            );
-        }
-        else
-        {
-            Debug.LogError(
-                "DevelopmentTutorialPopup script is NOT connected!"
-            );
-        }
-
-
+        IsGameStarted = true;
         isTransitioning = false;
-
-
-        Debug.Log(
-            "Lobby finished. Tutorial started."
-        );
+        if (gameUI != null) gameUI.Show();
+        if (developmentTutorialPopupPanel != null)
+            developmentTutorialPopupPanel.SetActive(true);
+        if (tutorialPopup != null) tutorialPopup.ShowTutorial();
     }
 
-
-    // =========================================================
-    // SETTINGS
-    // =========================================================
+    private void SetLobbyAlpha(float alpha, bool inputEnabled)
+    {
+        if (lobbyCanvasGroup == null) return;
+        lobbyCanvasGroup.alpha = alpha;
+        lobbyCanvasGroup.interactable = inputEnabled;
+        lobbyCanvasGroup.blocksRaycasts = inputEnabled;
+    }
 
     public void OpenSettings()
     {
-        Debug.Log(
-            "Settings not implemented yet."
-        );
+        if (escapeInput != null) escapeInput.OpenSettings();
     }
-
-
-    // =========================================================
-    // EXIT
-    // =========================================================
 
     public void ExitGame()
     {
 #if UNITY_EDITOR
-
-        UnityEditor.EditorApplication.isPlaying =
-            false;
-
+        UnityEditor.EditorApplication.isPlaying = false;
 #else
-
         Application.Quit();
-
 #endif
     }
 }

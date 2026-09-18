@@ -618,6 +618,7 @@ GameObject:
   - component: {fileID: 89608453}
   - component: {fileID: 89608452}
   - component: {fileID: 89608455}
+  - component: {fileID: 89608456}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -690,9 +691,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 89608455}
-        m_TargetAssemblyTypeName: ReturnToRoom, Assembly-CSharp
-        m_MethodName: ReturnToRoomScene
+      - m_Target: {fileID: 89608456}
+        m_TargetAssemblyTypeName: FeatureReturnButton, Assembly-CSharp
+        m_MethodName: BackToRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -747,12 +748,24 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 89608450}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f199d922770cf8f4ba5fb66b9a0f185a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReturnToRoom
   roomSceneName: Minjae's Scene
+--- !u!114 &89608456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89608450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3f4bd1bab96cd04b8cc8d9277e7857e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FeatureReturnButton
 --- !u!1 &121247463
 GameObject:
   m_ObjectHideFlags: 0

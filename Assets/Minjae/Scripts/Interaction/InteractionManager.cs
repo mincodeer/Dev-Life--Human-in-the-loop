@@ -9,6 +9,8 @@ public class InteractionManager : MonoBehaviour
 
     private void Update()
     {
+        if (EscapeInputRouter.WorldInputBlocked) return;
+
         if (Mouse.current != null &&
             Mouse.current.leftButton.wasPressedThisFrame)
         {
@@ -23,6 +25,8 @@ public class InteractionManager : MonoBehaviour
 
     private void TryInteract()
     {
+        if (mainCamera == null || Mouse.current == null) return;
+
         Vector2 mouseScreenPosition =
             Mouse.current.position.ReadValue();
 
