@@ -988,6 +988,11 @@ MonoBehaviour:
   - {fileID: 1622464151}
   - {fileID: 1125159348}
   - {fileID: 9518416}
+  pcUpgradeButton: {fileID: 511532894}
+  lightUpgradeButton: {fileID: 488447116}
+  cleanUpButton: {fileID: 2093384935}
+  windowUpgradeButton: {fileID: 1551855211}
+  decorButton: {fileID: 1026739749}
 --- !u!4 &355747408
 Transform:
   m_ObjectHideFlags: 0

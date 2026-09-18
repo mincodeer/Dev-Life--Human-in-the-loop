@@ -5,20 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class StoreUIController : MonoBehaviour
 {
-    // Main store panel
     public GameObject storePanel;
 
-    // Search bar
     public TMP_InputField searchInput;
 
-    // Product cards in the store
-    // Drag StoreItemBox1, StoreItemBox2, etc. into this list in Unity
     public GameObject[] productItems;
 
+    public Button pcUpgradeButton;
+    public Button lightUpgradeButton;
+    public Button cleanUpButton;
+    public Button windowUpgradeButton;
+    public Button decorButton;
 
-    // ------------------------------------------------------------
-    // STORE OPEN / CLOSE
-    // ------------------------------------------------------------
+    private void Start()
+    {
+        UpdatePurchaseButtons();
+    }
 
     public void CloseStore()
     {
@@ -28,58 +30,141 @@ public class StoreUIController : MonoBehaviour
     public void OpenStore()
     {
         storePanel.SetActive(true);
+        UpdatePurchaseButtons();
     }
-
-
-    // ------------------------------------------------------------
-    // PURCHASE ITEMS
-    // ------------------------------------------------------------
 
     public void PurchasePCUpgrade()
     {
-        PurchaseItem(800);
+        if (PurchaseItem(800, pcUpgradeButton))
+        {
+            if (RoomUpgradeManager.Instance != null)
+            {
+                RoomUpgradeManager.Instance.PurchasePCUpgrade();
+            }
+        }
     }
 
     public void PurchaseLightUpgrade()
     {
-        PurchaseItem(800);
+        if (PurchaseItem(800, lightUpgradeButton))
+        {
+            if (RoomUpgradeManager.Instance != null)
+            {
+                RoomUpgradeManager.Instance.PurchaseLightUpgrade();
+            }
+        }
     }
 
     public void PurchaseCleanUp()
     {
-        PurchaseItem(300);
+        if (PurchaseItem(300, cleanUpButton))
+        {
+            if (RoomUpgradeManager.Instance != null)
+            {
+                RoomUpgradeManager.Instance.PurchaseCleanUp();
+            }
+        }
     }
 
     public void PurchaseWindowUpgrade()
     {
-        PurchaseItem(300);
+        if (PurchaseItem(300, windowUpgradeButton))
+        {
+            if (RoomUpgradeManager.Instance != null)
+            {
+                RoomUpgradeManager.Instance.PurchaseWindowUpgrade();
+            }
+        }
     }
 
     public void PurchaseDecor()
     {
-        PurchaseItem(300);
+        if (PurchaseItem(300, decorButton))
+        {
+            if (RoomUpgradeManager.Instance != null)
+            {
+                RoomUpgradeManager.Instance.PurchaseDecorUpgrade();
+            }
+        }
     }
 
-    private void PurchaseItem(int price)
+    private bool PurchaseItem(int price, Button purchaseButton)
     {
         if (ResourceManager.Instance == null)
         {
             Debug.LogWarning("ResourceManager not found.");
-            return;
+            return false;
+        }
+
+        if (RoomUpgradeManager.Instance == null)
+        {
+            Debug.LogWarning("RoomUpgradeManager not found.");
+            return false;
+        }
+
+        if (purchaseButton == null)
+        {
+            Debug.LogWarning("Purchase button not connected.");
+            return false;
+        }
+
+        if (!purchaseButton.interactable)
+        {
+            return false;
         }
 
         if (ResourceManager.Instance.Money < price)
         {
             Debug.Log("Not enough money.");
+            return false;
+        }
+
+        ResourceManager.Instance.ChangeMoney(-price);
+
+        SetButtonPurchased(purchaseButton);
+
+        return true;
+    }
+
+    private void UpdatePurchaseButtons()
+    {
+        if (RoomUpgradeManager.Instance == null)
+        {
             return;
         }
 
-        Button purchaseButton =
-            UnityEngine.EventSystems.EventSystem.current
-            .currentSelectedGameObject
-            .GetComponent<Button>();
+        if (RoomUpgradeManager.Instance.IsPCUpgradePurchased())
+        {
+            SetButtonPurchased(pcUpgradeButton);
+        }
 
-        ResourceManager.Instance.ChangeMoney(-price);
+        if (RoomUpgradeManager.Instance.IsLightUpgradePurchased())
+        {
+            SetButtonPurchased(lightUpgradeButton);
+        }
+
+        if (RoomUpgradeManager.Instance.IsCleanUpPurchased())
+        {
+            SetButtonPurchased(cleanUpButton);
+        }
+
+        if (RoomUpgradeManager.Instance.IsWindowUpgradePurchased())
+        {
+            SetButtonPurchased(windowUpgradeButton);
+        }
+
+        if (RoomUpgradeManager.Instance.IsDecorUpgradePurchased())
+        {
+            SetButtonPurchased(decorButton);
+        }
+    }
+
+    private void SetButtonPurchased(Button purchaseButton)
+    {
+        if (purchaseButton == null)
+        {
+            return;
+        }
 
         purchaseButton.interactable = false;
 
@@ -96,10 +181,6 @@ public class StoreUIController : MonoBehaviour
     {
         SceneManager.LoadScene("Minjae's Scene");
     }
-
-    // ------------------------------------------------------------
-    // SEARCH
-    // ------------------------------------------------------------
 
     public void SearchProducts()
     {
