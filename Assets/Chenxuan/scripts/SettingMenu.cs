@@ -14,17 +14,19 @@ public class SettingMenu : MonoBehaviour
         bgmSource.volume = bgmSlider.value;
         sfxSource.volume = sfxSlider.value;
     }
-
     public void OpenSettings()
     {
         settingspanel.SetActive(true);
-        mainButtons.SetActive(false);
-    }
 
+        if (mainButtons != null)
+            mainButtons.SetActive(false);
+    }
     public void CloseSettings()
     {
         settingspanel.SetActive(false);
-        mainButtons.SetActive(true);
+
+        if (mainButtons != null)
+            mainButtons.SetActive(true);
     }
 
     public void SetBGMVolume(float volume)
