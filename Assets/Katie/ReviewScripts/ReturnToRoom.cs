@@ -9,20 +9,6 @@ public class ReturnToRoom : MonoBehaviour
 {
     [SerializeField] private string roomSceneName = "Minjae's Scene";
 
-    private static bool plainRoomRequested;
-
-    /// <summary>
-    /// Used by RoomReturnState after the room scene finishes loading.
-    /// The request is consumed once so normal game startup still shows
-    /// the Lobby menu.
-    /// </summary>
-    public static bool ConsumePlainRoomRequest()
-    {
-        bool wasRequested = plainRoomRequested;
-        plainRoomRequested = false;
-        return wasRequested;
-    }
-
     public void ReturnToRoomScene()
     {
         if (string.IsNullOrWhiteSpace(roomSceneName))
@@ -39,7 +25,6 @@ public class ReturnToRoom : MonoBehaviour
             return;
         }
 
-        plainRoomRequested = true;
         SceneManager.LoadScene(roomSceneName);
     }
 }

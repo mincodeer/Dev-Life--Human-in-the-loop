@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.52012104, g: 0.6613081, b: 0.86415094, a: 1}
+  m_Color: {r: 1, g: 0.7142247, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3945,14 +3945,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5366678, g: 0.65980494, b: 0.8490566, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -272975923538973608, guid: ab2094ca3bafac647ba3e68f37bfba01, type: 3}
+  m_Sprite: {fileID: 3487212021034205499, guid: ab2094ca3bafac647ba3e68f37bfba01, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11753,7 +11753,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 850, y: -250}
+  m_AnchoredPosition: {x: 890.2015, y: -369.88678}
   m_SizeDelta: {x: 400, y: 85}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &975179411
@@ -12524,7 +12524,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 850, y: -350}
+  m_AnchoredPosition: {x: 890.2015, y: -469.88678}
   m_SizeDelta: {x: 400, y: 85}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1070162176
@@ -16404,7 +16404,7 @@ GameObject:
   - component: {fileID: 1380851410}
   - component: {fileID: 1380851409}
   m_Layer: 5
-  m_Name: FeatureNavigationPanel
+  m_Name: IconPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22050,7 +22050,6 @@ GameObject:
   - component: {fileID: 1910014907}
   - component: {fileID: 1910014906}
   - component: {fileID: 1910014905}
-  - component: {fileID: 1910014909}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -22151,20 +22150,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1910014909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1910014904}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17bfb0fa11dbc5f4e8d583edfabd2351, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RoomReturnState
-  lobbyPanel: {fileID: 1139455390}
-  shortcutPanel: {fileID: 1380851407}
 --- !u!82 &1913693767 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 7675897798662282962, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
