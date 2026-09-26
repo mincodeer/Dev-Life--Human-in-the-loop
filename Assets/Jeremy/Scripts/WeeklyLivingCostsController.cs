@@ -142,14 +142,27 @@ public class WeeklyLivingCostsController : MonoBehaviour
 
     private void TriggerGameOver()
     {
+        // Hide the rent popup when the player cannot afford rent.
         if (rentPopup != null)
         {
             rentPopup.SetActive(false);
         }
 
-        if (gameOverPopup != null)
+        // Find the Ending Controller even if the Ending Panel is disabled.
+        EndingController endingController =
+            FindFirstObjectByType<EndingController>(
+                FindObjectsInactive.Include);
+
+        if (endingController != null)
         {
-            gameOverPopup.SetActive(true);
+            endingController.ShowEnding(
+                "YOUR LANDLORD HAS ENTERED THE CHAT",
+                "You remembered to develop your game. Unfortunately, you forgot one small detail: rent.",
+                "Rent Due: $" + livingCost
+                + "\nYour Money: $"
+                + ResourceManager.Instance.Money
+                + "\nDeveloper Status: BACK TO THE BASEMENT"
+            );
         }
     }
 

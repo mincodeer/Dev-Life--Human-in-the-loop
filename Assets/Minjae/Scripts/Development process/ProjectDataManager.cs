@@ -31,22 +31,77 @@ public class ProjectDataManager : MonoBehaviour
     [SerializeField] private List<ProjectData> completedProjects = new List<ProjectData>();
     [SerializeField] private bool currentProjectArchived;
 
+    // Counts how many projects have been completed using AI for every stage.
+    private int fullAIProjects = 0;
+
     public IReadOnlyList<ProjectData> CompletedProjects => completedProjects.AsReadOnly();
 
     public void ArchiveCurrentProject(FinalProjectResult result)
     {
-        if (currentProjectArchived || result == null) return;
+        if (currentProjectArchived || result == null)
+        {
+            return;
+        }
 
         currentProject.quality = result.quality;
         currentProject.bugs = result.bugs;
         currentProject.totalTime = result.developmentTime;
-        currentProject.finalResult = JsonUtility.FromJson<FinalProjectResult>(
-            JsonUtility.ToJson(result));
+
+        currentProject.finalResult =
+            JsonUtility.FromJson<FinalProjectResult>(
+                JsonUtility.ToJson(result));
 
         // Store a separate copy so later edits cannot change the old project.
-        completedProjects.Add(JsonUtility.FromJson<ProjectData>(
-            JsonUtility.ToJson(currentProject)));
+        completedProjects.Add(
+            JsonUtility.FromJson<ProjectData>(
+                JsonUtility.ToJson(currentProject)));
+
         currentProjectArchived = true;
+
+        // Check if this project used AI for every development stage.
+        CheckForAIProject();
+    }
+
+    // Checks if the completed project used AI for every development stage.
+    private void CheckForAIProject()
+    {
+        bool usedAIForEverything =
+            currentProject.codingMethod == WorkMethod.AI
+            && currentProject.designMethod == WorkMethod.AI
+            && currentProject.soundMethod == WorkMethod.AI
+            && currentProject.debuggingMethod == WorkMethod.AI;
+
+        if (usedAIForEverything)
+        {
+            fullAIProjects++;
+
+            Debug.Log(
+                "Full AI Projects: "
+                + fullAIProjects
+                + "/3");
+        }
+
+        // The AI ending happens after three fully AI-developed projects.
+        if (fullAIProjects >= 3)
+        {
+            EndingController endingController =
+                FindFirstObjectByType<EndingController>(
+                    FindObjectsInactive.Include);
+
+            if (endingController != null)
+            {
+                endingController.ShowEnding(
+                    "YOU HAVE BEEN AUTOMATED",
+                    "You used AI for three entire projects. "
+                    + "Coding? AI. Design? AI. Sound? AI. "
+                    + "Debugging? Somehow also AI. "
+                    + "The AI realised it was doing all the work anyway.",
+                    "Full AI Projects: 3\n"
+                    + "Human Contribution: Questionable\n"
+                    + "Developer Status: MENTALLY OUTSOURCED"
+                );
+            }
+        }
     }
 
     private void OnDestroy()

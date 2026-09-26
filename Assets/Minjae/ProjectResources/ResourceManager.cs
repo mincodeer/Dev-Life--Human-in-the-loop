@@ -117,6 +117,24 @@ public class ResourceManager : MonoBehaviour
             + ". Current Fandom: "
             + fandom);
 
+        // Check if the player has reached maximum Fandom.
+        if (fandom >= 100)
+        {
+            EndingController endingController =
+                FindFirstObjectByType<EndingController>(
+                    FindObjectsInactive.Include);
+
+            if (endingController != null)
+            {
+                endingController.ShowEnding(
+                    "YOU ACTUALLY DID IT!",
+                    "Your games became so popular that people actually know your name. You started as a developer and somehow became a legend.",
+                    "Fandom: 100\n"
+                    + "Developer Status: INTERNET FAMOUS"
+                );
+            }
+        }
+
         // Tell the Resource UI that Fandom has changed.
         OnResourcesChanged?.Invoke();
     }
@@ -155,6 +173,23 @@ public class ResourceManager : MonoBehaviour
             + amount
             + ". Current Technical Debt: "
             + technicalDebt);
+
+        // Check if the player has reached the maximum Technical Debt.
+        if (technicalDebt >= 100)
+        {
+            EndingController endingController =
+                FindFirstObjectByType<EndingController>(
+                    FindObjectsInactive.Include);
+
+            if (endingController != null)
+            {
+                endingController.ShowEnding(
+                    "YOUR CODE HAS BECOME SENTIENT",
+                    "You kept saying you would fix the technical debt later. Unfortunately, later has arrived. Your code has officially become more powerful than you.",
+                    "Technical Debt: 100%\nDeveloper Status: REPLACED"
+                );
+            }
+        }
     }
 
     // ==============================

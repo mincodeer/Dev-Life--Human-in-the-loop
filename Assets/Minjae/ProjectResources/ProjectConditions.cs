@@ -30,7 +30,26 @@ public class ProjectConditions
     public void ChangeWorkload(float amount)
     {
         workload += amount;
+
+        // Workload stays between 0 and 100.
         workload = Clamp(workload, 0f, 100f);
+
+        // Check if the player has reached the maximum workload.
+        if (workload >= 100f)
+        {
+            EndingController endingController =
+                UnityEngine.Object.FindFirstObjectByType<EndingController>(
+                UnityEngine.FindObjectsInactive.Include);
+
+            if (endingController != null)
+            {
+                endingController.ShowEnding(
+                    "YOU HAVE BEEN DEFEATED BY YOUR OWN DEADLINE",
+                    "You accepted more work than you could handle. Your game is unfinished, your coffee is gone, and your deadline is tomorrow.",
+                    "Workload: 100%\nDeveloper Status: NEEDS A NAP"
+                );
+            }
+        }
     }
 
     /// Adds bugs to the current project.
