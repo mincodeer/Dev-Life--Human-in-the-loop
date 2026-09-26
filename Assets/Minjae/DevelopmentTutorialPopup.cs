@@ -277,7 +277,7 @@ public class DevelopmentTutorialPopup : MonoBehaviour
         ShowPopup(
             "CODING\n\n" +
             "Create the systems and mechanics that make your game work.\n" +
-            "Your AI or Manual choice affects Quality, Workload, and Technical Debt."
+            "Choosing AI or Manual affects Quality, Workload, and Technical Debt."
         );
     }
 
