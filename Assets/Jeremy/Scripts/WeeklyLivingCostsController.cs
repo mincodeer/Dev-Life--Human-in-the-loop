@@ -25,6 +25,8 @@ public class WeeklyLivingCostsController : MonoBehaviour
     // Pay button
     public Button payRentButton;
 
+    // Stores the visual and text data for the Rent Game Over ending.
+    public EndingData rentEnding;
 
     // ------------------------------------------------------------
     // START
@@ -142,27 +144,29 @@ public class WeeklyLivingCostsController : MonoBehaviour
 
     private void TriggerGameOver()
     {
-        // Hide the rent popup when the player cannot afford rent.
         if (rentPopup != null)
         {
             rentPopup.SetActive(false);
         }
 
-        // Find the Ending Controller even if the Ending Panel is disabled.
+        // Find the Ending Controller so the full-screen
+        // Rent ending can be displayed.
         EndingController endingController =
             FindFirstObjectByType<EndingController>(
                 FindObjectsInactive.Include);
 
-        if (endingController != null)
+        if (endingController != null
+            && rentEnding != null)
         {
+            // Show the Rent ending using the EndingData
+            // asset assigned in the Inspector.
             endingController.ShowEnding(
-                "YOUR LANDLORD HAS ENTERED THE CHAT",
-                "You remembered to develop your game. Unfortunately, you forgot one small detail: rent.",
-                "Rent Due: $" + livingCost
-                + "\nYour Money: $"
-                + ResourceManager.Instance.Money
-                + "\nDeveloper Status: BACK TO THE BASEMENT"
-            );
+                rentEnding);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "EndingController or Rent EndingData is missing.");
         }
     }
 

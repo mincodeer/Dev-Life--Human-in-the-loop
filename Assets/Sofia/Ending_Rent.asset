@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c70254b8381bc342948145ba3f28df6, type: 3}
+  m_Name: Ending_Rent
+  m_EditorClassIdentifier: Assembly-CSharp::EndingData
+  endingTitle: CONGRATULATIONS! YOU ARE HOMELESS
+  titleColor: {r: 0.78867924, g: 0, b: 0, a: 1}
+  endingDescription: You couldn't afford rent. Your studio is now operating from
+    a suspicious cardboard box.
+  endingStats: 'Money: BROKE
+
+    Rent Due: $300'
+  endingImage: {fileID: 0}
+  endingBackground: {fileID: 5530713752826840949, guid: 98be091aa48c9154c88b7a3442e942a5, type: 3}

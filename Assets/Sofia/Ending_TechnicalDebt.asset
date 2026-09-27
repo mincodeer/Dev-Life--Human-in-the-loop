@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c70254b8381bc342948145ba3f28df6, type: 3}
+  m_Name: Ending_TechnicalDebt
+  m_EditorClassIdentifier: Assembly-CSharp::EndingData
+  endingTitle: IT WASN'T SUPPOSED TO DO THAT
+  titleColor: {r: 0.7921569, g: 0, b: 0, a: 1}
+  endingDescription: You accumulated so much technical debt that your code started
+    making its own decisions.
+  endingStats: 'Technical Debt: 100%'
+  endingImage: {fileID: 0}
+  endingBackground: {fileID: -6534227164090588512, guid: a57a99c445d1fd94aa574e5347d77c7a, type: 3}

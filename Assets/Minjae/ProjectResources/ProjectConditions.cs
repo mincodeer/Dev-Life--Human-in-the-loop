@@ -19,6 +19,9 @@ public class ProjectConditions
     // Total development time for this project.
     public float totalTime = 0f;
 
+    // Stores the visual and text data for the Workload ending.
+    public EndingData workloadEnding;
+
     /// Adds to the current project quality and keeps it between 0 and 100.
     public void ChangeQuality(float amount)
     {
@@ -26,6 +29,7 @@ public class ProjectConditions
         quality = Clamp(quality, 0f, 100f);
     }
 
+    /// Adds to the current project workload and keeps it between 0 and 100.
     /// Adds to the current project workload and keeps it between 0 and 100.
     public void ChangeWorkload(float amount)
     {
@@ -41,13 +45,13 @@ public class ProjectConditions
                 UnityEngine.Object.FindFirstObjectByType<EndingController>(
                 UnityEngine.FindObjectsInactive.Include);
 
-            if (endingController != null)
+            if (endingController != null
+                && workloadEnding != null)
             {
+                // Show the Workload ending using the
+                // EndingData asset created for this ending.
                 endingController.ShowEnding(
-                    "YOU HAVE BEEN DEFEATED BY YOUR OWN DEADLINE",
-                    "You accepted more work than you could handle. Your game is unfinished, your coffee is gone, and your deadline is tomorrow.",
-                    "Workload: 100%\nDeveloper Status: NEEDS A NAP"
-                );
+                    workloadEnding);
             }
         }
     }

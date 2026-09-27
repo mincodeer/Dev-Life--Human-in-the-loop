@@ -34,6 +34,8 @@ public class ProjectDataManager : MonoBehaviour
     // Counts how many projects have been completed using AI for every stage.
     private int fullAIProjects = 0;
 
+    // Stores the visual and text data for the AI ending.
+    public EndingData aiEnding;
     public IReadOnlyList<ProjectData> CompletedProjects => completedProjects.AsReadOnly();
 
     public void ArchiveCurrentProject(FinalProjectResult result)
@@ -81,27 +83,28 @@ public class ProjectDataManager : MonoBehaviour
                 + "/3");
         }
 
-        // The AI ending happens after three fully AI-developed projects.
         if (fullAIProjects >= 3)
         {
             EndingController endingController =
                 FindFirstObjectByType<EndingController>(
                     FindObjectsInactive.Include);
 
-            if (endingController != null)
+            if (endingController != null
+                && aiEnding != null)
             {
+                // Show the AI ending using the EndingData
+                // asset assigned in the Inspector.
                 endingController.ShowEnding(
-                    "YOU HAVE BEEN AUTOMATED",
-                    "You used AI for three entire projects. "
-                    + "Coding? AI. Design? AI. Sound? AI. "
-                    + "Debugging? Somehow also AI. "
-                    + "The AI realised it was doing all the work anyway.",
-                    "Full AI Projects: 3\n"
-                    + "Human Contribution: Questionable\n"
-                    + "Developer Status: MENTALLY OUTSOURCED"
-                );
+                    aiEnding);
             }
         }
+    }
+
+    public void ResetAIProjectCount()
+    {
+        fullAIProjects = 0;
+
+        Debug.Log("Full AI project count reset.");
     }
 
     private void OnDestroy()
