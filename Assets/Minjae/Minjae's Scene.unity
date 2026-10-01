@@ -22710,7 +22710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
   money: 250
-  fandom: 99
+  fandom: 0
   fandomEnding: {fileID: 11400000, guid: 7391f8299cc36a949b4c572275056d8e, type: 2}
   developmentSkill: 10
   technicalDebt: 0
