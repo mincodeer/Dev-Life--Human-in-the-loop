@@ -279,7 +279,24 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void ChooseManual() => SaveMethodAndContinue(WorkMethod.Manual);
 
-    public void ChooseAI() => SaveMethodAndContinue(WorkMethod.AI);
+    public void ChooseAI()
+    {
+        if (ResourceManager.Instance == null)
+        {
+            Debug.LogWarning("ResourceManager not found.");
+            return;
+        }
+
+        if (ResourceManager.Instance.AICredits <= 0)
+        {
+            Debug.Log("No AI credits available.");
+            return;
+        }
+
+        ResourceManager.Instance.ChangeAICredits(-1);
+
+        SaveMethodAndContinue(WorkMethod.AI);
+    }
 
     private void SaveMethodAndContinue(WorkMethod method)
     {

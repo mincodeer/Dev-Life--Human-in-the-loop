@@ -27,6 +27,9 @@ public class ResourceManager : MonoBehaviour
     [SerializeField]
     private int fandom = 0;
 
+    [SerializeField]
+    private int aiCredits = 10;
+
     // Stores the visual and text data for the Fandom ending.
     public EndingData fandomEnding;
 
@@ -55,6 +58,14 @@ public class ResourceManager : MonoBehaviour
         get
         {
             return fandom;
+        }
+    }
+
+    public int AICredits
+    {
+        get
+        {
+            return aiCredits;
         }
     }
 
@@ -144,6 +155,21 @@ public class ResourceManager : MonoBehaviour
         OnResourcesChanged?.Invoke();
     }
 
+    public void ChangeAICredits(int amount)
+    {
+        aiCredits += amount;
+
+        aiCredits = Mathf.Max(0, aiCredits);
+
+        Debug.Log(
+            "AI Credits changed by "
+            + amount
+            + ". Current AI Credits: "
+            + aiCredits);
+
+        OnResourcesChanged?.Invoke();
+    }
+
     public void ChangeDevelopmentSkill(int amount)
     {
         developmentSkill += amount;
@@ -205,6 +231,7 @@ public class ResourceManager : MonoBehaviour
     {
         money = 250;
         fandom = 0;
+        aiCredits = 10;
         developmentSkill = 10;
         technicalDebt = 0;
 
@@ -220,6 +247,7 @@ public class ResourceManager : MonoBehaviour
         Debug.Log(
             "Money: " + money
             + "\nFandom: " + fandom
+            + "\nAI Credits: " + aiCredits
             + "\nDevelopment Skill: " + developmentSkill
             + "\nTechnical Debt: " + technicalDebt);
     }

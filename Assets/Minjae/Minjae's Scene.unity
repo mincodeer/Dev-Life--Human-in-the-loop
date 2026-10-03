@@ -376,7 +376,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.079, y: 0.7077761}
   m_AnchorMax: {x: 0.10718267, y: 0.7595521}
-  m_AnchoredPosition: {x: -57, y: 286}
+  m_AnchoredPosition: {x: -57.000122, y: 286}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &40805991
@@ -910,6 +910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceUI
   moneyText: {fileID: 1993482880}
   fandomText: {fileID: 1146048074}
+  aiCreditsText: {fileID: 0}
 --- !u!1 &87273330
 GameObject:
   m_ObjectHideFlags: 0
@@ -14037,6 +14038,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1005747299}
   m_CullTransparentMesh: 1
+--- !u!1 &1023603390
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1023603392}
+  - component: {fileID: 1023603391}
+  m_Layer: 0
+  m_Name: AISubscriptionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1023603391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023603390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ca399f5af630f6418d853a035daaf96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AISubscriptionManager
+  subscriptionCost: 100
+  creditPackCost: 50
+  creditsPerPack: 10
+  creditsPerUse: 1
+  gameTime: {fileID: 876084387}
+--- !u!4 &1023603392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023603390}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 782.5642, y: 316.463, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1052390541
 GameObject:
   m_ObjectHideFlags: 0
@@ -22711,6 +22761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
   money: 250
   fandom: 0
+  aiCredits: 10
   fandomEnding: {fileID: 11400000, guid: 7391f8299cc36a949b4c572275056d8e, type: 2}
   developmentSkill: 10
   technicalDebt: 0
@@ -27376,3 +27427,4 @@ SceneRoots:
   - {fileID: 1794496574}
   - {fileID: 1951830436}
   - {fileID: 1567458695}
+  - {fileID: 1023603392}

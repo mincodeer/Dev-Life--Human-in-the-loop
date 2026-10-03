@@ -17,6 +17,10 @@ public class ResourceUI : MonoBehaviour
     [SerializeField]
     private TMP_Text fandomText;
 
+    // Displays the player's current AI credits.
+    [SerializeField]
+    private TMP_Text aiCreditsText;
+
     /// <summary>
     /// Starts listening for resource changes when
     /// the Resource UI becomes active.
@@ -71,7 +75,7 @@ public class ResourceUI : MonoBehaviour
 
     /// <summary>
     /// Stops listening for resource changes when
-    /// the UI is destroyed.
+    /// the Resource UI is destroyed.
     /// </summary>
     private void OnDestroy()
     {
@@ -91,7 +95,7 @@ public class ResourceUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the displayed Money and Fandom values.
+    /// Updates the displayed Money, Fandom and AI Credit values.
     /// </summary>
     public void UpdateResourceUI()
     {
@@ -119,6 +123,14 @@ public class ResourceUI : MonoBehaviour
             fandomText.text =
                 "Fandom: "
                 + ResourceManager.Instance.Fandom;
+        }
+
+        // Display the current AI Credits value.
+        if (aiCreditsText != null)
+        {
+            aiCreditsText.text =
+                "AI Credits: "
+                + ResourceManager.Instance.AICredits;
         }
     }
 }
