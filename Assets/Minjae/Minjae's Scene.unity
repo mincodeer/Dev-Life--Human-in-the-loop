@@ -376,7 +376,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.079, y: 0.7077761}
   m_AnchorMax: {x: 0.10718267, y: 0.7595521}
-  m_AnchoredPosition: {x: -57.000366, y: 286.00006}
+  m_AnchoredPosition: {x: -57.000977, y: 286.00006}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &40805991
@@ -24295,7 +24295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18ac502bae4ed334d836fca6a87b62a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RubbishSpawner
-  rubbishPrefab: {fileID: 6404503554575909628, guid: c08da81cb967d2746aac966e7bfd880b, type: 3}
+  rubbish: {fileID: 6404503554575909628, guid: c08da81cb967d2746aac966e7bfd880b, type: 3}
   spawnInterval: 5
   maxRubbish: 5
   minPosition: {x: -3, y: -2}

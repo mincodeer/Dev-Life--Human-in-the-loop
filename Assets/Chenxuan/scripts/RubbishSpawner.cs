@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class RubbishSpawner : MonoBehaviour
 {
-    public GameObject rubbishPrefab;
+    public GameObject rubbish;
     public float spawnInterval = 5f;
     public int maxRubbish = 5;
     public Vector2 minPosition = new Vector2(-3f, -2f);
@@ -40,7 +40,7 @@ public class RubbishSpawner : MonoBehaviour
         Vector3 spawnPosition = new Vector3(x, y, 0f);
 
         GameObject newRubbish = Instantiate(
-            rubbishPrefab,
+            rubbish,
             spawnPosition,
             Quaternion.identity
         );
