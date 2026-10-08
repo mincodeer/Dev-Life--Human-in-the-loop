@@ -258,6 +258,7 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void StartDevelopment()
     {
+        if (currentStage != DevelopmentStage.ProjectSetup) return;
         if (ProjectDataManager.Instance == null)
         {
             Debug.LogError("ProjectDataManager is missing.");
@@ -267,7 +268,10 @@ public class DevelopmentFlowManager : MonoBehaviour
 
         ProjectData project = ProjectDataManager.Instance.CurrentProject;
 
-        if (!project.HasProjectSetup)
+        ProjectSetupUI setupUI = projectSetupPanel.GetComponent<ProjectSetupUI>();
+        if (!project.HasProjectSetup || (setupUI != null &&
+            (setupUI.IsThemeLocked((int)project.selectedTheme) ||
+             setupUI.IsGenreLocked((int)project.selectedGenre))))
         {
             Debug.LogWarning("Select both Theme and Genre.");
 
@@ -380,6 +384,14 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void OnThemeDropdownChanged(int index)
     {
+        ProjectSetupUI setupUI = projectSetupPanel.GetComponent<ProjectSetupUI>();
+        if (setupUI != null && setupUI.IsThemeLocked(index))
+        {
+            setupUI.RefreshFromProject();
+            return;
+        }
+        if (index == 0 && ProjectDataManager.Instance != null)
+            ProjectDataManager.Instance.CurrentProject.selectedTheme = GameTheme.None;
         switch (index)
         {
             case 0:
@@ -395,10 +407,20 @@ public class DevelopmentFlowManager : MonoBehaviour
                 SelectHorror();
                 break;
         }
+        if (index > 0 && index <= 3 && developmentTutorialPopup != null)
+            developmentTutorialPopup.ThemeSelected();
     }
 
     public void OnGenreDropdownChanged(int index)
     {
+        ProjectSetupUI setupUI = projectSetupPanel.GetComponent<ProjectSetupUI>();
+        if (setupUI != null && setupUI.IsGenreLocked(index))
+        {
+            setupUI.RefreshFromProject();
+            return;
+        }
+        if (index == 0 && ProjectDataManager.Instance != null)
+            ProjectDataManager.Instance.CurrentProject.selectedGenre = GameGenre.None;
         switch (index)
         {
             case 0:
@@ -414,6 +436,8 @@ public class DevelopmentFlowManager : MonoBehaviour
                 SelectSimulation();
                 break;
         }
+        if (index > 0 && index <= 3 && developmentTutorialPopup != null)
+            developmentTutorialPopup.GenreSelected();
     }
 
     public void CompleteCoding()

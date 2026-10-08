@@ -38,6 +38,18 @@ public class ProjectDataManager : MonoBehaviour
     public EndingData aiEnding;
     public IReadOnlyList<ProjectData> CompletedProjects => completedProjects.AsReadOnly();
 
+    public event System.Action ProjectChanged;
+
+    public void SetProjectName(string value)
+    {
+        currentProject.projectName = NormalizeProjectName(value);
+    }
+
+    public static string NormalizeProjectName(string value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? "Untitled Project" : value.Trim();
+    }
+
     public void ArchiveCurrentProject(FinalProjectResult result)
     {
         if (currentProjectArchived || result == null)
@@ -200,6 +212,7 @@ public class ProjectDataManager : MonoBehaviour
     {
         currentProject = new ProjectData();
         currentProjectArchived = false;
+        ProjectChanged?.Invoke();
 
         Debug.Log("New project data created.");
     }
@@ -227,6 +240,7 @@ public class ProjectDataManager : MonoBehaviour
     {
         currentProject = new ProjectData();
         currentProjectArchived = false;
+        ProjectChanged?.Invoke();
 
         Debug.Log("Current project data reset.");
     }

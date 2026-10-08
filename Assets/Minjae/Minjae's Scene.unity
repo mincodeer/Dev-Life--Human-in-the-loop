@@ -5868,9 +5868,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 412964453}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Script: {fileID: 11500000, guid: 73bdf8ce636d4e13b1c2cac5d7c81d51, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_Dropdown
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectSetupDropdown
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -5937,19 +5937,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1977478551}
-        m_TargetAssemblyTypeName: DevelopmentTutorialPopup, Assembly-CSharp
-        m_MethodName: ThemeSelected
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
+  optionAccess: []
 --- !u!114 &412964456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6072,9 +6061,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 418918580}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 62294dd258c941ae91ef4d7d24a9b9b4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
+  m_EditorClassIdentifier: Assembly-CSharp::LockedOptionToggle
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -18856,9 +18845,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1390569095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 62294dd258c941ae91ef4d7d24a9b9b4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
+  m_EditorClassIdentifier: Assembly-CSharp::LockedOptionToggle
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -22197,6 +22186,7 @@ GameObject:
   - component: {fileID: 1698212403}
   - component: {fileID: 1698212405}
   - component: {fileID: 1698212404}
+  - component: {fileID: 2106020001}
   m_Layer: 5
   m_Name: ProjectSetupPanel
   m_TagString: Untagged
@@ -23606,18 +23596,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1977478551}
-        m_TargetAssemblyTypeName: DevelopmentTutorialPopup, Assembly-CSharp
-        m_MethodName: ShowCoding
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 322774567}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
         m_MethodName: Play
@@ -24490,9 +24468,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1904002279}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Script: {fileID: 11500000, guid: 73bdf8ce636d4e13b1c2cac5d7c81d51, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_Dropdown
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectSetupDropdown
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -24559,19 +24537,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1977478551}
-        m_TargetAssemblyTypeName: DevelopmentTutorialPopup, Assembly-CSharp
-        m_MethodName: GenreSelected
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
+  optionAccess: []
 --- !u!114 &1904002282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27397,6 +27364,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2147228221}
   m_CullTransparentMesh: 1
+--- !u!114 &2106020001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698212402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c9e77ddcc774fddabbd481cc5a04efa, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectSetupUI
+  titleText: {fileID: 1951090080}
+  themeDropdown: {fileID: 412964455}
+  genreDropdown: {fileID: 1904002281}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
