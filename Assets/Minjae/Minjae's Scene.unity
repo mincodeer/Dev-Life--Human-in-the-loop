@@ -2227,6 +2227,7 @@ GameObject:
   - component: {fileID: 158287394}
   - component: {fileID: 158287393}
   - component: {fileID: 158287392}
+  - component: {fileID: 158287395}
   m_Layer: 0
   m_Name: OldCharacter_0
   m_TagString: Untagged
@@ -2330,6 +2331,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 420984663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &158287395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158287391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 740b223a306b47c0bb1c44b37ea276db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterTitleAnimation
+  oldCharacterController: {fileID: 9100000, guid: db6da059f3e8ce548992807ad55f045d, type: 2}
+  newCharacterController: {fileID: 9100000, guid: 900260e2c9aeccb4c9097d0254b0b864, type: 2}
 --- !u!114 &160384829 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8177784701900602641, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
@@ -5938,7 +5953,13 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_AlphaFadeSpeed: 0.15
-  optionAccess: []
+  optionAccess:
+  - optionIndex: 2
+    unlocked: 0
+    requirement: Create two more games
+  - optionIndex: 1
+    unlocked: 0
+    requirement: Right click on the player's head.
 --- !u!114 &412964456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22749,11 +22770,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78e894e5c20209f45a7f3a3f996b920b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
-  money: 250
+  money: 10000
   fandom: 0
   aiCredits: 10
   fandomEnding: {fileID: 11400000, guid: 7391f8299cc36a949b4c572275056d8e, type: 2}
-  developmentSkill: 10
+  developmentSkill: 39
   technicalDebt: 0
   technicalDebtEnding: {fileID: 11400000, guid: 5fb70703b90b49c4c9be049495937489, type: 2}
 --- !u!4 &1713992933
@@ -26561,6 +26582,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 420984663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2106020001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698212402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c9e77ddcc774fddabbd481cc5a04efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectSetupUI
+  titleText: {fileID: 1951090080}
+  themeDropdown: {fileID: 412964455}
+  genreDropdown: {fileID: 1904002281}
 --- !u!1001 &2107515802
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27364,21 +27400,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2147228221}
   m_CullTransparentMesh: 1
---- !u!114 &2106020001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1698212402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c9e77ddcc774fddabbd481cc5a04efa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectSetupUI
-  titleText: {fileID: 1951090080}
-  themeDropdown: {fileID: 412964455}
-  genreDropdown: {fileID: 1904002281}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
