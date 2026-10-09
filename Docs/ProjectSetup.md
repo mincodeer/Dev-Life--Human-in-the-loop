@@ -1,3 +1,5 @@
+> **이 문서는 이전 구현 기록입니다.** 코드로 UI를 생성하는 방식은 제거했습니다. 현재 Inspector 필드와 직접 만드는 방법은 [ProjectSetupInspectorUI.md](ProjectSetupInspectorUI.md)를 따라주세요. 아래의 자동 생성 UI 및 Name Input Background 안내는 현재 구현에 적용되지 않습니다.
+
 # Project Setup 변경 안내
 
 대상 Scene은 `Assets/Minjae/Minjae's Scene.unity`입니다. 이름 입력과 잠금 안내를 연결했고, 기존 Project Setup → Coding → Design → Sound → Debugging → Build → Result 순서는 유지합니다.

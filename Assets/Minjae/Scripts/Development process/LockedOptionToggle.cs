@@ -8,8 +8,17 @@ using UnityEngine.UI;
 [AddComponentMenu("UI/Project Setup/Locked Option Toggle")]
 public class LockedOptionToggle : Toggle
 {
+    [SerializeField] private GameObject lockedVisual;
     public Func<bool> IsLocked;
     public Action ShowRequirement;
+
+    public void RefreshLockVisual()
+    {
+        if (lockedVisual != null)
+            lockedVisual.SetActive(IsLocked != null && IsLocked());
+    }
+
+    private void LateUpdate() => RefreshLockVisual();
 
     public override void OnPointerClick(PointerEventData eventData)
     {

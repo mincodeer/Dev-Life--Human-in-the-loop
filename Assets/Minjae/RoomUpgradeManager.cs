@@ -41,6 +41,13 @@ public class RoomUpgradeManager : MonoBehaviour
     private const string WINDOW_KEY = "Upgrade_Window";
     private const string DECOR_KEY = "Upgrade_Decor";
 
+    public int PurchasedUpgradeCount =>
+        (IsPCUpgradePurchased() ? 1 : 0) +
+        (IsLightUpgradePurchased() ? 1 : 0) +
+        (IsCleanUpPurchased() ? 1 : 0) +
+        (IsWindowUpgradePurchased() ? 1 : 0) +
+        (IsDecorUpgradePurchased() ? 1 : 0);
+
 
     private void Awake()
 {

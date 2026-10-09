@@ -95,6 +95,8 @@ public class ResourceManager : MonoBehaviour
         }
 
         Instance = this;
+        if (GetComponent<ProjectUnlockProgression>() == null)
+            gameObject.AddComponent<ProjectUnlockProgression>();
 
         // Keep player resources when changing scenes.
         DontDestroyOnLoad(gameObject);
