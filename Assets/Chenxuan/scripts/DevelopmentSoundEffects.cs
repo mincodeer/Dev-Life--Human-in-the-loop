@@ -53,7 +53,14 @@ public class DevelopmentSoundEffects : MonoBehaviour
 
     public void PlayPencilSound()
     {
-        PlaySound(pencilSound);
+        if (sfxSource == null || pencilSound == null)
+            return;
+
+        if (sfxSource.isPlaying)
+            return;
+
+        sfxSource.clip = pencilSound;
+        sfxSource.Play();
     }
 
     private void PlaySound(AudioClip clip)

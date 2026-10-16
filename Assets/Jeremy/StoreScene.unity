@@ -961,6 +961,7 @@ GameObject:
   m_Component:
   - component: {fileID: 355747408}
   - component: {fileID: 355747407}
+  - component: {fileID: 355747409}
   m_Layer: 0
   m_Name: StoreUIController
   m_TagString: Untagged
@@ -1008,6 +1009,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &355747409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355747406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b835cbbdb22b6d45ba84898eb12e6db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StoreSound
+  sfxSource: {fileID: 1458691251}
+  successSound: {fileID: 8300000, guid: 86598f98a2575ea4cae3e2f05a4881ee, type: 3}
+  failSound: {fileID: 8300000, guid: f735eba6286072f4c821474947a74c83, type: 3}
 --- !u!1 &397184232
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,9 +1518,33 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 990613002}
+        m_TargetAssemblyTypeName: StoreSound, Assembly-CSharp
+        m_MethodName: CheckPurchase
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 355747407}
         m_TargetAssemblyTypeName: StoreUIController, Assembly-CSharp
         m_MethodName: PurchaseLightUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 990613002}
+        m_TargetAssemblyTypeName: StoreSound, Assembly-CSharp
+        m_MethodName: RecordMoney
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1772,9 +1812,33 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 990613002}
+        m_TargetAssemblyTypeName: StoreSound, Assembly-CSharp
+        m_MethodName: CheckPurchase
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 355747407}
         m_TargetAssemblyTypeName: StoreUIController, Assembly-CSharp
         m_MethodName: PurchasePCUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 990613002}
+        m_TargetAssemblyTypeName: StoreSound, Assembly-CSharp
+        m_MethodName: RecordMoney
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2891,6 +2955,82 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 818563646}
   m_CullTransparentMesh: 1
+--- !u!1001 &874589772
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1328619763958256451, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716479477422745955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 373.89966
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716479477422745955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 218.53288
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716479477422745955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716479477422745955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716479477422745955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716479477422745955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716479477422745955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716479477422745955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716479477422745955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716479477422745955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316815362241081253, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6711748601096141072, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7110622777782856521, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8149168091721377421, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: m_Name
+      value: AudioSystem 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8149168091721377421, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 990613002}
+  m_SourcePrefab: {fileID: 100100000, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
 --- !u!1 &875919192
 GameObject:
   m_ObjectHideFlags: 0
@@ -3108,6 +3248,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 935858997}
   m_CullTransparentMesh: 1
+--- !u!1 &990613001 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8149168091721377421, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+  m_PrefabInstance: {fileID: 874589772}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &990613002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990613001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b835cbbdb22b6d45ba84898eb12e6db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StoreSound
+  sfxSource: {fileID: 1458691251}
+  successSound: {fileID: 8300000, guid: 86598f98a2575ea4cae3e2f05a4881ee, type: 3}
+  failSound: {fileID: 8300000, guid: f735eba6286072f4c821474947a74c83, type: 3}
 --- !u!1 &1026739747
 GameObject:
   m_ObjectHideFlags: 0
@@ -3191,9 +3351,33 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 990613002}
+        m_TargetAssemblyTypeName: StoreSound, Assembly-CSharp
+        m_MethodName: CheckPurchase
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 355747407}
         m_TargetAssemblyTypeName: StoreUIController, Assembly-CSharp
         m_MethodName: PurchaseDecor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 990613002}
+        m_TargetAssemblyTypeName: StoreSound, Assembly-CSharp
+        m_MethodName: RecordMoney
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4469,6 +4653,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1458691251 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1093795078927755750, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+  m_PrefabInstance: {fileID: 874589772}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1462635509
 GameObject:
   m_ObjectHideFlags: 0
@@ -5121,9 +5310,33 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 990613002}
+        m_TargetAssemblyTypeName: StoreSound, Assembly-CSharp
+        m_MethodName: CheckPurchase
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 355747407}
         m_TargetAssemblyTypeName: StoreUIController, Assembly-CSharp
         m_MethodName: PurchaseWindowUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 990613002}
+        m_TargetAssemblyTypeName: StoreSound, Assembly-CSharp
+        m_MethodName: RecordMoney
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5968,9 +6181,33 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 990613002}
+        m_TargetAssemblyTypeName: StoreSound, Assembly-CSharp
+        m_MethodName: CheckPurchase
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 355747407}
         m_TargetAssemblyTypeName: StoreUIController, Assembly-CSharp
         m_MethodName: PurchaseCleanUp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 990613002}
+        m_TargetAssemblyTypeName: StoreSound, Assembly-CSharp
+        m_MethodName: RecordMoney
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6028,3 +6265,4 @@ SceneRoots:
   - {fileID: 355747408}
   - {fileID: 218235697}
   - {fileID: 1127458743}
+  - {fileID: 874589772}
