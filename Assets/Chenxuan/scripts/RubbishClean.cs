@@ -1,30 +1,42 @@
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class RubbishCleaner : MonoBehaviour
+public class RubbishClean : MonoBehaviour
 {
+    private Camera mainCamera;
+
+    void Start()
+    {
+        mainCamera = Camera.main;
+    }
+
     void Update()
     {
+        if (Mouse.current == null || mainCamera == null)
+            return;
+
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
 
-            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(
+                new Vector3(mousePosition.x, mousePosition.y, 0f)
+            );
 
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            Collider2D hit = GetComponent<Collider2D>();
+
+            if (hit != null && hit.OverlapPoint(worldPosition))
             {
-                Debug.Log("Clicked: " + hit.collider.gameObject.name);
+                ProjectResourceController controller =
+                    FindFirstObjectByType<ProjectResourceController>();
 
-                if (hit.collider.gameObject == gameObject)
+                if (controller != null)
                 {
-                    Debug.Log("Rubbish cleaned!");
-                    Destroy(gameObject);
-                    ProjectResourceController projectController = FindFirstObjectByType<ProjectResourceController>();
-                    if (projectController != null)
-                    {
-                        projectController.CurrentProjectConditions.ChangeQuality(2f);
-                    }
+                    controller.CurrentProjectConditions.ChangeQuality(2f);
                 }
+
+                Destroy(gameObject);
             }
         }
     }
