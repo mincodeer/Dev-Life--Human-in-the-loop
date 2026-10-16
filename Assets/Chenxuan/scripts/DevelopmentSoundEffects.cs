@@ -51,16 +51,18 @@ public class DevelopmentSoundEffects : MonoBehaviour
         PlaySound(completionSound);
     }
 
+    private float lastPencilTime = -999f;
+
     public void PlayPencilSound()
     {
         if (sfxSource == null || pencilSound == null)
             return;
 
-        if (sfxSource.isPlaying)
+        if (Time.unscaledTime - lastPencilTime < pencilSound.length)
             return;
 
-        sfxSource.clip = pencilSound;
-        sfxSource.Play();
+        sfxSource.PlayOneShot(pencilSound);
+        lastPencilTime = Time.unscaledTime;
     }
 
     private void PlaySound(AudioClip clip)
