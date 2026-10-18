@@ -69,7 +69,7 @@ public class PlayerTitleController : MonoBehaviour
         int level = currentTitleLevel;
 
         // The player must complete every requirement
-        // Having enough Development Skill alone isnt enough
+        // Having enough Development Skill alone is not enough
         if (developmentSkill >= requiredSkill[level] &&
             gamesDeveloped >= requiredGames[level] &&
             manualDevelopment >= requiredManual[level] &&
@@ -92,6 +92,7 @@ public class PlayerTitleController : MonoBehaviour
         // Display final progression when Expert Developer is reached
         if (currentTitleLevel >= titles.Length - 1)
         {
+            titleProgressBar.maxValue = 20;
             titleProgressBar.value = 20;
             progressText.text = "MAX";
             progressTextMini.text = "MAX";
@@ -127,20 +128,30 @@ public class PlayerTitleController : MonoBehaviour
             return;
         }
 
-        // Display a completion message at the Expert Developer
+        // Display a completion message at Expert Developer
         if (currentTitleLevel >= titles.Length - 1)
         {
             todoListText.text =
-                "To-Do List:\nAll Developer Titles Unlocked!";
+                "All Developer Titles Unlocked!";
             return;
         }
 
         int level = currentTitleLevel;
 
-        // Display the requirements for the next Developer Title
+        // Calculate Development Skill progress for the next title
+        int previousSkill = level * 20;
+
+        int skillProgress = Mathf.Clamp(
+            developmentSkill - previousSkill, 0, 20
+        );
+
+        // Display Development Skill and other requirements
         // The values update automatically as the player progresses
         todoListText.text =
-            "To-Do List:\n" +
+            GetRequirement(
+                skillProgress,
+                20,
+                "Development Skill") +
             GetRequirement(
                 gamesDeveloped,
                 requiredGames[level],
