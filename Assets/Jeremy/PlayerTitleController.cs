@@ -7,7 +7,6 @@ public class PlayerTitleController : MonoBehaviour
 {
     // Display the player's current title
     public TMP_Text titleText;
-<<<<<<< Updated upstream
     public TMP_Text titleTextMini;
 
     // Display title progression
@@ -15,9 +14,6 @@ public class PlayerTitleController : MonoBehaviour
     public TMP_Text progressTextMini;
     public TMP_Text nextTitleText;
     public TMP_Text skillValueText;
-=======
-    public TMP_Text progressText;
->>>>>>> Stashed changes
     public Slider titleProgressBar;
 
     // To-do list text
@@ -67,13 +63,7 @@ public class PlayerTitleController : MonoBehaviour
         // Stop checking if the player has reached Expert Developer
         if (currentTitleLevel >= titles.Length - 1)
         {
-<<<<<<< Updated upstream
             return;
-=======
-            titleText.text = "Beginner Developer";
-            titleProgressBar.value = developmentSkill;
-            progressText.text = developmentSkill + " / 20";
->>>>>>> Stashed changes
         }
 
         int level = currentTitleLevel;
@@ -85,32 +75,8 @@ public class PlayerTitleController : MonoBehaviour
             manualDevelopment >= requiredManual[level] &&
             totalMoneyEarned >= requiredMoney[level])
         {
-<<<<<<< Updated upstream
             // Unlock the next Developer Title
             currentTitleLevel++;
-=======
-            titleText.text = "Junior Developer";
-            titleProgressBar.value = developmentSkill - 20;
-            progressText.text = (developmentSkill - 20) + " / 20";
-        }
-        else if (developmentSkill <= 60)
-        {
-            titleText.text = "Developer";
-            titleProgressBar.value = developmentSkill - 40;
-            progressText.text = (developmentSkill - 40) + " / 20";
-        }
-        else if (developmentSkill <= 80)
-        {
-            titleText.text = "Senior Developer";
-            titleProgressBar.value = developmentSkill - 60;
-            progressText.text = (developmentSkill - 60) + " / 20";
-        }
-        else
-        {
-            titleText.text = "Expert Developer";
-            titleProgressBar.value = 20;
-            progressText.text = "MAX";
->>>>>>> Stashed changes
         }
     }
 
