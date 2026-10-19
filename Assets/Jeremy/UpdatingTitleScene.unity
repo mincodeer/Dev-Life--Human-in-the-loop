@@ -1924,7 +1924,6 @@ MonoBehaviour:
   skillValueText: {fileID: 260893868}
   titleProgressBar: {fileID: 357476850}
   todoListText: {fileID: 608818361}
-  developmentSkill: 0
   gamesDeveloped: 0
   manualDevelopment: 0
   totalMoneyEarned: 0
@@ -2208,6 +2207,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1717704104}
   m_CullTransparentMesh: 1
+--- !u!1 &1727618328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1727618330}
+  - component: {fileID: 1727618329}
+  m_Layer: 0
+  m_Name: ResourceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1727618329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727618328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78e894e5c20209f45a7f3a3f996b920b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+  money: 250
+  fandom: 0
+  aiCredits: 10
+  aiCreditPurchaseCount: 0
+  aiSubscriptionActive: 0
+  aiSubscriptionPaused: 0
+  nextAISubscriptionDay: 0
+  fandomEnding: {fileID: 0}
+  developmentSkill: 10
+  technicalDebt: 0
+  technicalDebtEnding: {fileID: 0}
+--- !u!4 &1727618330
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727618328}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 782.5642, y: 316.463, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1747006762
 GameObject:
   m_ObjectHideFlags: 0
@@ -2838,3 +2892,4 @@ SceneRoots:
   - {fileID: 641752849}
   - {fileID: 1624284196}
   - {fileID: 2023829466}
+  - {fileID: 1727618330}

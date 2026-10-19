@@ -183,8 +183,23 @@ public class DevelopmentFlowManager : MonoBehaviour
         if (finalResultsCalculator != null)
         {
             FinalProjectResult result = finalResultsCalculator.CalculateFinalResult();
-            if (ProjectDataManager.Instance != null)
-                ProjectDataManager.Instance.ArchiveCurrentProject(result);
+
+            if (result != null)
+            {
+                if (ProjectDataManager.Instance != null)
+                {
+                    ProjectDataManager.Instance.ArchiveCurrentProject(result);
+                }
+
+                PlayerTitleController titleController =
+                    FindFirstObjectByType<PlayerTitleController>();
+
+                if (titleController != null)
+                {
+                    titleController.AddGameDeveloped();
+                    titleController.AddMoneyEarned(result.moneyEarned);
+                }
+            }
         }
         else
         {
@@ -439,22 +454,49 @@ public class DevelopmentFlowManager : MonoBehaviour
         if (index > 0 && index <= 3 && developmentTutorialPopup != null)
             developmentTutorialPopup.GenreSelected();
     }
+    private void CountManualDevelopment(DevelopmentStage stage)
+    {
+        if (ProjectDataManager.Instance == null)
+        {
+            return;
+        }
 
+        ProjectData project = ProjectDataManager.Instance.CurrentProject;
+
+        if (project == null || project.GetWorkMethod(stage) != WorkMethod.Manual)
+        {
+            return;
+        }
+
+        PlayerTitleController titleController =
+            FindFirstObjectByType<PlayerTitleController>();
+
+        if (titleController != null)
+        {
+            titleController.AddManualDevelopment();
+        }
+    }
     public void CompleteCoding()
     {
         if (currentStage != DevelopmentStage.Coding) return;
+
+        CountManualDevelopment(DevelopmentStage.Coding);
         GotoDesign();
     }
 
     public void CompleteDesign()
     {
         if (currentStage != DevelopmentStage.Design) return;
+
+        CountManualDevelopment(DevelopmentStage.Design);
         GotoSound();
     }
 
     public void CompleteSound()
     {
         if (currentStage != DevelopmentStage.Sound) return;
+
+        CountManualDevelopment(DevelopmentStage.Sound);
         GotoDebugging();
     }
     public void CompleteDebugging()
@@ -469,11 +511,12 @@ public class DevelopmentFlowManager : MonoBehaviour
             result.bugRemovalPercentage = 0f;
             projectResourceController.ApplyStageResult(DevelopmentStage.Debugging, result);
         }
+        CountManualDevelopment(DevelopmentStage.Debugging);
         GotoBuild();
     }
 
-    #if UNITY_EDITOR
-[Header("Editor Play Test")]
+#if UNITY_EDITOR
+    [Header("Editor Play Test")]
 [SerializeField] private DevelopmentStage testStage = DevelopmentStage.None;
 
 private void Update()

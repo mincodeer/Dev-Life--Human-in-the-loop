@@ -209,6 +209,7 @@ public class PlayerTitleController : MonoBehaviour
         }
     }
 
+
     public void AddDevelopmentSkill(int amount)
     {
         if (ResourceManager.Instance == null)
@@ -216,11 +217,7 @@ public class PlayerTitleController : MonoBehaviour
             return;
         }
 
-        ResourceManager.Instance.DevelopmentSkill =
-            Mathf.Clamp(
-                ResourceManager.Instance.DevelopmentSkill + amount,
-                0,
-                100
-            );
+        ResourceManager.Instance.ChangeDevelopmentSkill(amount);
     }
 }
+
