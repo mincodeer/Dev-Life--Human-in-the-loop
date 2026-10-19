@@ -81,4 +81,46 @@ public class GameTimeManager : MonoBehaviour
             }
         }
     }
+
+    // Advances time during sleep.
+    // Notifies other systems as minutes, hours and days pass.
+    public void AdvanceMinutes(int minutes)
+    {
+        if (minutes <= 0)
+            return;
+
+        while (minutes > 0)
+        {
+            // Advance only as far as the next hour.
+            int step = Mathf.Min(minutes, 60 - currentMinute);
+
+            currentMinute += step;
+            minutes -= step;
+
+            bool hourPassed = currentMinute >= 60;
+            bool dayPassed = false;
+
+            if (hourPassed)
+            {
+                currentMinute = 0;
+                currentHour++;
+
+                // Move into the next day when crossing midnight.
+                if (currentHour >= 24)
+                {
+                    currentHour = 0;
+                    currentDay++;
+                    dayPassed = true;
+                }
+            }
+
+            OnMinutesPassed?.Invoke(step);
+
+            if (hourPassed)
+                OnHourPassed?.Invoke();
+
+            if (dayPassed)
+                OnDayPassed?.Invoke();
+        }
+    }
 }
