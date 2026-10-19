@@ -1,14 +1,23 @@
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class RubbishClean : MonoBehaviour
 {
+    [SerializeField] private AudioClip cleaningSound;
+
     private Camera mainCamera;
+    private AudioSource sfxSource;
 
     void Start()
     {
         mainCamera = Camera.main;
+
+        GameObject sourceObject = GameObject.Find("SFXSource");
+
+        if (sourceObject != null)
+        {
+            sfxSource = sourceObject.GetComponent<AudioSource>();
+        }
     }
 
     void Update()
@@ -34,6 +43,11 @@ public class RubbishClean : MonoBehaviour
                 if (controller != null)
                 {
                     controller.CurrentProjectConditions.ChangeQuality(2f);
+                }
+
+                if (sfxSource != null && cleaningSound != null)
+                {
+                    sfxSource.PlayOneShot(cleaningSound);
                 }
 
                 Destroy(gameObject);

@@ -7,20 +7,33 @@ public class KeyboardSound : MonoBehaviour
     public AudioClip keyboardClip;
     public float keyboardVolume = 0.5f;
 
-    void Update()
+    private void Start()
     {
-        if (Keyboard.current != null &&
-            Keyboard.current.anyKey.wasPressedThisFrame)
-        {
-            if (sfxSource != null && keyboardClip != null)
-            {
-                sfxSource.PlayOneShot(keyboardClip, keyboardVolume);
-            }
-        }
+        keyboardVolume = PlayerPrefs.GetFloat("KeyboardVolume", keyboardVolume);
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current == null)
+            return;
+
+        if (!Keyboard.current.anyKey.wasPressedThisFrame)
+            return;
+
+        if (sfxSource == null || keyboardClip == null)
+            return;
+
+        if (keyboardVolume <= 0f)
+            return;
+
+        sfxSource.PlayOneShot(keyboardClip, keyboardVolume);
     }
 
     public void SetKeyboardVolume(float volume)
     {
         keyboardVolume = Mathf.Clamp01(volume);
+
+        PlayerPrefs.SetFloat("KeyboardVolume", keyboardVolume);
+        PlayerPrefs.Save();
     }
 }

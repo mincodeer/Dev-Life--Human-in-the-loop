@@ -3007,6 +3007,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1744778764551975363, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: sfxSlider
+      value: 
+      objectReference: {fileID: 3157403942380830741, guid: 8fb0299e8b244274f88b1f34a80a8c79, type: 3}
+    - target: {fileID: 1744778764551975363, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: mainButtons
+      value: 
+      objectReference: {fileID: 3507914247443925853, guid: b482aac5fa6a4f94f9eaa17ce5ce7712, type: 3}
+    - target: {fileID: 1744778764551975363, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: settingspanel
+      value: 
+      objectReference: {fileID: 2106716564089194499, guid: 1f5e5836aec71a144a36f0852fd64009, type: 3}
     - target: {fileID: 6316815362241081253, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -3030,6 +3042,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8149168091721377421, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 990613002}
+    - targetCorrespondingSourceObject: {fileID: 8149168091721377421, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 990613003}
   m_SourcePrefab: {fileID: 100100000, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
 --- !u!1 &875919192
 GameObject:
@@ -3268,6 +3283,19 @@ MonoBehaviour:
   sfxSource: {fileID: 1458691251}
   successSound: {fileID: 8300000, guid: 86598f98a2575ea4cae3e2f05a4881ee, type: 3}
   failSound: {fileID: 8300000, guid: f735eba6286072f4c821474947a74c83, type: 3}
+--- !u!114 &990613003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990613001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f8521438f477d94f94792ee4dfe8b98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StoreVolumeSync
+  sfxSource: {fileID: 1458691251}
 --- !u!1 &1026739747
 GameObject:
   m_ObjectHideFlags: 0

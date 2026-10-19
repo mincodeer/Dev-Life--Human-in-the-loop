@@ -151,3 +151,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c69245d42f3454fb3b7cfad0012e21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RubbishRespawner
+  cleaningSound: {fileID: 8300000, guid: 08024d25069e345408c2257e807e520f, type: 3}
