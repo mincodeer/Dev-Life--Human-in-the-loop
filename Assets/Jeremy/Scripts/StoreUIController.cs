@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -11,6 +12,9 @@ public class StoreUIController : MonoBehaviour
 
     public GameObject[] productItems;
 
+    public GameObject upgradesPage;
+    public GameObject aiCreditsPage;
+
     public Button pcUpgradeButton;
     public Button lightUpgradeButton;
     public Button cleanUpButton;
@@ -20,6 +24,7 @@ public class StoreUIController : MonoBehaviour
     private void Start()
     {
         UpdatePurchaseButtons();
+        ShowUpgradesPage();
     }
 
     public void CloseStore()
@@ -31,6 +36,41 @@ public class StoreUIController : MonoBehaviour
     {
         storePanel.SetActive(true);
         UpdatePurchaseButtons();
+        ShowUpgradesPage();
+    }
+
+    public void ShowUpgradesPage()
+    {
+        upgradesPage.SetActive(true);
+        aiCreditsPage.SetActive(false);
+    }
+
+    public void ShowAICreditsPage()
+    {
+        upgradesPage.SetActive(false);
+        aiCreditsPage.SetActive(true);
+    }
+
+    public void PurchaseAICredits()
+    {
+        if (AISubscriptionManager.Instance == null)
+        {
+            Debug.LogWarning("AISubscriptionManager not found.");
+            return;
+        }
+
+        AISubscriptionManager.Instance.BuyCredits();
+    }
+
+    public void PurchaseAISubscription()
+    {
+        if (AISubscriptionManager.Instance == null)
+        {
+            Debug.LogWarning("AISubscriptionManager not found.");
+            return;
+        }
+
+        AISubscriptionManager.Instance.Subscribe();
     }
 
     public void PurchasePCUpgrade()
@@ -184,12 +224,22 @@ public class StoreUIController : MonoBehaviour
 
     public void SearchProducts()
     {
+        if (searchInput == null)
+        {
+            return;
+        }
+
         string searchText = searchInput.text.ToLower();
 
         foreach (GameObject product in productItems)
         {
+            if (product == null)
+            {
+                continue;
+            }
+
             TMP_Text[] textComponents =
-                product.GetComponentsInChildren<TMP_Text>();
+                product.GetComponentsInChildren<TMP_Text>(true);
 
             bool productFound = false;
 

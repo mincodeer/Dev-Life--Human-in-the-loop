@@ -1,4 +1,3 @@
-// Student ID: 23208000
 
 using System;
 using UnityEngine;
@@ -16,7 +15,7 @@ public class ResourceManager : MonoBehaviour
         private set;
     }
 
-    // Notifies the UI whenever Money or Fandom changes.
+    // Notifies the UI whenever resources change.
     public Action OnResourcesChanged;
 
     [Header("Player Resources")]
@@ -29,6 +28,25 @@ public class ResourceManager : MonoBehaviour
 
     [SerializeField]
     private int aiCredits = 10;
+
+    // Tracks AI Credit purchases for scaling prices.
+    [SerializeField]
+    private int aiCreditPurchaseCount = 0;
+
+    [SerializeField]
+    private bool aiSubscriptionActive = false;
+
+    [SerializeField]
+    private bool aiSubscriptionPaused = false;
+
+    [SerializeField]
+    private int nextAISubscriptionDay = 0;
+
+    public bool AISubscriptionActive => aiSubscriptionActive;
+
+    public bool AISubscriptionPaused => aiSubscriptionPaused;
+
+    public int NextAISubscriptionDay => nextAISubscriptionDay;
 
     // Stores the visual and text data for the Fandom ending.
     public EndingData fandomEnding;
@@ -85,6 +103,30 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
+    // Returns the current AI Credit pack price.
+    public int AICreditPackCost
+    {
+        get
+        {
+            if (aiCreditPurchaseCount == 0)
+            {
+                return 50;
+            }
+            else if (aiCreditPurchaseCount == 1)
+            {
+                return 100;
+            }
+            else if (aiCreditPurchaseCount == 2)
+            {
+                return 200;
+            }
+            else
+            {
+                return 300;
+            }
+        }
+    }
+
     private void Awake()
     {
         // Prevent duplicate ResourceManagers.
@@ -95,8 +137,11 @@ public class ResourceManager : MonoBehaviour
         }
 
         Instance = this;
+
         if (GetComponent<ProjectUnlockProgression>() == null)
+        {
             gameObject.AddComponent<ProjectUnlockProgression>();
+        }
 
         // Keep player resources when changing scenes.
         DontDestroyOnLoad(gameObject);
@@ -119,7 +164,6 @@ public class ResourceManager : MonoBehaviour
             + ". Current Money: "
             + money);
 
-        // Tell the Resource UI that Money has changed.
         OnResourcesChanged?.Invoke();
     }
 
@@ -146,14 +190,10 @@ public class ResourceManager : MonoBehaviour
             if (endingController != null
                 && fandomEnding != null)
             {
-                // Show the Fandom ending using the EndingData
-                // asset assigned in the Inspector.
-                endingController.ShowEnding(
-                    fandomEnding);
+                endingController.ShowEnding(fandomEnding);
             }
         }
 
-        // Tell the Resource UI that Fandom has changed.
         OnResourcesChanged?.Invoke();
     }
 
@@ -161,6 +201,7 @@ public class ResourceManager : MonoBehaviour
     {
         aiCredits += amount;
 
+        // AI Credits cannot be negative.
         aiCredits = Mathf.Max(0, aiCredits);
 
         Debug.Log(
@@ -168,6 +209,44 @@ public class ResourceManager : MonoBehaviour
             + amount
             + ". Current AI Credits: "
             + aiCredits);
+
+        OnResourcesChanged?.Invoke();
+    }
+
+    // Increases the AI Credit pack price after a purchase.
+    public void IncreaseAICreditPurchaseCount()
+    {
+        aiCreditPurchaseCount++;
+
+        Debug.Log(
+            "AI Credit packs purchased: "
+            + aiCreditPurchaseCount
+            + ". Next pack price: $"
+            + AICreditPackCost);
+
+        OnResourcesChanged?.Invoke();
+    }
+
+    public void ActivateAISubscription(int nextPaymentDay)
+    {
+        aiSubscriptionActive = true;
+        aiSubscriptionPaused = false;
+        nextAISubscriptionDay = nextPaymentDay;
+
+        OnResourcesChanged?.Invoke();
+    }
+
+    public void PauseAISubscription()
+    {
+        aiSubscriptionActive = false;
+        aiSubscriptionPaused = true;
+
+        OnResourcesChanged?.Invoke();
+    }
+
+    public void UpdateAISubscriptionDay(int nextPaymentDay)
+    {
+        nextAISubscriptionDay = nextPaymentDay;
 
         OnResourcesChanged?.Invoke();
     }
@@ -216,10 +295,7 @@ public class ResourceManager : MonoBehaviour
             if (endingController != null
                 && technicalDebtEnding != null)
             {
-                // Show the Technical Debt ending using
-                // the EndingData asset assigned in the Inspector.
-                endingController.ShowEnding(
-                    technicalDebtEnding);
+                endingController.ShowEnding(technicalDebtEnding);
             }
         }
     }
@@ -234,10 +310,13 @@ public class ResourceManager : MonoBehaviour
         money = 250;
         fandom = 0;
         aiCredits = 10;
+        aiCreditPurchaseCount = 0;
         developmentSkill = 10;
         technicalDebt = 0;
+        aiSubscriptionActive = false;
+        aiSubscriptionPaused = false;
+        nextAISubscriptionDay = 0;
 
-        // Tell the UI to refresh after resetting resources.
         OnResourcesChanged?.Invoke();
 
         Debug.Log("Player resources reset.");
@@ -250,6 +329,8 @@ public class ResourceManager : MonoBehaviour
             "Money: " + money
             + "\nFandom: " + fandom
             + "\nAI Credits: " + aiCredits
+            + "\nAI Credit Pack Price: $" + AICreditPackCost
+            + "\nAI Credit Packs Purchased: " + aiCreditPurchaseCount
             + "\nDevelopment Skill: " + developmentSkill
             + "\nTechnical Debt: " + technicalDebt);
     }
