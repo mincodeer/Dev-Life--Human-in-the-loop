@@ -40,6 +40,12 @@ public class BuildStageController : MonoBehaviour
 
     private void OnEnable()
     {
+        if (hasRestorableProgress)
+        {
+            RestoreBuildView();
+            return;
+        }
+
         ResetBuild();
     }
 
@@ -278,6 +284,7 @@ public class BuildStageController : MonoBehaviour
 
     public void ResetBuild()
     {
+        hasRestorableProgress = true;
         StopAllCoroutines();
 
 
@@ -323,5 +330,80 @@ public class BuildStageController : MonoBehaviour
             animationImage.sprite =
                 frames[0];
         }
+    }
+
+    [System.Serializable]
+    private class BuildSaveState
+    {
+        public float progress;
+        public bool isBuilding;
+        public bool isComplete;
+    }
+
+    private bool hasRestorableProgress;
+
+    // Saves the build progress and current state.
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        BuildSaveState saved = new BuildSaveState
+        {
+            progress = progress,
+            isBuilding = isBuilding,
+            isComplete = isComplete
+        };
+
+        data.buildProgressJson = JsonUtility.ToJson(saved);
+    }
+
+    // Restores progress without restarting the build from zero.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        if (string.IsNullOrEmpty(data.buildProgressJson))
+        {
+            ResetBuild();
+            return;
+        }
+
+        BuildSaveState saved =
+            JsonUtility.FromJson<BuildSaveState>(
+                data.buildProgressJson);
+
+        if (saved == null)
+        {
+            ResetBuild();
+            return;
+        }
+
+        StopAllCoroutines();
+
+        progress = Mathf.Clamp01(saved.progress);
+        isComplete = saved.isComplete || progress >= 1f;
+        isBuilding = saved.isBuilding && !isComplete;
+
+        hasRestorableProgress = true;
+
+        if (isActiveAndEnabled)
+            RestoreBuildView();
+    }
+
+    // Displays the saved build and resumes its completion delay.
+    private void RestoreBuildView()
+    {
+        StopAllCoroutines();
+
+        UpdateProgressBar();
+        UpdateSpriteByProgress();
+
+        if (buildButton != null)
+            buildButton.interactable = !isBuilding && !isComplete;
+
+        if (isComplete)
+            StartCoroutine(FinishBuild());
     }
 }

@@ -19,19 +19,28 @@ public class DesignStageController : MonoBehaviour
     private bool automatic;
     private bool finished;
 
+    [System.Serializable]
+    private class DesignSaveState
+    {
+        public int frame;
+        public bool started;
+        public bool automatic;
+        public bool finished;
+    }
+
+    private bool hasRestorableProgress;
+
     private void OnEnable()
     {
-        frame = 0;
-        started = false;
-        automatic = false;
-        finished = false;
+        // Resume existing or loaded progress.
+        if (hasRestorableProgress)
+        {
+            RestoreDesignView();
+            return;
+        }
 
-        modeChoicePanel.SetActive(true);
-        aiOverlay.SetActive(false);
-        statusText.text = "";
-
-        if (frames.Length > 0)
-            animationImage.sprite = frames[0];
+        // First opening starts with an empty activity.
+        ResetSavedProgress();
     }
 
     private void OnDisable()
@@ -104,4 +113,113 @@ public class DesignStageController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         flowManager.CompleteDesign();
     }
+
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        DesignSaveState saved = new DesignSaveState
+        {
+            frame = frame,
+            started = started,
+            automatic = automatic,
+            finished = finished
+        };
+
+        data.designProgressJson = JsonUtility.ToJson(saved);
+    }
+
+    // Restore directly without selecting a work method again.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        if (string.IsNullOrEmpty(data.designProgressJson))
+        {
+            ResetSavedProgress();
+            return;
+        }
+
+        DesignSaveState saved =
+            JsonUtility.FromJson<DesignSaveState>(
+                data.designProgressJson);
+
+        if (saved == null)
+        {
+            ResetSavedProgress();
+            return;
+        }
+
+        StopAllCoroutines();
+
+        int lastFrame =
+            frames == null ? 0 : Mathf.Max(0, frames.Length - 1);
+
+        frame = Mathf.Clamp(saved.frame, 0, lastFrame);
+        started = saved.started;
+        automatic = saved.automatic;
+        finished = saved.finished;
+
+        hasRestorableProgress = true;
+
+        if (isActiveAndEnabled)
+            RestoreDesignView();
+    }
+
+    // Called when starting a new project.
+    public void ResetSavedProgress()
+    {
+        StopAllCoroutines();
+
+        frame = 0;
+        started = false;
+        automatic = false;
+        finished = false;
+        hasRestorableProgress = true;
+
+        if (isActiveAndEnabled)
+            RestoreDesignView();
+    }
+
+    // Rebuilds the UI and resumes AI or the completion delay.
+    private void RestoreDesignView()
+    {
+        StopAllCoroutines();
+
+        if (modeChoicePanel != null)
+            modeChoicePanel.SetActive(!started);
+
+        if (aiOverlay != null)
+            aiOverlay.SetActive(started && automatic && !finished);
+
+        if (animationImage != null &&
+            frames != null &&
+            frames.Length > 0)
+        {
+            animationImage.sprite = frames[
+                Mathf.Clamp(frame, 0, frames.Length - 1)];
+        }
+
+        if (!started)
+        {
+            if (statusText != null)
+                statusText.text = "";
+
+            return;
+        }
+
+        if (finished)
+        {
+            StartCoroutine(Complete());
+            return;
+        }
+
+        UpdateStatus();
+
+        if (automatic)
+            StartCoroutine(AutoPlay());
+    }
+
 }

@@ -334,4 +334,51 @@ public class ResourceManager : MonoBehaviour
             + "\nDevelopment Skill: " + developmentSkill
             + "\nTechnical Debt: " + technicalDebt);
     }
+
+    // Copies the current resources into the save snapshot.
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        data.money = money;
+        data.fandom = fandom;
+        data.developmentSkill = developmentSkill;
+        data.technicalDebt = technicalDebt;
+
+        data.aiCredits = aiCredits;
+        data.aiCreditPurchaseCount = aiCreditPurchaseCount;
+
+        data.aiSubscriptionActive = aiSubscriptionActive;
+        data.aiSubscriptionPaused = aiSubscriptionPaused;
+        data.nextAISubscriptionDay = nextAISubscriptionDay;
+    }
+
+    // Restores saved values directly.
+    // Loading does not count as earning resources or buying credits.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        money = Mathf.Max(0, data.money);
+        fandom = Mathf.Max(0, data.fandom);
+
+        developmentSkill = Mathf.Clamp(
+            data.developmentSkill, 0, 100);
+
+        technicalDebt = Mathf.Clamp(
+            data.technicalDebt, 0, 100);
+
+        aiCredits = Mathf.Max(0, data.aiCredits);
+
+        aiCreditPurchaseCount = Mathf.Max(
+            0, data.aiCreditPurchaseCount);
+
+        aiSubscriptionActive = data.aiSubscriptionActive;
+        aiSubscriptionPaused = data.aiSubscriptionPaused;
+
+        nextAISubscriptionDay = Mathf.Max(
+            0, data.nextAISubscriptionDay);
+    }
 }

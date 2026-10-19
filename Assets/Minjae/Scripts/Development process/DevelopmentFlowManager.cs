@@ -225,8 +225,22 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void StartNewProject()
     {
+        // Clear the previous project's displayed result.
+        if (finalResultsCalculator != null)
+            finalResultsCalculator.RestoreSavedResult(null);
+
+        if (codingActivity != null)
+            codingActivity.ResetSavedProgress();
+
+        if (designActivity != null)
+            designActivity.ResetSavedProgress();
+
+        if (soundActivity != null)
+            soundActivity.ResetSavedProgress();
+
         if (buildStage != null) buildStage.ResetBuild();
         if (debuggingActivity != null) debuggingActivity.ResetDebugging();
+        
 
         if (ProjectDataManager.Instance != null)
         {
@@ -531,5 +545,117 @@ private void Update()
     ChangeStage(stage);
 }
 #endif
+
+    // Saves the current stage and each activity's progress.
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        data.developmentStage = currentStage;
+
+        if (codingActivity != null)
+            codingActivity.CaptureSaveData(data);
+
+        if (designActivity != null)
+            designActivity.CaptureSaveData(data);
+
+        if (soundActivity != null)
+            soundActivity.CaptureSaveData(data);
+
+        if (debuggingActivity != null)
+            debuggingActivity.CaptureSaveData(data);
+
+        if (buildStage != null)
+            buildStage.CaptureSaveData(data);
+    }
+
+    // Restore after project data and project resources have been restored.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        // Disable activities before replacing their progress.
+        CloseComputer();
+        HideAllPanels();
+
+        currentStage = System.Enum.IsDefined(
+            typeof(DevelopmentStage), data.developmentStage)
+            ? data.developmentStage
+            : DevelopmentStage.None;
+
+        if (codingActivity != null)
+            codingActivity.RestoreSaveData(data);
+
+        if (designActivity != null)
+            designActivity.RestoreSaveData(data);
+
+        if (soundActivity != null)
+            soundActivity.RestoreSaveData(data);
+
+        if (debuggingActivity != null)
+            debuggingActivity.RestoreSaveData(data);
+
+        if (buildStage != null)
+            buildStage.RestoreSaveData(data);
+
+        // Restore the result that was already calculated and archived.
+        FinalProjectResult savedResult =
+            data.currentProjectArchived && data.currentProject != null
+            ? data.currentProject.finalResult
+            : null;
+
+        if (finalResultsCalculator != null)
+            finalResultsCalculator.RestoreSavedResult(savedResult);
+
+        // Display only; do not calculate, archive or pay rewards again.
+        if (currentStage == DevelopmentStage.Result &&
+            savedResult != null &&
+            resultsUI != null)
+        {
+            resultsUI.DisplayResults();
+        }
+
+        // Prepare the correct panel while the computer UI stays closed.
+        // Opening the computer will resume the saved activity.
+        switch (currentStage)
+        {
+            case DevelopmentStage.ProjectSetup:
+                projectSetupPanel.SetActive(true);
+                break;
+
+            case DevelopmentStage.Coding:
+                codingPanel.SetActive(true);
+                break;
+
+            case DevelopmentStage.Design:
+                designPanel.SetActive(true);
+                break;
+
+            case DevelopmentStage.Sound:
+                soundPanel.SetActive(true);
+                break;
+
+            case DevelopmentStage.Debugging:
+                debuggingPanel.SetActive(true);
+                break;
+
+            case DevelopmentStage.Build:
+                buildPanel.SetActive(true);
+                break;
+
+            case DevelopmentStage.Result:
+                resultPanel.SetActive(true);
+                break;
+        }
+
+        // Match the setup controls to the restored project choices.
+        ProjectSetupUI setupUI =
+            projectSetupPanel.GetComponent<ProjectSetupUI>();
+
+        if (setupUI != null)
+            setupUI.RefreshFromProject();
+    }
 }
 

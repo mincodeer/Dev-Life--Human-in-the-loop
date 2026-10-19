@@ -59,11 +59,13 @@ public class RoomUpgradeManager : MonoBehaviour
 
     Instance = this;
 
-    // TEST MODE:
-    // Every Play Mode starts with no upgrades purchased.
-    ResetAllRoomUpgrades();
+        // Reset on a fresh session, but keep upgrades when returning to the room.
+        if (!SaveLoadManager.SessionInitialized)
+            ResetAllRoomUpgrades();
+        else
+            RefreshRoomVisuals();
 
-    Debug.Log("RoomUpgradeManager ready.");
+        Debug.Log("RoomUpgradeManager ready.");
 }
 
 
@@ -272,5 +274,36 @@ public class RoomUpgradeManager : MonoBehaviour
         {
             Instance = null;
         }
+    }
+
+    // Copies purchased upgrades into the save snapshot.
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        data.pcUpgrade = IsPCUpgradePurchased();
+        data.lightUpgrade = IsLightUpgradePurchased();
+        data.cleanUpgrade = IsCleanUpPurchased();
+        data.windowUpgrade = IsWindowUpgradePurchased();
+        data.decorUpgrade = IsDecorUpgradePurchased();
+    }
+
+    // Restores purchase flags without charging the player again.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        PlayerPrefs.SetInt(PC_KEY, data.pcUpgrade ? 1 : 0);
+        PlayerPrefs.SetInt(LIGHT_KEY, data.lightUpgrade ? 1 : 0);
+        PlayerPrefs.SetInt(CLEAN_KEY, data.cleanUpgrade ? 1 : 0);
+        PlayerPrefs.SetInt(WINDOW_KEY, data.windowUpgrade ? 1 : 0);
+        PlayerPrefs.SetInt(DECOR_KEY, data.decorUpgrade ? 1 : 0);
+
+        PlayerPrefs.Save();
+
+        // Display the room matching the restored purchases.
+        RefreshRoomVisuals();
     }
 }

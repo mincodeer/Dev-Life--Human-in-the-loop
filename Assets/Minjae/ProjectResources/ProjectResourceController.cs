@@ -191,4 +191,63 @@ public class ProjectResourceController : MonoBehaviour
             + "\nBugs: " + projectConditions.bugs
             + "\nTotal Time: " + projectConditions.totalTime);
     }
+
+    // Saves project conditions and previously applied stage results.
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null || projectConditions == null)
+            return;
+
+        data.quality = projectConditions.quality;
+        data.workload = projectConditions.workload;
+        data.bugs = projectConditions.bugs;
+        data.totalTime = projectConditions.totalTime;
+
+        data.codingResult = CopyStageResult(codingResult);
+        data.designResult = CopyStageResult(designResult);
+        data.soundResult = CopyStageResult(soundResult);
+        data.debuggingResult = CopyStageResult(debuggingResult);
+        data.hasCodingResult = codingResult != null;
+        data.hasDesignResult = designResult != null;
+        data.hasSoundResult = soundResult != null;
+        data.hasDebuggingResult = debuggingResult != null;
+    }
+
+    // Restores values without applying stage rewards again.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        if (projectConditions == null)
+            projectConditions = new ProjectConditions();
+
+        // Keep the existing conditions object and its ending asset reference.
+        projectConditions.quality = Mathf.Clamp(data.quality, 0f, 100f);
+        projectConditions.workload = Mathf.Clamp(data.workload, 0f, 100f);
+        projectConditions.bugs = Mathf.Max(0, data.bugs);
+        projectConditions.totalTime = Mathf.Max(0f, data.totalTime);
+
+        codingResult = data.hasCodingResult
+        ? CopyStageResult(data.codingResult) : null;
+
+        designResult = data.hasDesignResult
+            ? CopyStageResult(data.designResult) : null;
+
+        soundResult = data.hasSoundResult
+            ? CopyStageResult(data.soundResult) : null;
+
+        debuggingResult = data.hasDebuggingResult
+            ? CopyStageResult(data.debuggingResult) : null;
+    }
+
+    // Creates a separate copy while preserving an unfinished stage as null.
+    private StageResult CopyStageResult(StageResult result)
+    {
+        if (result == null)
+            return null;
+
+        return JsonUtility.FromJson<StageResult>(
+            JsonUtility.ToJson(result));
+    }
 }

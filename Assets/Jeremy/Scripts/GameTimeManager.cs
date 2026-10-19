@@ -123,4 +123,14 @@ public class GameTimeManager : MonoBehaviour
                 OnDayPassed?.Invoke();
         }
     }
+    // Restores the clock without replaying hourly or daily events.
+    public void RestoreSavedTime(int day, int hour, int minute)
+    {
+        currentDay = Mathf.Max(1, day);
+        currentHour = Mathf.Clamp(hour, 0, 23);
+        currentMinute = Mathf.Clamp(minute, 0, 59);
+
+        // Discard the unfinished real-world second from before loading.
+        timer = 0f;
+    }
 }

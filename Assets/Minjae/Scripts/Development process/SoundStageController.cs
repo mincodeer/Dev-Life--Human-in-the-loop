@@ -38,27 +38,13 @@ public class SoundStageController : MonoBehaviour
 
     private void OnEnable()
     {
-        started = false;
-        automatic = false;
-        finished = false;
-        activeTrack = 0;
-        elapsed = 0f;
-
-        modeChoicePanel.SetActive(true);
-        aiOverlay.SetActive(false);
-        statusText.text = "";
-        SetPlayhead(0f);
-
-        foreach (Track track in tracks)
+        if (hasRestorableProgress)
         {
-            track.slider.SetValueWithoutNotify(0.5f);
-            track.slider.interactable = false;
-            track.previousValue = track.slider.normalizedValue;
-            track.progress = 0f;
-
-            SetupImage(track.blocks, Image.FillMethod.Horizontal);
-            SetupImage(track.meter, Image.FillMethod.Vertical);
+            RestoreSoundView();
+            return;
         }
+
+        ResetSavedProgress();
     }
 
     private void SetupImage(Image image, Image.FillMethod method)
@@ -230,5 +216,218 @@ public class SoundStageController : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
         flowManager.CompleteSound();
+    }
+
+    // Stores values for one sound track.
+    [System.Serializable]
+    private class SoundTrackSaveState
+    {
+        public float sliderValue;
+        public float previousValue;
+        public float progress;
+        public float blockFill;
+        public float meterFill;
+    }
+
+    // Stores the overall sound activity.
+    [System.Serializable]
+    private class SoundSaveState
+    {
+        public bool started;
+        public bool automatic;
+        public bool finished;
+        public int activeTrack;
+        public float elapsed;
+        public SoundTrackSaveState[] tracks;
+    }
+
+    private bool hasRestorableProgress;
+
+    // Saves activity progress and the current slider positions.
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        SoundSaveState saved = new SoundSaveState
+        {
+            started = started,
+            automatic = automatic,
+            finished = finished,
+            activeTrack = activeTrack,
+            elapsed = elapsed,
+            tracks = new SoundTrackSaveState[tracks.Length]
+        };
+
+        for (int i = 0; i < tracks.Length; i++)
+        {
+            Track track = tracks[i];
+
+            saved.tracks[i] = new SoundTrackSaveState
+            {
+                sliderValue = track.slider.normalizedValue,
+                previousValue = track.previousValue,
+                progress = track.progress,
+                blockFill = started ? track.blocks.fillAmount : 0f,
+                meterFill = started ? track.meter.fillAmount : 0f
+            };
+        }
+
+        data.soundProgressJson = JsonUtility.ToJson(saved);
+    }
+
+    // Restores progress without choosing a work method again.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        if (string.IsNullOrEmpty(data.soundProgressJson))
+        {
+            ResetSavedProgress();
+            return;
+        }
+
+        SoundSaveState saved =
+            JsonUtility.FromJson<SoundSaveState>(
+                data.soundProgressJson);
+
+        if (saved == null ||
+            saved.tracks == null ||
+            saved.tracks.Length != tracks.Length)
+        {
+            ResetSavedProgress();
+            return;
+        }
+
+        StopAllCoroutines();
+
+        started = saved.started;
+        automatic = saved.automatic;
+        finished = saved.finished && started;
+
+        activeTrack = Mathf.Clamp(
+            saved.activeTrack, 0, Mathf.Max(0, tracks.Length - 1));
+
+        elapsed = Mathf.Max(0f, saved.elapsed);
+
+        for (int i = 0; i < tracks.Length; i++)
+        {
+            Track track = tracks[i];
+            SoundTrackSaveState savedTrack = saved.tracks[i];
+
+            float value = savedTrack == null
+                ? 0.5f
+                : Mathf.Clamp01(savedTrack.sliderValue);
+
+            // Restore the slider without firing its value-change events.
+            track.slider.SetValueWithoutNotify(
+                Mathf.Lerp(track.slider.minValue,
+                           track.slider.maxValue,
+                           value));
+
+            track.previousValue = savedTrack == null
+                ? value
+                : Mathf.Clamp01(savedTrack.previousValue);
+
+            track.progress = savedTrack == null
+                ? 0f
+                : Mathf.Clamp01(savedTrack.progress);
+
+            SetupImage(track.blocks, Image.FillMethod.Horizontal);
+            SetupImage(track.meter, Image.FillMethod.Vertical);
+
+            track.blocks.fillAmount = savedTrack == null
+                ? 0f
+                : Mathf.Clamp01(savedTrack.blockFill);
+
+            track.meter.fillAmount = savedTrack == null
+                ? 0f
+                : Mathf.Clamp01(savedTrack.meterFill);
+        }
+
+        hasRestorableProgress = true;
+
+        if (isActiveAndEnabled)
+            RestoreSoundView();
+    }
+
+    // Clears sound progress when starting a new project.
+    public void ResetSavedProgress()
+    {
+        StopAllCoroutines();
+
+        started = false;
+        automatic = false;
+        finished = false;
+        activeTrack = 0;
+        elapsed = 0f;
+
+        foreach (Track track in tracks)
+        {
+            track.slider.SetValueWithoutNotify(
+                Mathf.Lerp(track.slider.minValue,
+                           track.slider.maxValue,
+                           0.5f));
+
+            track.slider.interactable = false;
+            track.previousValue = track.slider.normalizedValue;
+            track.progress = 0f;
+
+            SetupImage(track.blocks, Image.FillMethod.Horizontal);
+            SetupImage(track.meter, Image.FillMethod.Vertical);
+        }
+
+        hasRestorableProgress = true;
+
+        if (isActiveAndEnabled)
+            RestoreSoundView();
+    }
+
+    // Displays the restored activity.
+    // The existing Update() continues Manual or AI progress.
+    private void RestoreSoundView()
+    {
+        StopAllCoroutines();
+
+        modeChoicePanel.SetActive(!started);
+        aiOverlay.SetActive(started && automatic && !finished);
+
+        foreach (Track track in tracks)
+        {
+            track.slider.interactable =
+                started && !automatic && !finished;
+        }
+
+        if (!started)
+        {
+            statusText.text = "";
+            SetPlayhead(0f);
+            return;
+        }
+
+        if (tracks.Length > 0)
+            SetPlayhead(tracks[activeTrack].blocks.fillAmount);
+
+        if (finished)
+        {
+            StartCoroutine(Complete());
+            return;
+        }
+
+        int completeCount = 0;
+
+        foreach (Track track in tracks)
+        {
+            if (track.blocks.fillAmount >= 1f)
+                completeCount++;
+        }
+
+        string message = automatic
+            ? "AI Working..."
+            : "Move all sliders!";
+
+        statusText.text =
+            $"{message} {completeCount}/{tracks.Length}";
     }
 }
