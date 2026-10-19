@@ -42,6 +42,14 @@ public class TitleUIToggle : MonoBehaviour
             expandedTitleUI.SetActive(true);
             todoPanel.SetActive(false);
         }
+
+        // Show the Developer Titles tutorial when expanded.
+        if (MainGameTutorialManager.Instance != null)
+        {
+            MainGameTutorialManager.Instance.ShowTutorial(
+                MainGameTutorialManager.TutorialType.DeveloperTitles
+            );
+        }
     }
 
     public void ShowMinimised()

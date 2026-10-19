@@ -15,7 +15,7 @@ public class GameTimeManager : MonoBehaviour
     public int currentMinute = 0;
 
     // How many in-game minutes pass every real-world second.
-    public float gameMinutesPerSecond = 10f;
+    public float gameMinutesPerSecond = 50f;
 
     // Keeps track of real-world time.
     private float timer = 0f;
@@ -57,32 +57,11 @@ public class GameTimeManager : MonoBehaviour
             int minutesPassed =
                 Mathf.RoundToInt(gameMinutesPerSecond);
 
-            currentMinute += minutesPassed;
-
-            // Notify systems such as Market Trends.
-            OnMinutesPassed?.Invoke(minutesPassed);
-
-            // Advance the hour.
-            if (currentMinute >= 60)
-            {
-                currentMinute = 0;
-                currentHour++;
-
-                OnHourPassed?.Invoke();
-            }
-
-            // Advance the day.
-            if (currentHour >= 24)
-            {
-                currentHour = 0;
-                currentDay++;
-
-                OnDayPassed?.Invoke();
-            }
+            AdvanceMinutes(minutesPassed);
         }
     }
 
-    // Advances time during sleep.
+    // Advances time during sleep or normal gameplay.
     // Notifies other systems as minutes, hours and days pass.
     public void AdvanceMinutes(int minutes)
     {
@@ -96,6 +75,9 @@ public class GameTimeManager : MonoBehaviour
 
             currentMinute += step;
             minutes -= step;
+
+            // Notify systems such as Market Trends.
+            OnMinutesPassed?.Invoke(step);
 
             bool hourPassed = currentMinute >= 60;
             bool dayPassed = false;
@@ -112,12 +94,20 @@ public class GameTimeManager : MonoBehaviour
                     currentDay++;
                     dayPassed = true;
                 }
-            }
 
-            OnMinutesPassed?.Invoke(step);
-
-            if (hourPassed)
                 OnHourPassed?.Invoke();
+
+                // Show the Day/Night tutorial when nighttime begins.
+                if (currentHour == 18)
+                {
+                    if (MainGameTutorialManager.Instance != null)
+                    {
+                        MainGameTutorialManager.Instance.ShowTutorial(
+                            MainGameTutorialManager.TutorialType.DayNight
+                        );
+                    }
+                }
+            }
 
             if (dayPassed)
                 OnDayPassed?.Invoke();

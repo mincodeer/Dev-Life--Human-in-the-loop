@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -104,8 +105,25 @@ public class FeatureSceneNavigation : MonoBehaviour
             IsBusy = false;
             yield break;
         }
+
         featureScene = loaded;
         SceneManager.SetActiveScene(featureScene);
+
+        // Show the relevant tutorial after the feature scene has loaded.
+        if (MainGameTutorialManager.Instance != null)
+        {
+            Debug.Log("Tutorial manager found. Opened scene: " + sceneName);
+
+            MainGameTutorialManager.Instance.ShowTutorialForScene(sceneName);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "MainGameTutorialManager.Instance is NULL. " +
+                "Cannot show tutorial for scene: " + sceneName,
+                this);
+        }
+
         if (!HasEnabledEventSystem(featureScene))
             foreach (Behaviour component in roomEventComponents)
                 if (component != null) component.enabled = true;

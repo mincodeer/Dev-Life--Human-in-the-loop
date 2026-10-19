@@ -21,8 +21,17 @@ public class StoreUIController : MonoBehaviour
     public Button windowUpgradeButton;
     public Button decorButton;
 
+    // Reference to the new tutorial manager.
+    public MainGameTutorialManager tutorialManager;
+
     private void Start()
     {
+        // Connect to the persistent tutorial manager.
+        if (tutorialManager == null)
+        {
+            tutorialManager = MainGameTutorialManager.Instance;
+        }
+
         UpdatePurchaseButtons();
         ShowUpgradesPage();
     }
@@ -37,6 +46,26 @@ public class StoreUIController : MonoBehaviour
         storePanel.SetActive(true);
         UpdatePurchaseButtons();
         ShowUpgradesPage();
+
+        // Find the persistent tutorial manager if needed.
+        if (tutorialManager == null)
+        {
+            tutorialManager = MainGameTutorialManager.Instance;
+        }
+
+        // Show the Shop tutorial if it has not been completed.
+        if (tutorialManager != null)
+        {
+            tutorialManager.ShowTutorial(
+                MainGameTutorialManager.TutorialType.Shop
+            );
+        }
+        else
+        {
+            Debug.LogWarning(
+                "MainGameTutorialManager not found when opening Shop."
+            );
+        }
     }
 
     public void ShowUpgradesPage()
@@ -49,6 +78,26 @@ public class StoreUIController : MonoBehaviour
     {
         upgradesPage.SetActive(false);
         aiCreditsPage.SetActive(true);
+
+        // Find the persistent tutorial manager if needed.
+        if (tutorialManager == null)
+        {
+            tutorialManager = MainGameTutorialManager.Instance;
+        }
+
+        // Show the AI Subscription tutorial when opening the AI page.
+        if (tutorialManager != null)
+        {
+            tutorialManager.ShowTutorial(
+                MainGameTutorialManager.TutorialType.AICosts
+            );
+        }
+        else
+        {
+            Debug.LogWarning(
+                "MainGameTutorialManager not found when opening AI Credits page."
+            );
+        }
     }
 
     public void PurchaseAICredits()
