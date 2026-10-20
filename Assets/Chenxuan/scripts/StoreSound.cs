@@ -10,17 +10,27 @@ public class StoreSound : MonoBehaviour
 
     public void RecordMoney()
     {
-        moneyBefore = GetMoney();
+        if (ResourceManager.Instance != null)
+        {
+            moneyBefore = ResourceManager.Instance.Money;
+        }
     }
 
     public void CheckPurchase()
     {
-        PlaySound(successSound);
-    }
+        if (ResourceManager.Instance == null)
+            return;
 
-    private int GetMoney()
-    {
-        return 0;
+        int moneyAfter = ResourceManager.Instance.Money;
+
+        if (moneyAfter < moneyBefore)
+        {
+            PlaySound(successSound);
+        }
+        else
+        {
+            PlaySound(failSound);
+        }
     }
 
     private void PlaySound(AudioClip clip)
@@ -29,7 +39,7 @@ public class StoreSound : MonoBehaviour
             return;
 
         if (!sfxSource.gameObject.activeInHierarchy)
-            sfxSource.gameObject.SetActive(true);
+            return;
 
         if (!sfxSource.enabled)
             sfxSource.enabled = true;
