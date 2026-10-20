@@ -290,11 +290,3 @@ Allow tutorials to close before interacting with covered controls. A dropdown's 
 | `Docs` | Earlier development/setup notes. The current code and this README take priority where those notes describe older behaviour. |
 
 Keep Unity `.meta` files with their assets. Generated folders such as `Library`, `Temp` and `Logs` are not needed to open the source project on another machine.
-
-## Final submission branch
-
-The final source and this README must be committed and pushed to the GitHub branch named **`Release`**. A ZIP or Trello card called Release does not create a Git branch. The submission branch link is:
-
-`https://github.com/mincodeer/Dev-Life--Human-in-the-loop/tree/Release`
-
-Upload the required assessment documents separately to Trello and use the branch link to identify the final source revision. Commit and push any final README or project changes to this branch before submission.
