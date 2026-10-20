@@ -36,6 +36,17 @@ public class CodingStageController : MonoBehaviour
     private int pressCount;
     private int inputStartFrame;
 
+    // Stores coding progress without saving UI objects.
+    [System.Serializable]
+    private class CodingSaveState
+    {
+        public int state;
+        public int visibleBlockCount;
+        public int pressCount;
+    }
+
+    private bool hasRestorableProgress;
+
     // Physical letter keys, not text entry. Space, numbers and Delete do not count.
     private static readonly Key[] LetterKeys = {
         Key.A, Key.B, Key.C, Key.D, Key.E, Key.F, Key.G,
@@ -46,6 +57,13 @@ public class CodingStageController : MonoBehaviour
 
     private void OnEnable()
     {
+        // Resume existing progress when reopening the panel.
+        if (hasRestorableProgress)
+        {
+            RestoreCodingView();
+            return;
+        }
+
         state = CodingState.Choosing;
         visibleBlockCount = 0;
         pressCount = 0;
@@ -61,6 +79,8 @@ public class CodingStageController : MonoBehaviour
         }
         if (consoleText != null) consoleText.enabled = false;
         SetStatus("[M] Work manually    [A] Use AI");
+
+        hasRestorableProgress = true;
     }
 
     private void OnDisable()
@@ -225,5 +245,122 @@ public class CodingStageController : MonoBehaviour
     private void PlaySound(AudioClip clip)
     {
         if (audioSource != null && clip != null) audioSource.PlayOneShot(clip);
+    }
+
+    // Copies the current coding activity into the save snapshot.
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        CodingSaveState saved = new CodingSaveState
+        {
+            state = (int)state,
+            visibleBlockCount = visibleBlockCount,
+            pressCount = pressCount
+        };
+
+        data.codingProgressJson = JsonUtility.ToJson(saved);
+    }
+
+    // Restores progress without charging AI credits again.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        if (string.IsNullOrEmpty(data.codingProgressJson))
+        {
+            ResetSavedProgress();
+            return;
+        }
+
+        CodingSaveState saved =
+            JsonUtility.FromJson<CodingSaveState>(
+                data.codingProgressJson);
+
+        if (saved == null)
+        {
+            ResetSavedProgress();
+            return;
+        }
+
+        StopAllCoroutines();
+
+        state = (CodingState)Mathf.Clamp(saved.state, 0, 3);
+
+        int blockCount =
+            codeBlocks == null ? 0 : codeBlocks.Length;
+
+        visibleBlockCount = Mathf.Clamp(
+            saved.visibleBlockCount, 0, blockCount);
+
+        pressCount = Mathf.Clamp(
+            saved.pressCount,
+            0,
+            Mathf.Max(1, pressesPerBlock) - 1);
+
+        hasRestorableProgress = true;
+
+        if (isActiveAndEnabled)
+            RestoreCodingView();
+    }
+
+    // Clears old activity progress when starting a new project.
+    public void ResetSavedProgress()
+    {
+        StopAllCoroutines();
+
+        state = CodingState.Choosing;
+        visibleBlockCount = 0;
+        pressCount = 0;
+        hasRestorableProgress = true;
+
+        if (isActiveAndEnabled)
+            RestoreCodingView();
+    }
+
+    // Displays the saved state and resumes the activity.
+    private void RestoreCodingView()
+    {
+        StopAllCoroutines();
+        inputStartFrame = Time.frameCount;
+
+        bool choosing = state == CodingState.Choosing;
+        bool finishing = state == CodingState.Finishing;
+
+        if (modeChoicePanel != null)
+            modeChoicePanel.SetActive(choosing);
+
+        if (aiOverlay != null)
+            aiOverlay.SetActive(state == CodingState.AI);
+
+        if (codeBlocks != null)
+        {
+            for (int i = 0; i < codeBlocks.Length; i++)
+            {
+                if (codeBlocks[i] != null)
+                    codeBlocks[i].enabled = i < visibleBlockCount;
+            }
+        }
+
+        if (consoleText != null)
+            consoleText.enabled = finishing;
+
+        if (choosing)
+        {
+            SetStatus("[M] Work manually    [A] Use AI");
+        }
+        else if (finishing)
+        {
+            StartCoroutine(FinishCoding());
+        }
+        else
+        {
+            RefreshStatus();
+
+            if (state == CodingState.AI)
+                StartCoroutine(RunAI());
+        }
     }
 }

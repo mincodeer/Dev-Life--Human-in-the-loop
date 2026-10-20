@@ -175,4 +175,79 @@ public class DebuggingStageController : MonoBehaviour
         elapsed = 0f;
         RefreshView();
     }
+
+    // Stores debugging progress without saving UI objects.
+    [System.Serializable]
+    private class DebuggingSaveState
+    {
+        public bool[] resolved;
+        public bool running;
+        public bool useAI;
+        public bool finishing;
+        public float elapsed;
+    }
+
+    // Saves resolved lines and the current activity state.
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        DebuggingSaveState saved = new DebuggingSaveState
+        {
+            resolved = (bool[])resolved.Clone(),
+            running = running,
+            useAI = useAI,
+            finishing = finishing,
+            elapsed = elapsed
+        };
+
+        data.debuggingProgressJson = JsonUtility.ToJson(saved);
+    }
+
+    // Restores progress without resolving lines or removing bugs again.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        if (string.IsNullOrEmpty(data.debuggingProgressJson))
+        {
+            ResetDebugging();
+            return;
+        }
+
+        DebuggingSaveState saved =
+            JsonUtility.FromJson<DebuggingSaveState>(
+                data.debuggingProgressJson);
+
+        if (saved == null)
+        {
+            ResetDebugging();
+            return;
+        }
+
+        resolved = new bool[4];
+        resolvedCount = 0;
+
+        // Rebuild the count from the saved lines.
+        for (int i = 0; i < resolved.Length; i++)
+        {
+            resolved[i] =
+                saved.resolved != null &&
+                i < saved.resolved.Length &&
+                saved.resolved[i];
+
+            if (resolved[i])
+                resolvedCount++;
+        }
+
+        useAI = saved.useAI;
+        finishing = saved.finishing && resolvedCount == 4;
+        running = saved.running && !finishing && resolvedCount < 4;
+        elapsed = Mathf.Max(0f, saved.elapsed);
+        inputStartFrame = Time.frameCount;
+
+        RefreshView();
+    }
 }

@@ -244,4 +244,67 @@ public class ProjectDataManager : MonoBehaviour
 
         Debug.Log("Current project data reset.");
     }
+
+    // Copies the current project and history into the save snapshot.
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        data.currentProject = currentProject == null
+            ? new ProjectData()
+            : JsonUtility.FromJson<ProjectData>(
+                JsonUtility.ToJson(currentProject));
+
+        data.completedProjects = new List<ProjectData>();
+
+        foreach (ProjectData project in completedProjects)
+        {
+            if (project == null)
+                continue;
+
+            data.completedProjects.Add(
+                JsonUtility.FromJson<ProjectData>(
+                    JsonUtility.ToJson(project)));
+        }
+
+        data.currentProjectArchived = currentProjectArchived;
+        data.fullAIProjects = fullAIProjects;
+    }
+
+    // Restores project data without archiving again or awarding rewards.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        currentProject = data.currentProject == null
+            ? new ProjectData()
+            : JsonUtility.FromJson<ProjectData>(
+                JsonUtility.ToJson(data.currentProject));
+
+        completedProjects = new List<ProjectData>();
+
+        if (data.completedProjects != null)
+        {
+            foreach (ProjectData project in data.completedProjects)
+            {
+                if (project == null)
+                    continue;
+
+                completedProjects.Add(
+                    JsonUtility.FromJson<ProjectData>(
+                        JsonUtility.ToJson(project)));
+            }
+        }
+
+        currentProjectArchived = data.currentProjectArchived;
+        fullAIProjects = Mathf.Max(0, data.fullAIProjects);
+    }
+
+    // Called after the other saved systems have also been restored.
+    public void RefreshAfterLoad()
+    {
+        ProjectChanged?.Invoke();
+    }
 }

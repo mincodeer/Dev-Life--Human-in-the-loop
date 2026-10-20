@@ -207,4 +207,14 @@ public class FinalResultsCalculator : MonoBehaviour
     {
         return finalResult;
     }
+
+    // Restores an existing result without calculating or paying rewards again.
+    // Passing null clears the previous project's cached result.
+    public void RestoreSavedResult(FinalProjectResult savedResult)
+    {
+        finalResult = savedResult == null
+            ? null
+            : JsonUtility.FromJson<FinalProjectResult>(
+                JsonUtility.ToJson(savedResult));
+    }
 }

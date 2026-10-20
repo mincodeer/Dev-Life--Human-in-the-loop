@@ -219,5 +219,31 @@ public class PlayerTitleController : MonoBehaviour
 
         ResourceManager.Instance.ChangeDevelopmentSkill(amount);
     }
+
+    // Saves the title and the counters used to unlock later titles.
+    public void CaptureSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        data.gamesDeveloped = gamesDeveloped;
+        data.manualDevelopment = manualDevelopment;
+        data.totalMoneyEarned = totalMoneyEarned;
+        data.currentTitleLevel = currentTitleLevel;
+    }
+
+    // Restores progression without counting projects or earnings again.
+    public void RestoreSaveData(StudioSaveData data)
+    {
+        if (data == null)
+            return;
+
+        gamesDeveloped = Mathf.Max(0, data.gamesDeveloped);
+        manualDevelopment = Mathf.Max(0, data.manualDevelopment);
+        totalMoneyEarned = Mathf.Max(0, data.totalMoneyEarned);
+
+        currentTitleLevel = Mathf.Clamp(
+            data.currentTitleLevel, 0, titles.Length - 1);
+    }
 }
 
