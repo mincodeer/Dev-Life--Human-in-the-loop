@@ -910,6 +910,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceUI
   moneyText: {fileID: 1993482880}
   fandomText: {fileID: 1146048074}
+  aiCreditsText: {fileID: 0}
 --- !u!1 &87273330
 GameObject:
   m_ObjectHideFlags: 0
@@ -3339,6 +3340,7 @@ MonoBehaviour:
   gameOverPopup: {fileID: 0}
   rentText: {fileID: 1566514565}
   payRentButton: {fileID: 1566514563}
+  rentEnding: {fileID: 0}
 --- !u!4 &213330118
 Transform:
   m_ObjectHideFlags: 0
@@ -5644,6 +5646,7 @@ MonoBehaviour:
     workload: 0
     bugs: 0
     totalTime: 0
+    workloadEnding: {fileID: 0}
 --- !u!114 &387396544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6854,6 +6857,11 @@ MonoBehaviour:
   nextTitleText: {fileID: 428325165}
   skillValueText: {fileID: 235442789}
   titleProgressBar: {fileID: 1052573867}
+  todoListText: {fileID: 0}
+  gamesDeveloped: 0
+  manualDevelopment: 0
+  totalMoneyEarned: 0
+  currentTitleLevel: 0
 --- !u!4 &501421105
 Transform:
   m_ObjectHideFlags: 0
@@ -15035,6 +15043,7 @@ MonoBehaviour:
     bugs: 0
   completedProjects: []
   currentProjectArchived: 0
+  aiEnding: {fileID: 0}
 --- !u!1 &1136245838
 GameObject:
   m_ObjectHideFlags: 0
@@ -22551,8 +22560,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
   money: 10000
   fandom: 0
+  aiCredits: 10
+  aiCreditPurchaseCount: 0
+  aiSubscriptionActive: 0
+  aiSubscriptionPaused: 0
+  nextAISubscriptionDay: 0
+  fandomEnding: {fileID: 0}
   developmentSkill: 10
   technicalDebt: 0
+  technicalDebtEnding: {fileID: 0}
 --- !u!4 &1713992933
 Transform:
   m_ObjectHideFlags: 0
@@ -23283,6 +23299,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TitleUIToggle
   expandedTitleUI: {fileID: 1088662791}
   minimisedTitleUI: {fileID: 2043027480}
+  todoPanel: {fileID: 0}
+  tabButtons: {fileID: 0}
+  tabController: {fileID: 0}
 --- !u!4 &1864725831
 Transform:
   m_ObjectHideFlags: 0
@@ -27446,14 +27465,54 @@ PrefabInstance:
       propertyPath: settingspanel
       value: 
       objectReference: {fileID: 1937831732}
+    - target: {fileID: 1886251692572382728, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: bgmSlider
+      value: 
+      objectReference: {fileID: 794796722}
+    - target: {fileID: 1886251692572382728, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: bgmSource
+      value: 
+      objectReference: {fileID: 7675897800191724209}
+    - target: {fileID: 1886251692572382728, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: sfxSlider
+      value: 
+      objectReference: {fileID: 292395836}
+    - target: {fileID: 1886251692572382728, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: sfxSource
+      value: 
+      objectReference: {fileID: 971369234221073699}
+    - target: {fileID: 1886251692572382728, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: mainButtons
+      value: 
+      objectReference: {fileID: 148856066}
+    - target: {fileID: 1886251692572382728, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: settingspanel
+      value: 
+      objectReference: {fileID: 1937831732}
+    - target: {fileID: 4414711328696588741, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: sfxSource
+      value: 
+      objectReference: {fileID: 971369234221073699}
+    - target: {fileID: 4414711328696588741, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: flowManager
+      value: 
+      objectReference: {fileID: 590995890}
     - target: {fileID: 4953451197079673955, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
       propertyPath: m_LocalPosition.z
       value: -20
       objectReference: {fileID: 0}
+    - target: {fileID: 4969751475718305251, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: bgmSource
+      value: 
+      objectReference: {fileID: 7675897800191724209}
     - target: {fileID: 8149168091721377421, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
       propertyPath: m_Name
       value: AudioSystem
       objectReference: {fileID: 0}
+    - target: {fileID: 8671115120143210492, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
+      propertyPath: sfxSource
+      value: 
+      objectReference: {fileID: 971369234221073699}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: -8766108453338397770, guid: 43f1d22bf82a3724f8d348a5467778a6, type: 3}
