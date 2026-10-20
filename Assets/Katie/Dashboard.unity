@@ -3355,6 +3355,7 @@ GameObject:
   - component: {fileID: 567996537}
   - component: {fileID: 567996536}
   - component: {fileID: 567996540}
+  - component: {fileID: 567996541}
   m_Layer: 5
   m_Name: BackToMenuButton
   m_TagString: Untagged
@@ -3426,6 +3427,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 567996541}
+        m_TargetAssemblyTypeName: BackButtonSound, Assembly-CSharp
+        m_MethodName: PlayBackSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 567996540}
         m_TargetAssemblyTypeName: FeatureReturnButton, Assembly-CSharp
         m_MethodName: BackToRoom
@@ -3488,6 +3501,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f4bd1bab96cd04b8cc8d9277e7857e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FeatureReturnButton
+--- !u!114 &567996541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567996534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dad7adfc7f2c86543b1344052651580b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BackButtonSound
+  clickSound: {fileID: 8300000, guid: cfeb64eac3103f84eaed67387d5b1007, type: 3}
 --- !u!1 &571186418
 GameObject:
   m_ObjectHideFlags: 0
@@ -6425,7 +6451,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 138523228}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.2881171
+  m_Size: 0.27302885
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

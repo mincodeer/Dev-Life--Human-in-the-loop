@@ -1,24 +1,39 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class KeyboardSound : MonoBehaviour
 {
-    public AudioSource keyboardSource;
+    public AudioSource sfxSource;
     public AudioClip keyboardClip;
-    public Slider keyboardSlider;
-    void Start()
+    public float keyboardVolume = 0.5f;
+
+    private void Start()
     {
-        SetKeyboardVolume(keyboardSlider.value);
+        keyboardVolume = PlayerPrefs.GetFloat("KeyboardVolume", keyboardVolume);
     }
-    void Update()
+
+    private void Update()
     {
-        if (Keyboard.current != null &&
-            Keyboard.current.anyKey.wasPressedThisFrame)
-        { keyboardSource.PlayOneShot(keyboardClip, keyboardSlider.value);
-        }
+        if (Keyboard.current == null)
+            return;
+
+        if (!Keyboard.current.anyKey.wasPressedThisFrame)
+            return;
+
+        if (sfxSource == null || keyboardClip == null)
+            return;
+
+        if (keyboardVolume <= 0f)
+            return;
+
+        sfxSource.PlayOneShot(keyboardClip, keyboardVolume);
     }
+
     public void SetKeyboardVolume(float volume)
-    { keyboardSource.volume = volume;
+    {
+        keyboardVolume = Mathf.Clamp01(volume);
+
+        PlayerPrefs.SetFloat("KeyboardVolume", keyboardVolume);
+        PlayerPrefs.Save();
     }
 }
