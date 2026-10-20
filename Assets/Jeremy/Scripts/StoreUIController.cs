@@ -17,7 +17,6 @@ public class StoreUIController : MonoBehaviour
 
     public Button pcUpgradeButton;
     public Button lightUpgradeButton;
-    public Button cleanUpButton;
     public Button windowUpgradeButton;
     public Button decorButton;
 
@@ -144,17 +143,6 @@ public class StoreUIController : MonoBehaviour
         }
     }
 
-    public void PurchaseCleanUp()
-    {
-        if (PurchaseItem(300, cleanUpButton))
-        {
-            if (RoomUpgradeManager.Instance != null)
-            {
-                RoomUpgradeManager.Instance.PurchaseCleanUp();
-            }
-        }
-    }
-
     public void PurchaseWindowUpgrade()
     {
         if (PurchaseItem(300, windowUpgradeButton))
@@ -230,11 +218,6 @@ public class StoreUIController : MonoBehaviour
         if (RoomUpgradeManager.Instance.IsLightUpgradePurchased())
         {
             SetButtonPurchased(lightUpgradeButton);
-        }
-
-        if (RoomUpgradeManager.Instance.IsCleanUpPurchased())
-        {
-            SetButtonPurchased(cleanUpButton);
         }
 
         if (RoomUpgradeManager.Instance.IsWindowUpgradePurchased())

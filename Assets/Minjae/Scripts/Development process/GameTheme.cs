@@ -5,5 +5,6 @@ public enum GameTheme
     None,
     Fantasy,
     SciFi,
-    Horror
+    Horror,
+    Surreal
 }

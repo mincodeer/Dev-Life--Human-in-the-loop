@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -43,6 +43,20 @@ public class ProjectSetupUI : MonoBehaviour
 
     private void Start() => RefreshFromProject();
 
+    private void Update() => RefreshHiddenOptions();
+
+    private void RefreshHiddenOptions()
+    {
+        ProjectUnlockProgression progression = ResourceManager.Instance == null
+            ? null : ResourceManager.Instance.GetComponent<ProjectUnlockProgression>();
+        bool visible = progression != null &&
+            progression.IsUnlocked(ProjectUnlockProgression.Rule.HiddenContent);
+        if (themeDropdown != null)
+            themeDropdown.SetHiddenOption((int)GameTheme.Surreal, "Surreal", visible);
+        if (genreDropdown != null)
+            genreDropdown.SetHiddenOption((int)GameGenre.Metroidvania, "Metroidvania", visible);
+    }
+
     private void OnDisable()
     {
         if (nameInput != null)
@@ -59,6 +73,7 @@ public class ProjectSetupUI : MonoBehaviour
 
     public void RefreshFromProject()
     {
+        RefreshHiddenOptions();
         if (ProjectDataManager.Instance == null) return;
         ProjectData project = ProjectDataManager.Instance.CurrentProject;
         if (nameInput != null) nameInput.SetTextWithoutNotify(project.projectName == "Untitled Project" ? "" : project.projectName);

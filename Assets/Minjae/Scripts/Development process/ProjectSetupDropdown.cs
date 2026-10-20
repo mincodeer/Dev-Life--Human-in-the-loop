@@ -19,9 +19,36 @@ public class ProjectSetupDropdown : TMP_Dropdown
     [SerializeField] private List<OptionAccess> optionAccess = new List<OptionAccess>();
     public Action<string> LockedOptionClicked;
     private int nextItemIndex;
+    private int hiddenOptionIndex = -1;
+
+    public void SetHiddenOption(int index, string label, bool visible)
+    {
+        hiddenOptionIndex = index;
+        if (visible && options.Count == index)
+        {
+            Hide();
+            options.Add(new OptionData(label));
+            RefreshShownValue();
+        }
+        else if (!visible && options.Count > index && options[index].text == label)
+        {
+            Hide();
+            options.RemoveAt(index);
+            if (value >= options.Count) SetValueWithoutNotify(0);
+            RefreshShownValue();
+        }
+    }
 
     public bool IsOptionLocked(int index)
     {
+        if (index < 0 || index >= options.Count) return true;
+        if (index == hiddenOptionIndex)
+        {
+            ProjectUnlockProgression hiddenProgression = ResourceManager.Instance == null
+                ? null : ResourceManager.Instance.GetComponent<ProjectUnlockProgression>();
+            return hiddenProgression == null ||
+                !hiddenProgression.IsUnlocked(ProjectUnlockProgression.Rule.HiddenContent);
+        }
         OptionAccess access = optionAccess.Find(entry => entry.optionIndex == index);
         if (index <= 0 || access == null) return false;
         if (access.unlockRule == ProjectUnlockProgression.Rule.Manual) return !access.unlocked;

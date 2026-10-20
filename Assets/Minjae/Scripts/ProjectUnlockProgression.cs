@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 // Progression only: the scene's UnlockNotificationUI owns presentation.
 public class ProjectUnlockProgression : MonoBehaviour
 {
-    public enum Rule { Manual, TwoGames, TwoRoomUpgrades, Sleep, Developer }
+    public enum Rule { Manual, TwoGames, TwoRoomUpgrades, Sleep, Developer, HiddenContent }
     private readonly HashSet<Rule> unlocked = new HashSet<Rule>();
     private readonly Queue<Rule> notifications = new Queue<Rule>();
     private bool hasSlept;
@@ -41,6 +41,13 @@ public class ProjectUnlockProgression : MonoBehaviour
         if (hasSlept) Unlock(Rule.Sleep);
         if (ResourceManager.Instance != null && ResourceManager.Instance.DevelopmentSkill >= 41)
             Unlock(Rule.Developer);
+
+        if (HiddenContentUnlockRules.CanUnlock(
+            IsUnlocked(Rule.TwoGames),
+            IsUnlocked(Rule.TwoRoomUpgrades),
+            IsUnlocked(Rule.Sleep),
+            IsUnlocked(Rule.Developer)))
+            Unlock(Rule.HiddenContent);
     }
 
     private void Unlock(Rule rule)
