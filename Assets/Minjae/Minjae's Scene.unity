@@ -7566,11 +7566,11 @@ MonoBehaviour:
   endingPanel: {fileID: 0}
   endingTitle: {fileID: 0}
   audioSource: {fileID: 536175693}
-  replacedSound: {fileID: 8300000, guid: 1ce2c5356487b6d4c836b965705906de, type: 3}
-  successSound: {fileID: 8300000, guid: e23ed98c1acb1c341afb764f45954d2d, type: 3}
-  homelessSound: {fileID: 8300000, guid: 54121160146dd3943806bddc1bb8efc3, type: 3}
-  unexpectedSound: {fileID: 8300000, guid: 684dbd6266466994188b2cff5eabc2cb, type: 3}
-  bugSound: {fileID: 8300000, guid: d4e43958633965a4ab9a1693c8f1da39, type: 3}
+  fandomSound: {fileID: 8300000, guid: e23ed98c1acb1c341afb764f45954d2d, type: 3}
+  technicalDebtSound: {fileID: 8300000, guid: 684dbd6266466994188b2cff5eabc2cb, type: 3}
+  aiTakesOverSound: {fileID: 8300000, guid: 1ce2c5356487b6d4c836b965705906de, type: 3}
+  cantPayRentSound: {fileID: 8300000, guid: 54121160146dd3943806bddc1bb8efc3, type: 3}
+  workloadSound: {fileID: 8300000, guid: d4e43958633965a4ab9a1693c8f1da39, type: 3}
 --- !u!82 &536175693
 AudioSource:
   m_ObjectHideFlags: 0

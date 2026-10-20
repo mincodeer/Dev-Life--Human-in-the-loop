@@ -51,23 +51,23 @@ public class EndingSound : MonoBehaviour
         switch (title)
         {
             case "YOU HAVE BEEN REPLACED":
-                selectedClip = replacedSound;
+                selectedClip = aiTakesOverSound;
                 break;
 
             case "YOU ACTUALLY DID IT!":
-                selectedClip = successSound;
+                selectedClip = fandomSound;
                 break;
 
             case "CONGRATULATIONS! YOU ARE HOMELESS":
-                selectedClip = homelessSound;
+                selectedClip = cantPayRentSound;
                 break;
 
             case "IT WASN'T SUPPOSED TO DO THAT":
-                selectedClip = unexpectedSound;
+                selectedClip = technicalDebtSound;
                 break;
 
             case "YOU HAVE BECOME THE BUG":
-                selectedClip = bugSound;
+                selectedClip = workloadSound;
                 break;
         }
 
