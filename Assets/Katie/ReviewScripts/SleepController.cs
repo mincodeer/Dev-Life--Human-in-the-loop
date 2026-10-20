@@ -113,6 +113,16 @@ public class SleepController : MonoBehaviour
         yield return FadeTo(0f);
 
         FinishSleep();
+
+        // Record progression only after the full sleep sequence completes.
+        if (ResourceManager.Instance != null)
+        {
+            ProjectUnlockProgression progression =
+                ResourceManager.Instance.GetComponent<ProjectUnlockProgression>();
+            if (progression != null)
+                progression.RecordSleep();
+        }
+
         sleepRoutine = null;
     }
 

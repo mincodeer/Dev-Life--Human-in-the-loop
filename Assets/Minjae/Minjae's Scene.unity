@@ -22063,6 +22063,7 @@ MonoBehaviour:
   workloadRecovery: 20
   fadeDuration: 1
   blackScreenDuration: 3
+  sleepDarkness: 0.65
 --- !u!1001 &1566514562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24023,7 +24024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78e894e5c20209f45a7f3a3f996b920b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
-  money: 100
+  money: 10000
   fandom: 0
   aiCredits: 10
   aiCreditPurchaseCount: 0
@@ -24031,7 +24032,7 @@ MonoBehaviour:
   aiSubscriptionPaused: 0
   nextAISubscriptionDay: 0
   fandomEnding: {fileID: 11400000, guid: 7391f8299cc36a949b4c572275056d8e, type: 2}
-  developmentSkill: 10
+  developmentSkill: 39
   technicalDebt: 0
   technicalDebtEnding: {fileID: 11400000, guid: 5fb70703b90b49c4c9be049495937489, type: 2}
 --- !u!4 &1713992933
@@ -30753,6 +30754,8 @@ MonoBehaviour:
   horrorMessage: 'Theme unlocked: Horror!'
   actionMessage: 'Genre unlocked: Action!'
   simulationMessage: 'Genre unlocked: Simulation!'
+  hiddenContentMessage: 'Hidden content unlocked: Surreal theme and Metroidvania
+    genre!'
 --- !u!1 &2109000061
 GameObject:
   m_ObjectHideFlags: 0

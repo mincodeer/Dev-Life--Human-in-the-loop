@@ -11,6 +11,8 @@ public class UnlockNotificationUI : MonoBehaviour
     [SerializeField, TextArea] private string horrorMessage = "Theme unlocked: Horror!";
     [SerializeField, TextArea] private string actionMessage = "Genre unlocked: Action!";
     [SerializeField, TextArea] private string simulationMessage = "Genre unlocked: Simulation!";
+    [SerializeField, TextArea] private string hiddenContentMessage =
+        "Hidden content unlocked: Surreal theme and Metroidvania genre!";
     private float hideAt;
     private bool showing;
 
@@ -36,6 +38,7 @@ public class UnlockNotificationUI : MonoBehaviour
             case ProjectUnlockProgression.Rule.TwoRoomUpgrades: notificationText.text = horrorMessage; break;
             case ProjectUnlockProgression.Rule.Sleep: notificationText.text = actionMessage; break;
             case ProjectUnlockProgression.Rule.Developer: notificationText.text = simulationMessage; break;
+            case ProjectUnlockProgression.Rule.HiddenContent: notificationText.text = hiddenContentMessage; break;
         }
         notificationPanel.SetActive(true);
         hideAt = Time.unscaledTime + displaySeconds;

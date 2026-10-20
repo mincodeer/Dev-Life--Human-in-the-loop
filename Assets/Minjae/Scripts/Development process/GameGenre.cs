@@ -5,5 +5,6 @@ public enum GameGenre
     None,
     RPG,
     Action,
-    Simulation
+    Simulation,
+    Metroidvania
 }

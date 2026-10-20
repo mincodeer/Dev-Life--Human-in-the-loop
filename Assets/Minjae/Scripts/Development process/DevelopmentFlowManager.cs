@@ -265,6 +265,10 @@ public class DevelopmentFlowManager : MonoBehaviour
 
     public void SelectHorror() => ProjectDataManager.Instance.SetTheme(GameTheme.Horror);
 
+    public void SelectSurreal() => ProjectDataManager.Instance.SetTheme(GameTheme.Surreal);
+
+    public void SelectMetroidvania() => ProjectDataManager.Instance.SetGenre(GameGenre.Metroidvania);
+
     public void SelectRPG() => ProjectDataManager.Instance.SetGenre(GameGenre.RPG);
 
     public void SelectAction() => ProjectDataManager.Instance.SetGenre(GameGenre.Action);
@@ -421,8 +425,11 @@ public class DevelopmentFlowManager : MonoBehaviour
             case 3:
                 SelectHorror();
                 break;
+            case 4:
+                SelectSurreal();
+                break;
         }
-        if (index > 0 && index <= 3 && developmentTutorialPopup != null)
+        if (index > 0 && index <= 4 && developmentTutorialPopup != null)
             developmentTutorialPopup.ThemeSelected();
     }
 
@@ -450,8 +457,11 @@ public class DevelopmentFlowManager : MonoBehaviour
             case 3:
                 SelectSimulation();
                 break;
+            case 4:
+                SelectMetroidvania();
+                break;
         }
-        if (index > 0 && index <= 3 && developmentTutorialPopup != null)
+        if (index > 0 && index <= 4 && developmentTutorialPopup != null)
             developmentTutorialPopup.GenreSelected();
     }
     private void CountManualDevelopment(DevelopmentStage stage)
