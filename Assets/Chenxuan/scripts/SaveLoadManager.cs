@@ -158,7 +158,7 @@ public class SaveLoadManager : MonoBehaviour
 
             ApplyStudioSnapshot(data);
 
-            ShowSaveMessage("Game Loaded");
+            ShowSaveMessage("Game Loaded!");
             Debug.Log("Full studio snapshot loaded.");
         }
         catch (System.Exception exception)
