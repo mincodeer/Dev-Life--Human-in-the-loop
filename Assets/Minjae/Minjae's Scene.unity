@@ -2803,6 +2803,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 322774567}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &161999046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4752,8 +4764,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1871809319}
-        m_TargetAssemblyTypeName: BuildSoundEffects, Assembly-CSharp
+      - m_Target: {fileID: 1871809322}
+        m_TargetAssemblyTypeName: BuildSoundTimer, Assembly-CSharp
         m_MethodName: PlayBuildSound
         m_Mode: 1
         m_Arguments:
@@ -24993,6 +25005,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5332909551185744130, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1871809319}
+    - targetCorrespondingSourceObject: {fileID: 5332909551185744130, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1871809322}
     - targetCorrespondingSourceObject: {fileID: 8672046528218977504, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2116089488}
@@ -26978,13 +26993,26 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871809316}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be599f4e25582e34fa13da0fa112caa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildSoundEffects
   sfxSource: {fileID: 322774567}
   buildingSound: {fileID: 8300000, guid: 9eef36868556fe340979d8810d36838f, type: 3}
+--- !u!114 &1871809322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871809316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20c8aa85021f6ba498028f9991d42f54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildSoundTimer
+  buildSource: {fileID: 322774567}
 --- !u!1 &1872402519
 GameObject:
   m_ObjectHideFlags: 0
@@ -32461,7 +32489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DevelopmentSoundEffects
   sfxSource: {fileID: 322774567}
-  completionSound: {fileID: 8300000, guid: 86598f98a2575ea4cae3e2f05a4881ee, type: 3}
+  completionSound: {fileID: 8300000, guid: bcbc15abb71ee75418950176a17cdacf, type: 3}
   pencilSound: {fileID: 8300000, guid: 502c6ce59f539334cbdb09a95304b55e, type: 3}
   flowManager: {fileID: 590995890}
 --- !u!114 &2116089488
