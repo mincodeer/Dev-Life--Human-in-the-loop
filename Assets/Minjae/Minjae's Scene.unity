@@ -24932,6 +24932,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2039275573838203386, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4033112086240898521, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6198138610647858374, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7675897798662282962, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8122960507813458714, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
       propertyPath: m_Name
       value: AudioSystem
@@ -24944,6 +24960,10 @@ PrefabInstance:
       propertyPath: keyboardSlider
       value: 
       objectReference: {fileID: 3202094535014188762}
+    - target: {fileID: 8672046528218977504, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9097515483836052437, guid: 2b63e95d31d395f40a0d7088e195eec1, type: 3}
       propertyPath: bgmSlider
       value: 

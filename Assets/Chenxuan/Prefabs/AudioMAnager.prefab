@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5081620725779343413}
   - component: {fileID: 8703566366031771187}
   - component: {fileID: 9001045647430171259}
+  - component: {fileID: 4777149254731655625}
   m_Layer: 0
   m_Name: AudioMAnager
   m_TagString: Untagged
@@ -198,3 +199,18 @@ MonoBehaviour:
   sfxSource: {fileID: 0}
   marketClickSound: {fileID: 8300000, guid: 0d9dfc59ac5998f41bbce59ab4d5d20e, type: 3}
   reviewClickSound: {fileID: 8300000, guid: cfeb64eac3103f84eaed67387d5b1007, type: 3}
+--- !u!114 &4777149254731655625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 223761155711665646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b835cbbdb22b6d45ba84898eb12e6db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StoreSound
+  sfxSource: {fileID: 2153253054908175513}
+  successSound: {fileID: 8300000, guid: bcbc15abb71ee75418950176a17cdacf, type: 3}
+  failSound: {fileID: 8300000, guid: f735eba6286072f4c821474947a74c83, type: 3}
