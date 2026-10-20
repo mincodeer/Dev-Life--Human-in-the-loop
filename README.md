@@ -16,7 +16,7 @@ Individual feature contributions and Scrum evidence are recorded on the team's T
 
 - Unity **6000.3.8f1** (Unity 6.3 LTS), matching `ProjectSettings/ProjectVersion.txt`.
 - Unity Hub and the build support module for your chosen platform. Windows is the development and demonstration platform.
-- A mouse and keyboard. A 16:9 Game view is recommended.
+- A mouse and keyboard. The game keeps its original 16:9 layout inside the window. Other screen ratios use black borders so the room and UI stay aligned.
 - Git to clone the repository, or download and extract its source ZIP.
 
 Unity Package Manager restores the packages listed in `Packages/manifest.json`. These include Universal Render Pipeline 17.3.0, Input System 1.18.0, Unity UI 2.0.0, the 2D animation/sprite/importer packages, and Unity Test Framework 1.6.0. Keep the manifest and package lock file with the project.
@@ -165,6 +165,10 @@ The opening tutorial introduces the computer and development flow. Context tutor
 
 This section describes the code behind the features above. Paths are relative to the repository root.
 
+### Screen size and UI layout
+
+`Assets/Minjae/Scripts/FixedGameViewport.cs` starts automatically and keeps cameras and overlay UI inside the same centred 16:9 area. It preserves the existing Canvas reference scales and child anchors rather than resizing every scene element. Wider screens receive side borders, and taller screens receive top and bottom borders. The layout updates when the window size changes and also handles the Shop, Dashboard and other additively loaded scenes. No Inspector connection is required.
+
 ### Starting the game and moving between screens
 
 `Assets/Minjae/Scripts/Development process/LobbyController.cs` controls the opening menu. `PlayGame()` starts the camera/button transition, enables computer interaction and shows the opening tutorial. `ComputerInteractionIn.cs`, in `Assets/Minjae/Scripts/Interaction`, stores the room camera position and moves between Room, ComputerZoomedIn and ComputerUIOpen. This is why opening development uses two clicks rather than immediately replacing the room screen.
@@ -255,7 +259,7 @@ Ending conditions are checked where the relevant value changes: fandom and techn
 
    Keep all feature scenes enabled because navigation loads them at runtime. `Assets/Jeremy/TutorialScene.unity` is an additional standalone scene already listed in the project; the integrated game tutorials are driven from the room scene.
 
-4. **Check the order before building:** the repository's current shared scene list starts with the mostly empty `Assets/Scenes/MainScene.unity`. Disable it or move the integrated game scene above it for the playable build. A profile can override the shared list, so check the active profile too.
+4. The shared scene list starts with the integrated game scene. Keep it at build index 0. A Build Profile can override the shared list, so check the active profile before building.
 5. Choose **Build** or **Build and Run** and select an output folder outside `Assets`, such as `Builds/Windows`.
 6. For Windows, launch the generated `.exe`. When sharing the build, include its companion `_Data` folder and the other files Unity generates, not only the executable.
 
